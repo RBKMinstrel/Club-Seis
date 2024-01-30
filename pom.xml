@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>es.minstrel.app</groupId>
@@ -9,7 +8,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>Club Seis</name>
-  <description>Una herramienta de gestion de clubs deportivos</description>
+  <description>Una herramienta de gestión de clubes deportivos</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -18,40 +17,164 @@
   </parent>
 
   <properties>
+    <!--  Data source properties -->
+    <dataSource.user>cs</dataSource.user>
+    <dataSource.password>cs</dataSource.password>
+    <testDataSource.user>${dataSource.user}</testDataSource.user>
+    <testDataSource.password>${dataSource.password}</testDataSource.password>
 
-    <!-- Opciones de compilacion -->
+    <!-- Opciones de compilación -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+
+    <!-- Version de pluggins -->
+    <jjwt.version>0.9.1</jjwt.version>
+    <surefireMavenPlugin.version>2.22.2</surefireMavenPlugin.version>
+    <sqlPlugin.version>1.5</sqlPlugin.version>
   </properties>
 
-  <dependencies>
+  <profiles>
+    <profile>
+      <id>mysql</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <!-- Propiedades del driver JDBC -->
+        <jdbcDriver.groupId>com.mysql</jdbcDriver.groupId>
+        <jdbcDriver.artifactId>mysql-connector-j</jdbcDriver.artifactId>
+        <jdbcDriver.version>8.3.0</jdbcDriver.version>
+        <jdbcDriver.className>com.mysql.cj.jdbc.Driver</jdbcDriver.className>
 
+        <!--  Data source properties -->
+        <dataSource.baseUrl>jdbc:mysql://localhost/clubseis</dataSource.baseUrl>
+        <dataSource.url>${dataSource.baseUrl}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Madrid</dataSource.url>
+        <testDataSource.url>${dataSource.baseUrl}test?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Madrid</testDataSource.url>
+        <dataSource.createTablesScript>schema.sql</dataSource.createTablesScript>
+        <dataSource.createDataScript>data.sql</dataSource.createDataScript>
+      </properties>
+    </profile>
+  </profiles>
+
+  <dependencies>
+    <!-- Spring Boot Starter -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
 
+    <!-- Spring Boot Starter Test -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
 
+    <!-- JUnit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <!-- SQL Connector -->
+    <dependency>
+      <groupId>${jdbcDriver.groupId}</groupId>
+      <artifactId>${jdbcDriver.artifactId}</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Webtoken -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+
     <plugins>
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefireMavenPlugin.version}</version>
+        <configuration>
+          <forkCount>0</forkCount>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sql-maven-plugin</artifactId>
+        <version>${sqlPlugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>${jdbcDriver.groupId}</groupId>
+            <artifactId>${jdbcDriver.artifactId}</artifactId>
+            <version>${jdbcDriver.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <driver>${jdbcDriver.className}</driver>
+          <url>${dataSource.url}</url>
+          <username>${dataSource.user}</username>
+          <password>${dataSource.password}</password>
+          <autocommit>true</autocommit>
+          <onError>continue</onError>
+          <orderFile>ascending</orderFile>
+          <fileset>
+            <basedir>${basedir}</basedir>
+            <includes>
+              <include>
+                src/main/resources/${dataSource.createTablesScript}
+              </include>
+              <include>
+                src/main/resources/${dataSource.createDataScript}
+              </include>
+            </includes>
+          </fileset>
+        </configuration>
+        <executions>
+          <execution>
+            <id>create-tables-for-testing</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <driver>${jdbcDriver.className}</driver>
+              <url>${testDataSource.url}</url>
+              <username>${testDataSource.user}</username>
+              <password>${testDataSource.password}</password>
+              <autocommit>true</autocommit>
+              <onError>continue</onError>
+              <fileset>
+                <basedir>${basedir}</basedir>
+                <includes>
+                  <include>
+                    src/main/resources/${dataSource.createTablesScript}
+                  </include>
+                </includes>
+              </fileset>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 </project>
+
