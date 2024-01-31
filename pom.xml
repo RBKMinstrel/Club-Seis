@@ -167,6 +167,9 @@
                   <include>
                     src/main/resources/${dataSource.createTablesScript}
                   </include>
+                  <include>
+                    src/main/resources/${dataSource.createDataScript}
+                  </include>
                 </includes>
               </fileset>
             </configuration>
