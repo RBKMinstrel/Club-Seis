@@ -31,18 +31,39 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRolDao userRolDao;
 
-    private void addRolesToUser(User user, List<Long> rolesIds) throws InstanceNotFoundException {
+    private void addRolesToUser(User user, List<Long> rolesIds) throws InstanceNotFoundException, PermissionException {
 
         Optional<Rol> rol;
+        UserRol userRol;
 
         for (Long id : rolesIds) {
             rol = rolDao.findById(id);
 
             if (rol.isEmpty())
-                throw new InstanceNotFoundException("project.entities.user", id);
+                throw new InstanceNotFoundException("project.entities.rol", id);
 
-            userRolDao.save(new UserRol(user, rol.get()));
+            if (rol.get().getRole().equals("ADMIN"))
+                throw new PermissionException();
+
+            userRol = new UserRol(user, rol.get());
+            user.addUserRol(userRol);
+            rol.get().addUserRol(userRol);
+            userRolDao.save(userRol);
         }
+
+    }
+
+    private void deleteAllRolesToUser(User user) throws InstanceNotFoundException {
+
+        Optional<Rol> rol;
+
+        for (UserRol userRol : user.getUserRols()) {
+
+            userRol.getRol().removeUserRol(userRol);
+            userRolDao.delete(userRol);
+        }
+
+        user.removeAllUserRol();
 
     }
 
@@ -94,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(User user, List<Long> rolesIds) throws DuplicateInstanceException, InstanceNotFoundException {
+    public void createUser(User user, List<Long> rolesIds) throws DuplicateInstanceException, InstanceNotFoundException, PermissionException {
 
         if (userDao.existsByUserName(user.getUserName())) {
             throw new DuplicateInstanceException("project.entities.user", user.getUserName());
@@ -105,11 +126,12 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
 
         addRolesToUser(user, rolesIds);
+
     }
 
     @Override
     public void updateUser(Long id, String userName, String firstName, String lastName, List<Long> rolesIds)
-            throws InstanceNotFoundException, DuplicateInstanceException {
+            throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = permissionChecker.checkUser(id);
 
@@ -119,11 +141,12 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+        user.setUserName(userName);
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
         if (!isUserAdmin(id)) {
-            userRolDao.deleteByUserIs(user);
+            deleteAllRolesToUser(user);
             addRolesToUser(user, rolesIds);
         }
 
@@ -150,6 +173,7 @@ public class UserServiceImpl implements UserService {
         if (isUserAdmin(id))
             throw new PermissionException();
 
+        deleteAllRolesToUser(user);
         userDao.delete(user);
     }
 }

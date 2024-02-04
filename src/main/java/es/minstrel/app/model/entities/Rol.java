@@ -2,6 +2,7 @@ package es.minstrel.app.model.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -9,7 +10,7 @@ public class Rol {
 
     private long id;
     private String role;
-    private Set<UserRol> userRols;
+    private Set<UserRol> userRols = new HashSet<>();
 
     public Rol() {
     }
@@ -44,4 +45,14 @@ public class Rol {
     public void setUserRols(Set<UserRol> userRols) {
         this.userRols = userRols;
     }
+
+    public void addUserRol(UserRol userRol) {
+        userRols.add(userRol);
+        userRol.setRol(this);
+    }
+
+    public void removeUserRol(UserRol userRol) {
+        userRols.remove(userRol);
+    }
+
 }
