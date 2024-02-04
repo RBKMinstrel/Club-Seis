@@ -27,7 +27,7 @@ public class UserRol {
         this.id = id;
     }
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     public User getUser() {
         return user;
@@ -37,7 +37,7 @@ public class UserRol {
         this.user = user;
     }
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "rolId")
     public Rol getRol() {
         return rol;

@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -82,10 +84,11 @@ public class UserServiceImpl implements UserService {
 
         User user = permissionChecker.checkUser(id);
 
-        for (UserRol userRol : user.getUserRols()) {
-            if (userRol.getRol().getRole().equals("ADMIN"))
-                return true;
-        }
+        if (user.getUserRols() != null)
+            for (UserRol userRol : user.getUserRols()) {
+                if (userRol.getRol().getRole().equals("ADMIN"))
+                    return true;
+            }
 
         return false;
     }
@@ -105,7 +108,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(Long id, String userName, String firstName, String lastName, List<Long> rolesIds) throws InstanceNotFoundException, DuplicateInstanceException {
+    public void updateUser(Long id, String userName, String firstName, String lastName, List<Long> rolesIds)
+            throws InstanceNotFoundException, DuplicateInstanceException {
 
         User user = permissionChecker.checkUser(id);
 
@@ -118,8 +122,11 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
-        userRolDao.deleteByUserIs(user);
-        addRolesToUser(user, rolesIds);
+        if (!isUserAdmin(id)) {
+            userRolDao.deleteByUserIs(user);
+            addRolesToUser(user, rolesIds);
+        }
+
     }
 
     @Override
