@@ -3,12 +3,13 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +54,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private void deleteAllRolesToUser(User user) throws InstanceNotFoundException {
-
-        Optional<Rol> rol;
+    private void deleteAllRolesToUser(User user) {
 
         for (UserRol userRol : user.getUserRols()) {
 
@@ -84,14 +83,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUser() {
+    public Block<User> getAllUser(int page, int size) {
 
-        Iterable<User> users = userDao.findAll(Sort.by(Sort.Direction.ASC, "userName"));
-        List<User> usersAsList = new ArrayList<>();
+        Slice<User> users = userDao.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "userName")));
 
-        users.forEach(usersAsList::add);
-
-        return usersAsList;
+        return new Block<>(users.getContent(), users.hasNext());
     }
 
     @Override
@@ -130,7 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(Long id, String userName, String firstName, String lastName, List<Long> rolesIds)
+    public User updateUser(Long id, String userName, String firstName, String lastName, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = permissionChecker.checkUser(id);
@@ -149,6 +145,8 @@ public class UserServiceImpl implements UserService {
             deleteAllRolesToUser(user);
             addRolesToUser(user, rolesIds);
         }
+
+        return user;
 
     }
 

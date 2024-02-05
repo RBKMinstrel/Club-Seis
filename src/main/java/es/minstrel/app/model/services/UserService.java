@@ -11,7 +11,7 @@ public interface UserService {
     User login(String userName, String password)
             throws IncorrectLoginException;
 
-    List<User> getAllUser();
+    Block<User> getAllUser(int page, int size);
 
     List<Rol> getAllRoles();
 
@@ -21,7 +21,7 @@ public interface UserService {
     void createUser(User user, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException;
 
-    void updateUser(Long id, String userName, String firstname, String lastName, List<Long> rolesIds)
+    User updateUser(Long id, String userName, String firstname, String lastName, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException;
 
     void changePassword(Long id, String oldPassword, String newPassword)

@@ -2,6 +2,7 @@ package es.minstrel.app.model;
 
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.*;
+import es.minstrel.app.model.services.Block;
 import es.minstrel.app.model.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +163,7 @@ public class UserServiceTest {
     /*Funcion de actualizar usuario*/
 
     @Test
-    public void testUpdateProfile() throws InstanceNotFoundException, DuplicateInstanceException, IncorrectLoginException, PermissionException {
+    public void testUpdateProfile() throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = createUser("user");
 
@@ -184,10 +185,8 @@ public class UserServiceTest {
         user.setFirstName('X' + user.getFirstName());
         user.setLastName('X' + user.getLastName());
 
-        userService.updateUser(user.getId(), 'X' + user.getUserName(),
+        User updatedUser = userService.updateUser(user.getId(), 'X' + user.getUserName(),
                 'X' + user.getFirstName(), 'X' + user.getLastName(), rolList);
-
-        User updatedUser = userService.login(user.getUserName(), "password");
 
         assertEquals(user, updatedUser);
 
@@ -231,7 +230,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUserWithAdminRole() throws InstanceNotFoundException, DuplicateInstanceException, IncorrectLoginException, PermissionException {
+    public void testUpdateUserWithAdminRole() throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = createUser("user");
 
@@ -252,8 +251,7 @@ public class UserServiceTest {
 
     @Test
     public void testUpdateProfileTryRemoveRolAdmin()
-            throws InstanceNotFoundException, DuplicateInstanceException,
-            IncorrectLoginException, PermissionException {
+            throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = createUserAdmin();
         Rol rol2 = createRol("Rol");
@@ -263,10 +261,8 @@ public class UserServiceTest {
         List<Long> rolList = new ArrayList<>();
         rolList.add(rol2.getId());
 
-        userService.updateUser(user.getId(), user.getUserName(),
+        User updatedUser = userService.updateUser(user.getId(), user.getUserName(),
                 user.getFirstName(), user.getLastName(), rolList);
-
-        User updatedUser = userService.login(user.getUserName(), "password");
 
         assertTrue(updatedUser.getUserRols().stream().anyMatch(userRol -> userRol.getRol().getRole().equals("ADMIN")));
         assertFalse(updatedUser.getUserRols().stream().anyMatch(userRol -> userRol.getRol().getRole().equals("Rol")));
@@ -379,17 +375,17 @@ public class UserServiceTest {
         userDao.save(user1);
         userDao.save(user2);
 
-        List<User> userList = userService.getAllUser();
+        Block<User> userList = userService.getAllUser(0, 5);
 
-        assertEquals(userList.size(), 2);
-        assertTrue(userList.contains(user1));
-        assertTrue(userList.contains(user2));
+        assertEquals(userList.getItems().size(), 2);
+        assertTrue(userList.getItems().contains(user1));
+        assertTrue(userList.getItems().contains(user2));
 
     }
 
     @Test
     public void testGetAllUserEmpty() {
-        assertTrue(userService.getAllUser().isEmpty());
+        assertTrue(userService.getAllUser(0, 5).getItems().isEmpty());
     }
 
     /*Funcion obtener todos los roles*/

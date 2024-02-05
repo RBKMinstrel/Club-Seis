@@ -29,7 +29,7 @@
     <java.version>17</java.version>
 
     <!-- Version de pluggins -->
-    <jjwt.version>0.9.1</jjwt.version>
+    <jjwt.version>0.11.5</jjwt.version>
     <surefireMavenPlugin.version>2.22.2</surefireMavenPlugin.version>
     <sqlPlugin.version>1.5</sqlPlugin.version>
   </properties>
@@ -119,8 +119,33 @@
     <!-- Webtoken -->
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt</artifactId>
+      <artifactId>jjwt-api</artifactId>
       <version>${jjwt.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+
+    <!-- Validaror de parametros -->
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>8.0.1.Final</version>
     </dependency>
   </dependencies>
 
@@ -165,7 +190,7 @@
           <password>${dataSource.password}</password>
           <autocommit>true</autocommit>
           <onError>continue</onError>
-          <orderFile>ascending</orderFile>
+          <orderFile>descending</orderFile>
           <fileset>
             <basedir>${basedir}</basedir>
             <includes>
@@ -179,6 +204,32 @@
           </fileset>
         </configuration>
         <executions>
+          <execution>
+            <id>create-tables</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <driver>${jdbcDriver.className}</driver>
+              <url>${dataSource.url}</url>
+              <username>${dataSource.user}</username>
+              <password>${dataSource.password}</password>
+              <autocommit>true</autocommit>
+              <onError>continue</onError>
+              <fileset>
+                <basedir>${basedir}</basedir>
+                <includes>
+                  <include>
+                    src/main/resources/${dataSource.createTablesScript}
+                  </include>
+                  <include>
+                    src/main/resources/${dataSource.createDataScript}
+                  </include>
+                </includes>
+              </fileset>
+            </configuration>
+          </execution>
           <execution>
             <id>create-tables-for-testing</id>
             <phase>process-test-resources</phase>
