@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
 
             userRol.getRol().removeUserRol(userRol);
             userRolDao.delete(userRol);
+            userRolDao.flush();
         }
 
         user.removeAllUserRol();
