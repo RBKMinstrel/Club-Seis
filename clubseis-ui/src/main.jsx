@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <Provider store={store}>
             <IntlProvider locale={locale} messages={messages}>
-                <BrowserRouter>
+                <BrowserRouter basename="/club-seis">
                     <App/>
                 </BrowserRouter>
             </IntlProvider>

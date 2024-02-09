@@ -1,6 +1,6 @@
 {
   "name": "clubseis-ui",
-  "description": "Web frontend for club seis",
+  "description": "Web frontend para club seis",
   "private": true,
   "version": "0.0.0",
   "type": "module",
