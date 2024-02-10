@@ -18,7 +18,8 @@ backend.init(() => store.dispatch(app.actions.error(new NetworkError())));
 const {locale, messages} = initReactIntl();
 
 /*Render aplication*/
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
     <React.StrictMode>
         <Provider store={store}>
             <IntlProvider locale={locale} messages={messages}>
@@ -27,5 +28,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 </BrowserRouter>
             </IntlProvider>
         </Provider>
-    </React.StrictMode>,
-)
+    </React.StrictMode>
+);

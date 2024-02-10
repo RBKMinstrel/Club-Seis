@@ -1,30 +1,17 @@
-import {useState} from 'react'
-import seisNadal from '/logo.png'
 import './App.css'
+import {Route, Routes} from "react-router-dom";
+import {Base, Login} from "../../user/index.js";
 
-function App() {
-    const [count, setCount] = useState(0)
+const App = () => {
 
     return (
-        <>
-            <div>
-                <a href="https://seisdonadal.com" target="_blank">
-                    <img src={seisNadal} className="logo" alt="Seis do nadal logo"/>
-                </a>
-            </div>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.jsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
-    )
+        <div>
+            <Routes>
+                <Route path="/*" element={<Login/>}/>
+                <Route path="/gestion" element={<Base/>}/>
+            </Routes>
+        </div>
+    );
 }
 
 export default App
