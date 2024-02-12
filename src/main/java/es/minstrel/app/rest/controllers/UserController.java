@@ -2,22 +2,24 @@ package es.minstrel.app.rest.controllers;
 
 import es.minstrel.app.model.entities.User;
 import es.minstrel.app.model.exceptions.*;
-import es.minstrel.app.model.services.Block;
 import es.minstrel.app.model.services.UserService;
 import es.minstrel.app.rest.common.ErrorsDto;
 import es.minstrel.app.rest.common.JwtGenerator;
 import es.minstrel.app.rest.common.JwtInfo;
-import es.minstrel.app.rest.dtos.*;
+import es.minstrel.app.rest.dtos.AuthenticatedUserDto;
+import es.minstrel.app.rest.dtos.ChangePasswordParamsDto;
+import es.minstrel.app.rest.dtos.LoginParamsDto;
+import es.minstrel.app.rest.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Locale;
 
-import static es.minstrel.app.rest.dtos.UserConversor.*;
+import static es.minstrel.app.rest.dtos.UserConversor.toAuthenticatedUserDto;
+import static es.minstrel.app.rest.dtos.UserConversor.toUserDto;
 
 @RestController
 @RequestMapping("/api/user")
@@ -69,44 +71,15 @@ public class UserController {
 
     }
 
-    @GetMapping("/list")
-    public BlockDto<UserDto> getAllUser() {
-        Block<User> userBlock = userService.getAllUser(0, 5);
-
-        return new BlockDto<>(toUserDtos(userBlock.getItems()), userBlock.getExistMoreItems());
-    }
-
-    @GetMapping("/roles")
-    public List<RolDto> getAllRoles() {
-        return toRolDtos(userService.getAllRoles());
-    }
-
-    @PostMapping("/create")
-    public void createUser(@RequestAttribute Long userId,
-                           @Validated({UserDto.AllValidations.class}) @RequestBody UserDto userDto)
-            throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
-
-        if (!userService.isUserAdmin(userId)) {
-            throw new PermissionException();
-        }
-
-        User user = toUser(userDto);
-
-        userService.createUser(user, toRolesIds(userDto.getRoles()));
-
-    }
-
     @PutMapping("/{id}")
     public UserDto updateUser(@RequestAttribute Long userId, @PathVariable Long id,
                               @Validated({UserDto.UpdateValidations.class}) @RequestBody UserDto userDto)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
-        if (!userService.isUserAdmin(userId)) {
-            if (!id.equals(userId)) throw new PermissionException();
-        }
+        if (!id.equals(userId))
+            throw new PermissionException();
 
-        return toUserDto(userService.updateUser(id, userDto.getUserName(), userDto.getFirstName(), userDto.getLastName(),
-                toRolesIds(userDto.getRoles())));
+        return toUserDto(userService.updateUser(id, userDto.getUserName(), userDto.getFirstName(), userDto.getLastName()));
 
     }
 
@@ -121,18 +94,6 @@ public class UserController {
         }
 
         userService.changePassword(id, params.getOldPassword(), params.getNewPassword());
-
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@RequestAttribute Long userId, @PathVariable Long id)
-            throws InstanceNotFoundException, PermissionException {
-
-        if (!userService.isUserAdmin(userId)) {
-            throw new PermissionException();
-        }
-
-        userService.deleteUser(id);
 
     }
 

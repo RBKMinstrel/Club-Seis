@@ -36,13 +36,16 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(antMatcher("/*")).permitAll()
+                        /*Peticiones relativas a userService*/
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/login")).permitAll()
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/user/list")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/user/roles")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/create")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/api/user/*")).authenticated()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/*/changePassword")).authenticated()
-                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/user/*")).hasRole("ADMIN")
+                        /*Peticiones relativas a adminService*/
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/admin/roles")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/admin/users")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/admin/users/create")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/admin/users/*")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/admin/users/*")).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

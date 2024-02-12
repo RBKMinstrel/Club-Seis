@@ -2,6 +2,7 @@ package es.minstrel.app.model.services;
 
 import es.minstrel.app.model.entities.User;
 import es.minstrel.app.model.entities.UserDao;
+import es.minstrel.app.model.entities.UserRol;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,19 @@ public class PermissionCheckerImpl implements PermissionChecker {
 
         return user.get();
 
+    }
+
+    @Override
+    public boolean checkUserIsAdmin(Long userId) throws InstanceNotFoundException {
+        User user = checkUser(userId);
+
+        if (user.getUserRols() != null)
+            for (UserRol userRol : user.getUserRols()) {
+                if (userRol.getRol().getRole().equals("ADMIN"))
+                    return true;
+            }
+
+        return false;
     }
 
 }
