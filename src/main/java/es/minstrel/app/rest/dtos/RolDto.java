@@ -3,14 +3,14 @@ package es.minstrel.app.rest.dtos;
 public class RolDto {
 
     private Long id;
-    private String rol;
+    private String name;
 
     public RolDto() {
     }
 
-    public RolDto(Long id, String rol) {
+    public RolDto(Long id, String name) {
         this.id = id;
-        this.rol = rol;
+        this.name = name;
     }
 
     public Long getId() {
@@ -21,11 +21,11 @@ public class RolDto {
         this.id = id;
     }
 
-    public String getRol() {
-        return rol;
+    public String getName() {
+        return name;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setName(String name) {
+        this.name = name;
     }
 }

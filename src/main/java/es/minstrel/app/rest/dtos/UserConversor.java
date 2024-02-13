@@ -2,7 +2,6 @@ package es.minstrel.app.rest.dtos;
 
 import es.minstrel.app.model.entities.Rol;
 import es.minstrel.app.model.entities.User;
-import es.minstrel.app.model.entities.UserRol;
 
 import java.util.List;
 
@@ -17,7 +16,12 @@ public class UserConversor {
 
     public final static UserDto toUserDto(User user) {
         return new UserDto(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(),
-                toRolDtos(user.getUserRols().stream().map(UserRol::getRol).toList()));
+                user.getUserRols().stream().map(userRol -> userRol.getRol().getId()).toList());
+    }
+
+    public final static UserInfoDto toUserInfoDto(User user) {
+        return new UserInfoDto(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(),
+                user.getUserRols().stream().map(userRol -> userRol.getRol().getRole()).toList());
     }
 
     public final static User toUser(UserDto userDto) {
@@ -27,7 +31,7 @@ public class UserConversor {
 
     public final static AuthenticatedUserDto toAuthenticatedUserDto(String serviceToken, User user) {
 
-        return new AuthenticatedUserDto(serviceToken, toUserDto(user));
+        return new AuthenticatedUserDto(serviceToken, toUserInfoDto(user));
 
     }
 

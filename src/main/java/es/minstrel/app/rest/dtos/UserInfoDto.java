@@ -5,31 +5,25 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public class UserDto {
-
-    public interface AllValidations {
-    }
-
-    public interface UpdateValidations {
-    }
+public class UserInfoDto {
 
     private Long id;
     private String userName;
     private String password;
     private String firstName;
     private String lastName;
-    private List<Long> rolesIds;
+    private List<String> roles;
 
-    public UserDto() {
+    public UserInfoDto() {
     }
 
-    public UserDto(Long id, String userName, String firstName, String lastName, List<Long> roles) {
+    public UserInfoDto(Long id, String userName, String firstName, String lastName, List<String> roles) {
 
         this.id = id;
         this.userName = userName != null ? userName.trim() : null;
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
-        this.rolesIds = roles;
+        this.roles = roles;
 
     }
 
@@ -41,8 +35,8 @@ public class UserDto {
         this.id = id;
     }
 
-    @NotNull(groups = {AllValidations.class, UpdateValidations.class})
-    @Size(min = 1, max = 60, groups = {AllValidations.class, UpdateValidations.class})
+    @NotNull()
+    @Size(min = 1, max = 60)
     public String getUserName() {
         return userName;
     }
@@ -51,8 +45,8 @@ public class UserDto {
         this.userName = userName.trim();
     }
 
-    @NotNull(groups = {AllValidations.class})
-    @Size(min = 1, max = 60, groups = {AllValidations.class})
+    @NotNull()
+    @Size(min = 1, max = 60)
     public String getPassword() {
         return password;
     }
@@ -61,8 +55,8 @@ public class UserDto {
         this.password = password;
     }
 
-    @NotNull(groups = {AllValidations.class, UpdateValidations.class})
-    @Size(min = 1, max = 60, groups = {AllValidations.class, UpdateValidations.class})
+    @NotNull()
+    @Size(min = 1, max = 60)
     public String getFirstName() {
         return firstName;
     }
@@ -71,8 +65,8 @@ public class UserDto {
         this.firstName = firstName.trim();
     }
 
-    @NotNull(groups = {AllValidations.class, UpdateValidations.class})
-    @Size(min = 1, max = 60, groups = {AllValidations.class, UpdateValidations.class})
+    @NotNull()
+    @Size(min = 1, max = 60)
     public String getLastName() {
         return lastName;
     }
@@ -81,11 +75,11 @@ public class UserDto {
         this.lastName = lastName.trim();
     }
 
-    public List<Long> getRolesIds() {
-        return rolesIds;
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setRolesIds(List<Long> rolesIds) {
-        this.rolesIds = rolesIds;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }

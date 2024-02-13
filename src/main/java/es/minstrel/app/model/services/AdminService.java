@@ -14,6 +14,8 @@ public interface AdminService {
 
     List<Rol> getAllRoles();
 
+    User getUserById(Long id) throws InstanceNotFoundException;
+
     void createUser(User user, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException;
 

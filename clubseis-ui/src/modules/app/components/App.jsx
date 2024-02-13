@@ -1,14 +1,42 @@
 import './App.css'
+
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux";
 import {Route, Routes} from "react-router-dom";
-import {Base, Login} from "../../user/index.js";
+
+import user, {Base, BaseIndex, ChangePassword, Login, Logout, UpdateProfile} from "../../user";
+import {MainAdmin, UserForm} from "../../admin/index";
 
 const App = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+
+        dispatch(user.actions.tryLoginFromServiceToken(
+            () => dispatch(user.actions.logout())));
+
+    }, [dispatch]);
+
+    const loggedIn = useSelector(user.selectors.isLoggedIn);
+    const roles = useSelector(user.selectors.getUserRoles);
 
     return (
         <div>
             <Routes>
                 <Route path="/*" element={<Login/>}/>
-                <Route path="/gestion" element={<Base/>}/>
+                {!loggedIn && <Route path="/gestion/login" element={<Login/>}/>}
+                {loggedIn && <Route path="/gestion/logout" element={<Logout/>}/>}
+                {loggedIn && <Route path="/gestion/update-profile" element={<UpdateProfile/>}/>}
+                {loggedIn && <Route path="/gestion/change-password" element={<ChangePassword/>}/>}
+                {loggedIn &&
+                    <Route path="/gestion/" element={<Base/>}>
+                        <Route index element={<BaseIndex/>}/>
+                        {roles.includes('ADMIN') && <Route path="admin" element={<MainAdmin/>}/>}
+                        {roles.includes('ADMIN') && <Route path="admin/create-user" element={<UserForm/>}/>}
+                        {roles.includes('ADMIN') && <Route path="admin/:userId/update" element={<MainAdmin/>}/>}
+                    </Route>
+                }
             </Routes>
         </div>
     );

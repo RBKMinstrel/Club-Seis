@@ -84,6 +84,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public User getUserById(Long id) throws InstanceNotFoundException {
+        return permissionChecker.checkUser(id);
+    }
+
+    @Override
     public void createUser(User user, List<Long> rolesIds) throws DuplicateInstanceException, InstanceNotFoundException, PermissionException {
 
         if (userDao.existsByUserName(user.getUserName())) {

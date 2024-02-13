@@ -6,10 +6,7 @@ import es.minstrel.app.model.services.UserService;
 import es.minstrel.app.rest.common.ErrorsDto;
 import es.minstrel.app.rest.common.JwtGenerator;
 import es.minstrel.app.rest.common.JwtInfo;
-import es.minstrel.app.rest.dtos.AuthenticatedUserDto;
-import es.minstrel.app.rest.dtos.ChangePasswordParamsDto;
-import es.minstrel.app.rest.dtos.LoginParamsDto;
-import es.minstrel.app.rest.dtos.UserDto;
+import es.minstrel.app.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -19,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Locale;
 
 import static es.minstrel.app.rest.dtos.UserConversor.toAuthenticatedUserDto;
-import static es.minstrel.app.rest.dtos.UserConversor.toUserDto;
+import static es.minstrel.app.rest.dtos.UserConversor.toUserInfoDto;
 
 @RestController
 @RequestMapping("/api/user")
@@ -71,15 +68,25 @@ public class UserController {
 
     }
 
+    @PostMapping("/loginFromServiceToken")
+    public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId,
+                                                      @RequestAttribute String serviceToken) throws InstanceNotFoundException {
+
+        User user = userService.loginFromId(userId);
+
+        return toAuthenticatedUserDto(serviceToken, user);
+
+    }
+
     @PutMapping("/{id}")
-    public UserDto updateUser(@RequestAttribute Long userId, @PathVariable Long id,
-                              @Validated({UserDto.UpdateValidations.class}) @RequestBody UserDto userDto)
+    public UserInfoDto updateUser(@RequestAttribute Long userId, @PathVariable Long id,
+                                  @Validated({UserDto.UpdateValidations.class}) @RequestBody UserDto userInfoDto)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         if (!id.equals(userId))
             throw new PermissionException();
 
-        return toUserDto(userService.updateUser(id, userDto.getUserName(), userDto.getFirstName(), userDto.getLastName()));
+        return toUserInfoDto(userService.updateUser(id, userInfoDto.getUserName(), userInfoDto.getFirstName(), userInfoDto.getLastName()));
 
     }
 

@@ -30,20 +30,30 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public BlockDto<UserDto> getAllUser() {
-        Block<User> userBlock = adminService.getAllUser(0, 5);
+    public BlockDto<UserDto> getAllUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Block<User> userBlock = adminService.getAllUser(page, size);
 
         return new BlockDto<>(toUserDtos(userBlock.getItems()), userBlock.getExistMoreItems());
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/users")
     public void createUser(@RequestAttribute Long userId,
                            @Validated({UserDto.AllValidations.class}) @RequestBody UserDto userDto)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = toUser(userDto);
 
-        adminService.createUser(user, toRolesIds(userDto.getRoles()));
+        adminService.createUser(user, userDto.getRolesIds());
+
+    }
+
+    @GetMapping("/users/{id}")
+    public UserDto getUser(@RequestAttribute Long userId, @PathVariable Long id)
+            throws InstanceNotFoundException {
+
+        return toUserDto(adminService.getUserById(id));
 
     }
 
@@ -53,7 +63,7 @@ public class AdminController {
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         adminService.updateUser(id, userDto.getUserName(), userDto.getFirstName(), userDto.getLastName(),
-                toRolesIds(userDto.getRoles()));
+                userDto.getRolesIds());
 
     }
 

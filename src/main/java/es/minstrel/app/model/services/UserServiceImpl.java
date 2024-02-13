@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
+    @Transactional(readOnly = true)
     public User login(String userName, String password) throws IncorrectLoginException {
 
         Optional<User> user = userDao.findByUserName(userName);
@@ -40,6 +41,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return user.get();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User loginFromId(Long id) throws InstanceNotFoundException {
+        return permissionChecker.checkUser(id);
     }
 
     @Override

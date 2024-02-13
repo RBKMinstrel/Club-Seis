@@ -11,6 +11,9 @@ public interface UserService {
     User login(String userName, String password)
             throws IncorrectLoginException;
 
+    User loginFromId(Long id)
+            throws InstanceNotFoundException;
+
     User updateUser(Long id, String userName, String firstname, String lastName)
             throws InstanceNotFoundException, DuplicateInstanceException;
 

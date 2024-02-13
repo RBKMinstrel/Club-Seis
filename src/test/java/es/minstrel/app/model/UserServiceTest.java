@@ -70,6 +70,24 @@ public class UserServiceTest {
         assertThrows(IncorrectLoginException.class, () -> userService.login("X", "Y"));
     }
 
+    /*Funcion de login por id*/
+
+    @Test
+    public void testLoginFromId() throws InstanceNotFoundException {
+
+        User user = createUser("user");
+
+        User loggedInUser = userService.loginFromId(user.getId());
+
+        assertEquals(user, loggedInUser);
+
+    }
+
+    @Test
+    public void testLoginFromIdWithNonExistentUser() {
+        assertThrows(InstanceNotFoundException.class, () -> userService.loginFromId(NON_EXISTENT_ID));
+    }
+
     /*Funcion de actualizar usuario*/
 
     @Test

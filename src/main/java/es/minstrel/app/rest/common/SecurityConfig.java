@@ -38,12 +38,14 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher("/*")).permitAll()
                         /*Peticiones relativas a userService*/
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/login")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/loginFromServiceToken")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/api/user/*")).authenticated()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/*/changePassword")).authenticated()
                         /*Peticiones relativas a adminService*/
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/admin/roles")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/admin/users")).hasRole("ADMIN")
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/admin/users/create")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/admin/users")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/admin/users/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/api/admin/users/*")).hasRole("ADMIN")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/admin/users/*")).hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -9,7 +9,6 @@ import store from './store';
 import app, {App} from './modules/app';
 import backend, {NetworkError} from './backend';
 import {initReactIntl} from './i18n';
-import './index.css';
 
 /* Configure backend proxy. */
 backend.init(() => store.dispatch(app.actions.error(new NetworkError())));
