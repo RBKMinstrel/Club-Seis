@@ -10,6 +10,7 @@ import es.minstrel.app.rest.dtos.BlockDto;
 import es.minstrel.app.rest.dtos.RolDto;
 import es.minstrel.app.rest.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,7 @@ public class AdminController {
     }
 
     @PostMapping("/users")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createUser(@RequestAttribute Long userId,
                            @Validated({UserDto.AllValidations.class}) @RequestBody UserDto userDto)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
@@ -58,16 +60,18 @@ public class AdminController {
     }
 
     @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUser(@RequestAttribute Long userId, @PathVariable Long id,
                            @Validated({UserDto.UpdateValidations.class}) @RequestBody UserDto userDto)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
-        adminService.updateUser(id, userDto.getUserName(), userDto.getFirstName(), userDto.getLastName(),
-                userDto.getRolesIds());
+        adminService.updateUser(id, userDto.getUserName(), userDto.getPassword(), userDto.getFirstName(),
+                userDto.getLastName(), userDto.getRolesIds());
 
     }
 
     @DeleteMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@RequestAttribute Long userId, @PathVariable Long id)
             throws InstanceNotFoundException, PermissionException {
 

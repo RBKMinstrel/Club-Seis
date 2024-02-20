@@ -143,11 +143,12 @@ public class AdminServiceTest {
         rolList.remove(rol1.getId());
         rolList.add(rol2.getId());
 
+        user.setPassword(passwordEncoder.encode("Xpassword"));
         user.setUserName('X' + user.getUserName());
         user.setFirstName('X' + user.getFirstName());
         user.setLastName('X' + user.getLastName());
 
-        adminService.updateUser(user.getId(), 'X' + user.getUserName(),
+        adminService.updateUser(user.getId(), 'X' + user.getUserName(), "Xpassword",
                 'X' + user.getFirstName(), 'X' + user.getLastName(), rolList);
         Optional<User> updatedUser = userDao.findById(user.getId());
 
@@ -159,7 +160,7 @@ public class AdminServiceTest {
     @Test
     public void testUpdateUserWithNonExistentId() {
         assertThrows(InstanceNotFoundException.class, () ->
-                adminService.updateUser(NON_EXISTENT_ID, "X", "X", "X", new ArrayList<>()));
+                adminService.updateUser(NON_EXISTENT_ID, "X", "X", "X", "X", new ArrayList<>()));
     }
 
     @Test
@@ -172,7 +173,7 @@ public class AdminServiceTest {
         adminService.createUser(user2, new ArrayList<>());
 
         assertThrows(DuplicateInstanceException.class, () ->
-                adminService.updateUser(user1.getId(), user2.getUserName(),
+                adminService.updateUser(user1.getId(), user2.getUserName(), "X",
                         user1.getFirstName(), user1.getLastName(), new ArrayList<>()));
 
     }
@@ -188,7 +189,7 @@ public class AdminServiceTest {
         adminService.createUser(user, new ArrayList<>());
 
         assertThrows(InstanceNotFoundException.class, () ->
-                adminService.updateUser(user.getId(), 'X' + user.getUserName(),
+                adminService.updateUser(user.getId(), 'X' + user.getUserName(), "X",
                         'X' + user.getFirstName(), 'X' + user.getLastName(), rolList));
 
     }
@@ -208,7 +209,7 @@ public class AdminServiceTest {
         adminService.createUser(user, new ArrayList<>());
 
         assertThrows(PermissionException.class, () ->
-                adminService.updateUser(user.getId(), 'X' + user.getUserName(),
+                adminService.updateUser(user.getId(), 'X' + user.getUserName(), "X",
                         'X' + user.getFirstName(), 'X' + user.getLastName(), rolList));
 
     }
@@ -220,7 +221,7 @@ public class AdminServiceTest {
 
         assertThrows(PermissionException.class, () ->
                 adminService.updateUser(user.getId(), user.getUserName(),
-                        user.getFirstName(), user.getLastName(), new ArrayList<>()));
+                        "X", user.getFirstName(), user.getLastName(), new ArrayList<>()));
 
     }
 

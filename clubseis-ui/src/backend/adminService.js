@@ -11,3 +11,9 @@ export const findByUserId = (id, onSuccess) =>
 
 export const createUser = (user, onSuccess, onErrors) =>
     appFetch('/admin/users', config('POST', user), onSuccess, onErrors);
+
+export const updateUser = (id, user, onSuccess, onErrors) =>
+    appFetch(`/admin/users/${id}`, config('PUT', user), onSuccess, onErrors);
+
+export const deleteUser = (id, onSuccess, onErrors) =>
+    appFetch(`/admin/users/${id}`, config('DELETE'), onSuccess, onErrors);

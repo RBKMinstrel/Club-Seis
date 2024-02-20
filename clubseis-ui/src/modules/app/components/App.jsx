@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Route, Routes} from "react-router-dom";
 
 import user, {Base, BaseIndex, ChangePassword, Login, Logout, UpdateProfile} from "../../user";
-import {MainAdmin, UserForm} from "../../admin/index";
+import {MainAdmin, UpdateUser, UserForm} from "../../admin";
 
 const App = () => {
 
@@ -34,7 +34,8 @@ const App = () => {
                         <Route index element={<BaseIndex/>}/>
                         {roles.includes('ADMIN') && <Route path="admin" element={<MainAdmin/>}/>}
                         {roles.includes('ADMIN') && <Route path="admin/create-user" element={<UserForm/>}/>}
-                        {roles.includes('ADMIN') && <Route path="admin/:userId/update" element={<MainAdmin/>}/>}
+                        {roles.includes('ADMIN') && <Route path="admin/update" element={<UpdateUser/>}/>}
+                        {roles.includes('ADMIN') && <Route path="admin/delete" element={<MainAdmin/>}/>}
                     </Route>
                 }
             </Routes>

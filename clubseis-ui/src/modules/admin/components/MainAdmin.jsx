@@ -5,6 +5,7 @@ import * as selectors from '../selectors';
 import {Pager} from '../../common';
 import Users from './Users';
 import {useEffect} from "react";
+import {Link} from "react-router-dom";
 
 const MainAdmin = () => {
 
@@ -35,6 +36,9 @@ const MainAdmin = () => {
     return (
 
         <div className="">
+            <Link to={'/gestion/admin/create-user'}>
+                Añadir usuario
+            </Link>
             <Users users={userSearch.result.items}/>
             <Pager
                 back={{

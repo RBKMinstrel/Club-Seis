@@ -1,11 +1,32 @@
 import PropTypes from 'prop-types';
 
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+
 import * as selectors from '../selectors';
-import {useSelector} from "react-redux";
+import * as actions from '../actions';
 
 const Users = ({users}) => {
     const roles = useSelector(selectors.getRoles);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const updateClick = (id) => {
+
+        dispatch(actions.findUserById(id,
+            () => navigate(`/gestion/admin/update`))
+        );
+
+    }
+
+    const deleteClick = (id) => {
+
+        dispatch(actions.findUserById(id,
+            () => navigate(`/gestion/admin/delete`))
+        );
+
+    }
+
 
     return (
         <table className="custom-table">
@@ -23,6 +44,9 @@ const Users = ({users}) => {
                 </th>
                 <th scope="col">
                     Roles
+                </th>
+                <th scope="col">
+                    Acciones
                 </th>
             </tr>
             </thead>
@@ -43,6 +67,22 @@ const Users = ({users}) => {
                     </td>
                     <td>
                         <p>{user.rolesIds.map(id => selectors.getRolName(roles, id)).join(", ")}</p>
+                    </td>
+                    <td>
+                        {user.rolesIds.map(id => selectors.getRolName(roles, id)).includes('ADMIN') ?
+                            (
+                                <p>El usuario es administrador</p>
+                            ) : (
+                                <div className="acciones">
+                                    <button onClick={() => updateClick(user.id)}>
+                                        Editar
+                                    </button>
+                                    <button onClick={() => deleteClick(user.id)}>
+                                        Borrar
+                                    </button>
+                                </div>
+                            )
+                        }
                     </td>
                 </tr>
             )}

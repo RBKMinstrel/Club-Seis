@@ -37,7 +37,7 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className="center-content">
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
             <div>
                 <h5>

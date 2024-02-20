@@ -104,7 +104,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateUser(Long id, String userName, String firstName, String lastName, List<Long> rolesIds)
+    public void updateUser(Long id, String userName, String password, String firstName, String lastName, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException {
 
         User user = permissionChecker.checkUser(id);
@@ -117,6 +117,9 @@ public class AdminServiceImpl implements AdminService {
                 throw new DuplicateInstanceException("project.entities.user", userName);
             }
         }
+
+        if (password != null && !password.isEmpty())
+            user.setPassword(passwordEncoder.encode(password));
 
         user.setUserName(userName);
         user.setFirstName(firstName);

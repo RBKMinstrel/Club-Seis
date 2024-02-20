@@ -48,9 +48,13 @@ const findUserByIdCompleted = user => ({
     user
 });
 
-export const findUserById = id => dispatch => {
+export const findUserById = (id, onSuccess) => dispatch => {
+    dispatch(clearUser());
     backend.adminService.findByUserId(id,
-        user => dispatch(findUserByIdCompleted(user)));
+        user => {
+            dispatch(findUserByIdCompleted(user));
+            onSuccess();
+        });
 }
 
 export const clearUser = () => ({
@@ -59,3 +63,9 @@ export const clearUser = () => ({
 
 export const createUser = (user, onSuccess, onErrors) => () =>
     backend.adminService.createUser(user, onSuccess, onErrors);
+
+export const updateUser = (id, user, onSuccess, onErrors) => () =>
+    backend.adminService.updateUser(id, user, onSuccess, onErrors);
+
+export const deleteUser = (id, onSuccess, onErrors) => () =>
+    backend.adminService.deleteUser(id, onSuccess, onErrors);

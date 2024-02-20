@@ -12,6 +12,12 @@ body {
     margin-right: 10px;
 }
 
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .custom-table {
     width: 100%;
     border-collapse: collapse;

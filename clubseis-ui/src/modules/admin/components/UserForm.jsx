@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 
 import {Errors} from '../../common';
 import * as actions from '../actions';
+import RolesSelector from "./RolesSelector.jsx";
 
 const UserForm = () => {
 
@@ -24,7 +25,7 @@ const UserForm = () => {
 
         event.preventDefault();
 
-        if (form.checkValidity()) {
+        if (form.checkValidity() && checkConfirmNewPassword()) {
 
             dispatch(actions.createUser(
                 {
@@ -32,7 +33,7 @@ const UserForm = () => {
                     password: password,
                     firstName: firstName.trim(),
                     lastName: lastName.trim(),
-                    rolesIds: rolesIds
+                    rolesIds: toNumbers(rolesIds)
                 },
                 () => navigate('/gestion/admin'),
                 errors => setBackendErrors(errors)));
@@ -44,6 +45,8 @@ const UserForm = () => {
         }
 
     }
+
+    const toNumbers = value => value.length > 0 ? value.map(id => Number(id)) : value;
 
     const checkConfirmNewPassword = () => {
 
@@ -68,16 +71,27 @@ const UserForm = () => {
 
     }
 
+    const handleChangeRoles = event => {
+        const options = event.target.options;
+        const values = [];
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected)
+                values.push(options[i].value);
+        }
+        setRolesIds(values);
+    }
+
     return (
         <div>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
             <div>
                 <h5>
-                    Actualizar perfil
+                    Crear usuario
                 </h5>
                 <div>
                     <form ref={node => form = node}
-                          noValidate onSubmit={e => handleSubmit(e)}>
+                          noValidate
+                          onSubmit={e => handleSubmit(e)}>
                         <div>
                             <label htmlFor="userName">
                                 Nombre de usuario
@@ -152,6 +166,13 @@ const UserForm = () => {
                                     Apellidos requerido
                                 </div>
                             </div>
+                        </div>
+                        <div>
+                            <label htmlFor="roles">
+                                Roles
+                            </label>
+                            <RolesSelector id="roles" multiple={true} value={rolesIds}
+                                           onChange={e => handleChangeRoles(e)}/>
                         </div>
                         <div>
                             <div>

@@ -19,7 +19,7 @@ public interface AdminService {
     void createUser(User user, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException;
 
-    void updateUser(Long id, String userName, String firstname, String lastName, List<Long> rolesIds)
+    void updateUser(Long id, String userName, String password, String firstname, String lastName, List<Long> rolesIds)
             throws InstanceNotFoundException, DuplicateInstanceException, PermissionException;
 
     void deleteUser(Long id)
