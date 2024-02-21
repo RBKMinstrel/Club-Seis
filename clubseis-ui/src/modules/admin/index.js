@@ -6,5 +6,6 @@ import * as selectors from './selectors';
 export {default as MainAdmin} from "./components/MainAdmin";
 export {default as UserForm} from "./components/UserForm";
 export {default as UpdateUser} from "./components/UpdateUser";
+export {default as DeleteUser} from "./components/DeleteUser";
 
 export default {actions, actionTypes, reducer, selectors};
