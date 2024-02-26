@@ -1,28 +1,33 @@
-.cabezera {
-    height: 200px;
-    width: 100%;
-    top: 0;
+.general {
+    display: block;
+}
+
+.header {
     background-color: cornflowerblue;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 160px;
+    width: 100%;
+    display: block;
+}
+
+.top-header {
+    height: 125px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .logo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 200px;
+    padding: 10px;
 }
 
 .logo img {
-    width: 150px;
-    height: 150px;
-}
-
-.logo p {
-    color: white;
+    width: 100px;
+    height: 100px;
 }
 
 .funciones {
@@ -44,36 +49,50 @@
     background-color: #ddd;
 }
 
-.sidenav {
-    height: 100%;
-    width: 200px;
-    position: fixed;
-    left: 0;
+.top-subnav {
     background-color: #111;
+    color: #f1f1f1;
+    letter-spacing: 1px;
+    height: 35px;
+    width: 100%;
     overflow-x: hidden;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-/* Side navigation links */
-.sidenav a {
-    color: white;
-    padding: 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/* Change color on hover */
-.sidenav a:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-/* Style the content */
-.content {
-    margin-left: 200px;
-    padding: 20px;
-}
-
-.acciones {
+.top-subnav div {
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 2px solid transparent;
     display: flex;
     align-items: center;
+}
+
+.top-subnav div:hover {
+    background-color: #ddd;
+    color: black;
+    border-bottom-color: #fff;
+}
+
+.top-subnav a {
+    color: white;
+    text-decoration: none;
+    transition: border-bottom-color 0.3s;
+}
+
+.top-subnav a:hover {
+    background-color: #ddd;
+    color: black;
+    border-bottom-color: #fff;
+}
+
+.content {
+    margin-top: 160px;
+    padding: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
 }

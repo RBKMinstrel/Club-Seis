@@ -10,38 +10,37 @@ const Base = () => {
     const roles = useSelector(user.selectors.getUserRoles);
 
     return (
-        <div>
-            <header className="cabezera row">
-                <div className="logo">
-                    <Link to="/gestion">
+        <div className="general">
+            <header className="header">
+                <div className="top-header">
+                    <Link className="logo" to="/gestion">
                         <img src={appLogo}/>
                     </Link>
-                    <p>
+                    <h1>
                         Seis Do Nadal
-                    </p>
-                </div>
-                <div className="funciones">
-                    <Link to="/gestion/update-profile">
-                        Actualizar perfil
-                    </Link>
-                    <Link to="/gestion/change-password">
-                        Cambiar contraseña
-                    </Link>
-                    <Link to="/gestion/logout">
-                        Logout
-                    </Link>
-
-                </div>
-            </header>
-            <div className="sidenav">
-                <nav>
-                    {roles.includes('ADMIN') &&
-                        <Link to="/gestion/admin">
-                            Admin
+                    </h1>
+                    <div className="funciones">
+                        <Link to="/gestion/update-profile">
+                            Actualizar perfil
                         </Link>
+                        <Link to="/gestion/change-password">
+                            Cambiar contraseña
+                        </Link>
+                        <Link to="/gestion/logout">
+                            Logout
+                        </Link>
+                    </div>
+                </div>
+                <nav className="top-subnav">
+                    {roles.includes('ADMIN') &&
+                        <div>
+                            <Link to="/gestion/admin">
+                                Admin
+                            </Link>
+                        </div>
                     }
                 </nav>
-            </div>
+            </header>
             <main className="content">
                 <Outlet/>
             </main>
