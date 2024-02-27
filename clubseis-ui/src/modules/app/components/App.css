@@ -2,9 +2,11 @@
     box-sizing: border-box;
 }
 
-body {
+.main {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+    width: 100%;
 }
 
 .row {
@@ -16,6 +18,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.center-content-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .custom-table {

@@ -22,16 +22,16 @@ const App = () => {
     const roles = useSelector(user.selectors.getUserRoles);
 
     return (
-        <div>
+        <div className="main">
             <Routes>
                 <Route path="/*" element={<Login/>}/>
                 {!loggedIn && <Route path="/gestion/login" element={<Login/>}/>}
-                {loggedIn && <Route path="/gestion/logout" element={<Logout/>}/>}
-                {loggedIn && <Route path="/gestion/update-profile" element={<UpdateProfile/>}/>}
-                {loggedIn && <Route path="/gestion/change-password" element={<ChangePassword/>}/>}
                 {loggedIn &&
                     <Route path="/gestion/" element={<Base/>}>
                         <Route index element={<BaseIndex/>}/>
+                        <Route path="/gestion/update-profile" element={<UpdateProfile/>}/>
+                        <Route path="/gestion/change-password" element={<ChangePassword/>}/>
+                        <Route path="/gestion/logout" element={<Logout/>}/>
                         {roles.includes('ADMIN') && <Route path="admin" element={<MainAdmin/>}/>}
                         {roles.includes('ADMIN') && <Route path="admin/create-user" element={<UserForm/>}/>}
                         {roles.includes('ADMIN') && <Route path="admin/update" element={<UpdateUser/>}/>}

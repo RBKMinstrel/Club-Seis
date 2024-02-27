@@ -27,7 +27,7 @@ const Base = () => {
                             Cambiar contraseña
                         </Link>
                         <Link to="/gestion/logout">
-                            Logout
+                            Desconectarse
                         </Link>
                     </div>
                 </div>
