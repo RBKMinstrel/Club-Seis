@@ -79,13 +79,13 @@ CREATE TABLE Movimiento
     base4         DECIMAL(11, 2) NOT NULL,
     base10        DECIMAL(11, 2) NOT NULL,
     base21        DECIMAL(11, 2) NOT NULL,
-    razonSocialId BIGINT         NOT NULL,
-    conceptoId    BIGINT         NOT NULL,
-    categoriaId   BIGINT         NOT NULL,
-    cuentaId      BIGINT         NOT NULL,
+    razonSocialId BIGINT,
+    conceptoId    BIGINT,
+    categoriaId   BIGINT,
+    cuentaId      BIGINT,
     CONSTRAINT MovimientoPK PRIMARY KEY (id),
-    CONSTRAINT MovimientoRazonSocialFK FOREIGN KEY (razonSocialId) REFERENCES RazonSocial (id),
-    CONSTRAINT MovimientoConceptoFK FOREIGN KEY (conceptoId) REFERENCES Concepto (id),
-    CONSTRAINT MovimientoCategoriaFK FOREIGN KEY (categoriaId) REFERENCES Categoria (id),
-    CONSTRAINT MovimientoCuentaFK FOREIGN KEY (cuentaId) REFERENCES Cuenta (id)
+    CONSTRAINT MovimientoRazonSocialFK FOREIGN KEY (razonSocialId) REFERENCES RazonSocial (id) ON DELETE SET NULL,
+    CONSTRAINT MovimientoConceptoFK FOREIGN KEY (conceptoId) REFERENCES Concepto (id) ON DELETE SET NULL,
+    CONSTRAINT MovimientoCategoriaFK FOREIGN KEY (categoriaId) REFERENCES Categoria (id) ON DELETE SET NULL,
+    CONSTRAINT MovimientoCuentaFK FOREIGN KEY (cuentaId) REFERENCES Cuenta (id) ON DELETE SET NULL
 ) ENGINE = InnoDB;

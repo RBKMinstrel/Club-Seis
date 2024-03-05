@@ -35,12 +35,10 @@ const MainAdmin = () => {
 
     return (
 
-        <div className="center-content-column">
+        <div className="main-admin">
             <Link to={'/gestion/admin/create-user'}>
                 + Añadir usuario
             </Link>
-            <br/>
-            <br/>
             <Users users={userSearch.result.items}/>
             <Pager
                 back={{

@@ -94,7 +94,7 @@ public class Movimiento {
         this.base21 = base21;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "razonSocialId")
     public RazonSocial getRazonSocial() {
         return razonSocial;
@@ -104,7 +104,7 @@ public class Movimiento {
         this.razonSocial = razonSocial;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "conceptoId")
     public Concepto getConcepto() {
         return concepto;
@@ -114,7 +114,7 @@ public class Movimiento {
         this.concepto = concepto;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "categoriaId")
     public Categoria getCategoria() {
         return categoria;
@@ -124,7 +124,7 @@ public class Movimiento {
         this.categoria = categoria;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "cuentaId")
     public Cuenta getCuenta() {
         return cuenta;
