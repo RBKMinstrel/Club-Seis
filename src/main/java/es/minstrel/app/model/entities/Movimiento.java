@@ -23,17 +23,13 @@ public class Movimiento {
     public Movimiento() {
     }
 
-    public Movimiento(LocalDate fecha, boolean esGasto, BigDecimal base0, BigDecimal base4, BigDecimal base10, BigDecimal base21, RazonSocial razonSocial, Concepto concepto, Categoria categoria, Cuenta cuenta) {
+    public Movimiento(LocalDate fecha, boolean esGasto, BigDecimal base0, BigDecimal base4, BigDecimal base10, BigDecimal base21) {
         this.fecha = fecha;
         this.esGasto = esGasto;
         this.base0 = base0;
         this.base4 = base4;
         this.base10 = base10;
         this.base21 = base21;
-        this.razonSocial = razonSocial;
-        this.concepto = concepto;
-        this.categoria = categoria;
-        this.cuenta = cuenta;
     }
 
     @Id
@@ -132,5 +128,25 @@ public class Movimiento {
 
     public void setCuenta(Cuenta cuenta) {
         this.cuenta = cuenta;
+    }
+
+    @Transient
+    public BigDecimal getIva4() {
+        return base4.multiply(new BigDecimal("0.04"));
+    }
+
+    @Transient
+    public BigDecimal getIva10() {
+        return base4.multiply(new BigDecimal("0.1"));
+    }
+
+    @Transient
+    public BigDecimal getIva21() {
+        return base4.multiply(new BigDecimal("0.21"));
+    }
+
+    @Transient
+    public BigDecimal getTotal() {
+        return base0.add(base4).add(getIva4()).add(base10).add(getIva10()).add(base21).add(getIva21());
     }
 }

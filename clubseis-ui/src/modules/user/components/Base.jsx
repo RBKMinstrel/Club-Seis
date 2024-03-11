@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import user from "../index.js";
 
 import "./Base.css";
-import appLogo from "../../../../public/logo.png";
+import appLogo from "../../../assets/logo.png";
 
 const Base = () => {
 
@@ -36,6 +36,13 @@ const Base = () => {
                         <div>
                             <Link to="/gestion/admin">
                                 Admin
+                            </Link>
+                        </div>
+                    }
+                    {roles.includes('TESORERO') &&
+                        <div>
+                            <Link to="/gestion/contabilidad">
+                                Contabilidad
                             </Link>
                         </div>
                     }

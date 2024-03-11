@@ -1,38 +1,61 @@
 package es.minstrel.app.model.services;
 
-import es.minstrel.app.model.entities.Categoria;
-import es.minstrel.app.model.entities.Concepto;
-import es.minstrel.app.model.entities.Cuenta;
-import es.minstrel.app.model.entities.RazonSocial;
+import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ContabilidadService {
 
     List<Categoria> getAllCategorias();
 
-    void createCategoria(String name) throws DuplicateInstanceException;
+    void createCategoria(String name)
+            throws DuplicateInstanceException;
 
-    void updateCategoria(Long id, String name) throws DuplicateInstanceException, InstanceNotFoundException;
+    void updateCategoria(Long id, String name)
+            throws DuplicateInstanceException, InstanceNotFoundException;
 
     List<Concepto> getAllConcepto();
 
-    void createConcepto(String name) throws DuplicateInstanceException;
+    void createConcepto(String name)
+            throws DuplicateInstanceException;
 
-    void updateConcepto(Long id, String name) throws DuplicateInstanceException, InstanceNotFoundException;
+    void updateConcepto(Long id, String name)
+            throws DuplicateInstanceException, InstanceNotFoundException;
+
+    List<RazonSocial> getAllRazonSocial();
 
     List<RazonSocial> getAllRazonSocial(String keywords);
 
-    void createRazonSocial(String denominacion, String cifnif) throws DuplicateInstanceException;
+    void createRazonSocial(String denominacion, String cifnif)
+            throws DuplicateInstanceException;
 
-    void updateRazonSocial(Long id, String denominacion, String cifnif) throws DuplicateInstanceException, InstanceNotFoundException;
+    void updateRazonSocial(Long id, String denominacion, String cifnif)
+            throws DuplicateInstanceException, InstanceNotFoundException;
 
     List<Cuenta> getAllCuentas();
 
-    void createCuentas(String name) throws DuplicateInstanceException;
+    void createCuentas(String name)
+            throws DuplicateInstanceException;
 
-    void updateCuentas(Long id, String name) throws DuplicateInstanceException, InstanceNotFoundException;
+    void updateCuentas(Long id, String name)
+            throws DuplicateInstanceException, InstanceNotFoundException;
+
+    Block<Movimiento> getMovimientos(LocalDate fecha, Long conceptoId, Long categoriaId, Long cuentaId, int page, int size);
+
+    Movimiento getMovimiento(Long id)
+            throws InstanceNotFoundException;
+
+    void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId);
+
+    void updateMovimiento(Long id, LocalDate fecha, boolean esGasto, BigDecimal base0, BigDecimal base4, BigDecimal base10,
+                          BigDecimal base21, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
+            throws InstanceNotFoundException;
+
+    void deleteMovimiento(Long id)
+            throws InstanceNotFoundException;
 
 }

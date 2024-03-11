@@ -36,6 +36,7 @@ const App = () => {
                         {roles.includes('ADMIN') && <Route path="admin/create-user" element={<UserForm/>}/>}
                         {roles.includes('ADMIN') && <Route path="admin/update" element={<UpdateUser/>}/>}
                         {roles.includes('ADMIN') && <Route path="admin/delete" element={<DeleteUser/>}/>}
+                        {roles.includes('TESORERO') && <Route path="admin/delete" element={<DeleteUser/>}/>}
                     </Route>
                 }
             </Routes>

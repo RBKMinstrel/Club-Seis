@@ -5,7 +5,7 @@ import * as actionTypes from './actionTypes';
 const initialState = {
     roles: null,
     userSearch: null,
-    user: null
+    user: null,
 };
 
 const roles = (state = initialState.roles, action) => {
