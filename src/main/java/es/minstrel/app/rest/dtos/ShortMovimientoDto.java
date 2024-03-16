@@ -11,11 +11,12 @@ public class ShortMovimientoDto {
     private String categoria;
     private String cuenta;
     private BigDecimal total;
+    private boolean gasto;
 
     public ShortMovimientoDto() {
     }
 
-    public ShortMovimientoDto(Long id, Long fecha, String razonSocial, String concepto, String categoria, String cuenta, BigDecimal total) {
+    public ShortMovimientoDto(Long id, Long fecha, String razonSocial, String concepto, String categoria, String cuenta, BigDecimal total, boolean gasto) {
         this.id = id;
         this.fecha = fecha;
         this.razonSocial = razonSocial;
@@ -23,6 +24,7 @@ public class ShortMovimientoDto {
         this.categoria = categoria;
         this.cuenta = cuenta;
         this.total = total;
+        this.gasto = gasto;
     }
 
     public Long getId() {
@@ -79,5 +81,13 @@ public class ShortMovimientoDto {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public boolean isGasto() {
+        return gasto;
+    }
+
+    public void setGasto(boolean gasto) {
+        this.gasto = gasto;
     }
 }

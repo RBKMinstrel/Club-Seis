@@ -27,6 +27,13 @@ const Users = ({users}) => {
 
     }
 
+    if (!users || users.length === 0) {
+        return (
+            <div role="alert">
+                No existen usuarios. Felicidades, lograste algo imposible.
+            </div>
+        );
+    }
 
     return (
         <table className="custom-table">

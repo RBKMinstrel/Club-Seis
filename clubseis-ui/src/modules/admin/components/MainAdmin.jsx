@@ -21,17 +21,8 @@ const MainAdmin = () => {
 
     }, [dispatch]);
 
-    if (!userSearch) {
+    if (!userSearch)
         return null;
-    }
-
-    if (userSearch.result.items.length === 0) {
-        return (
-            <div role="alert">
-                No existen usuarios
-            </div>
-        );
-    }
 
     return (
 

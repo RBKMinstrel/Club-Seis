@@ -18,7 +18,7 @@ public class MovimientoConversor {
     public final static ShortMovimientoDto toShortMovimientoDto(Movimiento movimiento) {
         return new ShortMovimientoDto(movimiento.getId(), toDays(movimiento.getFecha()),
                 toRazonSocialText(movimiento.getRazonSocial()), movimiento.getConcepto().getName(),
-                movimiento.getCategoria().getName(), movimiento.getCuenta().getName(), movimiento.getTotal());
+                movimiento.getCategoria().getName(), movimiento.getCuenta().getName(), movimiento.getTotal(), movimiento.isEsGasto());
     }
 
     public final static Movimiento toMovimiento(MovimientoDto movimientoDto) {

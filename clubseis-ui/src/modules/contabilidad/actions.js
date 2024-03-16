@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import * as selectors from './selectors';
 import backend from '../../backend';
 
 const findAllRazonSocialCompleted = razonSocial => ({
@@ -7,17 +6,10 @@ const findAllRazonSocialCompleted = razonSocial => ({
     razonSocial
 });
 
-export const findAllRazonSocial = () => (dispatch, getState) => {
-
-    const razonSocial = selectors.getRazonSocial(getState());
-
-    if (!razonSocial) {
-
-        backend.contabilidadService.findAllRazonSocial(
-            razonSocial => dispatch(findAllRazonSocialCompleted(razonSocial))
-        );
-
-    }
+export const findAllRazonSocial = () => dispatch => {
+    backend.contabilidadService.findAllRazonSocial(
+        razonSocial => dispatch(findAllRazonSocialCompleted(razonSocial))
+    );
 
 }
 
@@ -26,17 +18,10 @@ const findAllConceptosCompleted = conceptos => ({
     conceptos
 });
 
-export const findAllConceptos = () => (dispatch, getState) => {
-
-    const conceptos = selectors.getConceptos(getState());
-
-    if (!conceptos) {
-
-        backend.contabilidadService.findAllConceptos(
-            conceptos => dispatch(findAllConceptosCompleted(conceptos))
-        );
-
-    }
+export const findAllConceptos = () => dispatch => {
+    backend.contabilidadService.findAllConceptos(
+        conceptos => dispatch(findAllConceptosCompleted(conceptos))
+    );
 
 }
 
@@ -45,17 +30,10 @@ const findAllCategoriasCompleted = categorias => ({
     categorias
 });
 
-export const findAllCategorias = () => (dispatch, getState) => {
-
-    const categorias = selectors.getCategorias(getState());
-
-    if (!categorias) {
-
-        backend.contabilidadService.findAllCategorias(
-            categorias => dispatch(findAllCategoriasCompleted(categorias))
-        );
-
-    }
+export const findAllCategorias = () => dispatch => {
+    backend.contabilidadService.findAllCategorias(
+        categorias => dispatch(findAllCategoriasCompleted(categorias))
+    );
 
 }
 
@@ -64,17 +42,10 @@ const findAllCuentasCompleted = cuentas => ({
     cuentas
 });
 
-export const findAllCuentas = () => (dispatch, getState) => {
-
-    const cuentas = selectors.getCuentas(getState());
-
-    if (!cuentas) {
-
-        backend.contabilidadService.findAllCuentas(
-            cuentas => dispatch(findAllCuentasCompleted(cuentas))
-        );
-
-    }
+export const findAllCuentas = () => dispatch => {
+    backend.contabilidadService.findAllCuentas(
+        cuentas => dispatch(findAllCuentasCompleted(cuentas))
+    );
 
 }
 

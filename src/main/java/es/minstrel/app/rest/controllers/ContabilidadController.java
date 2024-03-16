@@ -7,6 +7,7 @@ import es.minstrel.app.model.services.Block;
 import es.minstrel.app.model.services.ContabilidadService;
 import es.minstrel.app.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,12 +27,14 @@ public class ContabilidadController {
     }
 
     @PostMapping("/conceptos")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createConcepto(@RequestBody ConceptoDto conceptoDto)
             throws DuplicateInstanceException {
         contabilidadService.createConcepto(conceptoDto.getName());
     }
 
     @PutMapping("/conceptos/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateConcepto(@PathVariable Long id, @RequestBody ConceptoDto conceptoDto)
             throws DuplicateInstanceException, InstanceNotFoundException {
         contabilidadService.updateConcepto(id, conceptoDto.getName());
@@ -43,12 +46,14 @@ public class ContabilidadController {
     }
 
     @PostMapping("/categorias")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createCategoria(@RequestBody CategoriaDto categoriaDto)
             throws DuplicateInstanceException {
         contabilidadService.createCategoria(categoriaDto.getName());
     }
 
     @PutMapping("/categorias/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCategoria(@PathVariable Long id, @RequestBody CategoriaDto categoriaDto)
             throws DuplicateInstanceException, InstanceNotFoundException {
         contabilidadService.updateCategoria(id, categoriaDto.getName());
@@ -60,12 +65,14 @@ public class ContabilidadController {
     }
 
     @PostMapping("/cuentas")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createCategoria(@RequestBody CuentaDto cuentaDto)
             throws DuplicateInstanceException {
         contabilidadService.createCuentas(cuentaDto.getName());
     }
 
     @PutMapping("/cuentas/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCuenta(@PathVariable Long id, @RequestBody CuentaDto cuentaDto)
             throws DuplicateInstanceException, InstanceNotFoundException {
         contabilidadService.updateCuentas(id, cuentaDto.getName());
@@ -81,12 +88,14 @@ public class ContabilidadController {
     }
 
     @PostMapping("/razon-social")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createRazonSocial(@RequestBody RazonSocialDto razonSocialDto)
             throws DuplicateInstanceException {
         contabilidadService.createRazonSocial(razonSocialDto.getDenominacion(), razonSocialDto.getCifnif());
     }
 
     @PutMapping("/razon-social/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateRazonSocial(@PathVariable Long id, @RequestBody RazonSocialDto razonSocialDto)
             throws DuplicateInstanceException, InstanceNotFoundException {
         contabilidadService.updateRazonSocial(id, razonSocialDto.getDenominacion(), razonSocialDto.getCifnif());
@@ -94,7 +103,8 @@ public class ContabilidadController {
 
     //TODO: Añadir campo razon social
     @GetMapping("/movimientos")
-    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Long fecha,
+    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Long razonSocialId,
+                                                       @RequestParam(required = false) Long fecha,
                                                        @RequestParam(required = false) Long conceptoId,
                                                        @RequestParam(required = false) Long categoriaId,
                                                        @RequestParam(required = false) Long cuentaId,
@@ -113,12 +123,14 @@ public class ContabilidadController {
     }
 
     @PostMapping("/movimientos")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createMovimientos(@RequestBody MovimientoDto movimientoDto) {
         contabilidadService.createMovimiento(toMovimiento(movimientoDto), movimientoDto.getRazonSocial(),
                 movimientoDto.getConcepto(), movimientoDto.getCategoria(), movimientoDto.getCuenta());
     }
 
     @PutMapping("/movimientos/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMovimiento(@PathVariable Long id, @RequestBody MovimientoDto movimientoDto) throws InstanceNotFoundException {
         contabilidadService.updateMovimiento(id, fromDays(movimientoDto.getFecha()),
                 movimientoDto.getEsGasto(), movimientoDto.getBase0(), movimientoDto.getBase4(),
@@ -127,6 +139,7 @@ public class ContabilidadController {
     }
 
     @DeleteMapping("/movimientos/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMovimiento(@PathVariable Long id)
             throws InstanceNotFoundException {
         contabilidadService.deleteMovimiento(id);
