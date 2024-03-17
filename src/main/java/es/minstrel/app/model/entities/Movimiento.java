@@ -3,6 +3,8 @@ package es.minstrel.app.model.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
@@ -132,17 +134,17 @@ public class Movimiento {
 
     @Transient
     public BigDecimal getIva4() {
-        return base4.multiply(new BigDecimal("0.04"));
+        return base4.multiply(new BigDecimal("0.04")).round(new MathContext(2, RoundingMode.HALF_DOWN));
     }
 
     @Transient
     public BigDecimal getIva10() {
-        return base4.multiply(new BigDecimal("0.1"));
+        return base4.multiply(new BigDecimal("0.1")).round(new MathContext(2, RoundingMode.HALF_DOWN));
     }
 
     @Transient
     public BigDecimal getIva21() {
-        return base4.multiply(new BigDecimal("0.21"));
+        return base4.multiply(new BigDecimal("0.21")).round(new MathContext(2, RoundingMode.HALF_DOWN));
     }
 
     @Transient
