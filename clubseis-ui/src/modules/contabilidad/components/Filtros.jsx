@@ -60,11 +60,17 @@ const Filtros = ({criteria}) => {
             cuentaId: cuentaId !== -1 ? cuentaId : null,
             size: size,
         }));
-    }
+    };
 
     const selectMapper = (value, label) => {
         return ({value: value, label: label})
     };
+
+    const selectRazonSocial = () => {
+        const razonSocial = selectors.getRazonSocial(razonesSociales, razonSocialId);
+        const aux = razonSocial ? razonSocial.denominacion + "(" + razonSocial.cifnif + ")" : "";
+        return selectMapper(razonSocialId, aux)
+    }
 
     return (
         <form className="form-filter-contabilidad" onSubmit={e => handleSubmit(e)}>
@@ -74,8 +80,8 @@ const Filtros = ({criteria}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={selectMapper(razonSocialId, selectors.getRazonSocial(razonesSociales, razonSocialId))}
-                    onChange={e => setRazonSocialId(e.value)}
+                    value={selectRazonSocial()}
+                    onChange={e => setRazonSocialId(e ? e.value : -1)}
                     options={razonesSociales ? razonesSociales.map(r => (selectMapper(r.id, r.denominacion + "(" + r.cifnif + ")"))) : []}
                 />
             </div>
@@ -94,7 +100,7 @@ const Filtros = ({criteria}) => {
                     isClearable={true}
                     isSearchable={true}
                     value={selectMapper(conceptoId, selectors.getConcepto(conceptos, conceptoId))}
-                    onChange={e => setConceptoId(e.value)}
+                    onChange={e => setConceptoId(e ? e.value : -1)}
                     options={conceptos ? conceptos.map(c => (selectMapper(c.id, c.name))) : []}
                 />
             </div>
@@ -105,7 +111,7 @@ const Filtros = ({criteria}) => {
                     isClearable={true}
                     isSearchable={true}
                     value={selectMapper(categoriaId, selectors.getCategoria(categorias, categoriaId))}
-                    onChange={e => setCategoriaId(e.value)}
+                    onChange={e => setCategoriaId(e ? e.value : -1)}
                     options={categorias ? categorias.map(c => (selectMapper(c.id, c.name))) : []}
                 />
             </div>
@@ -116,7 +122,7 @@ const Filtros = ({criteria}) => {
                     isClearable={true}
                     isSearchable={true}
                     value={selectMapper(cuentaId, selectors.getCuenta(cuentas, cuentaId))}
-                    onChange={e => setCuentaId(e.value)}
+                    onChange={e => setCuentaId(e ? e.value : -1)}
                     options={cuentas ? cuentas.map(c => (selectMapper(c.id, c.name))) : []}
                 />
             </div>

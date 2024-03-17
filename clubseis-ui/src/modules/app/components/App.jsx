@@ -6,7 +6,14 @@ import {Route, Routes} from "react-router-dom";
 
 import user, {Base, BaseIndex, ChangePassword, Login, Logout, UpdateProfile} from "../../user";
 import {DeleteUser, MainAdmin, UpdateUser, UserForm} from "../../admin";
-import {BuscadorMovimientos, Categorias, Conceptos, ContabilidadBase, Cuentas} from "../../contabilidad";
+import {
+    BuscadorMovimientos,
+    Categorias,
+    Conceptos,
+    ContabilidadBase,
+    Cuentas,
+    RazonesSociales
+} from "../../contabilidad";
 
 const App = () => {
 
@@ -47,6 +54,7 @@ const App = () => {
                                 <Route path="conceptos" element={<Conceptos/>}/>
                                 <Route path="cuentas" element={<Cuentas/>}/>
                                 <Route path="categorias" element={<Categorias/>}/>
+                                <Route path="razones-sociales" element={<RazonesSociales/>}/>
                             </Route>
                         }
                     </Route>

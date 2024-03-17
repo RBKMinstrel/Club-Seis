@@ -8,5 +8,6 @@ export {default as BuscadorMovimientos} from './components/BuscadorMovimientos';
 export {default as Conceptos} from './components/Conceptos';
 export {default as Cuentas} from './components/Cuentas';
 export {default as Categorias} from './components/Categorias';
+export {default as RazonesSociales} from './components/RazonesSociales';
 
 export default {actions, actionTypes, reducer, selectors};

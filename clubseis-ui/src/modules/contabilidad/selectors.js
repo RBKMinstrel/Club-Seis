@@ -15,7 +15,7 @@ export const getRazonSocial = (razonSociales, id) => {
         return '';
     }
 
-    return s;
+    return razonSocial;
 
 }
 
