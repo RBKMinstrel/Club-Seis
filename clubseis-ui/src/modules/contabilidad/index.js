@@ -9,5 +9,6 @@ export {default as Conceptos} from './components/Conceptos';
 export {default as Cuentas} from './components/Cuentas';
 export {default as Categorias} from './components/Categorias';
 export {default as RazonesSociales} from './components/RazonesSociales';
+export {default as CreateMovimiento} from './components/CreateMovimiento';
 
 export default {actions, actionTypes, reducer, selectors};

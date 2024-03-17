@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import * as actions from "../actions.js";
 import * as selectors from '../selectors';
 import {Pager} from "../../common/index";
+import {Link} from "react-router-dom";
 
 const BuscadorMovimientos = () => {
 
@@ -17,6 +18,7 @@ const BuscadorMovimientos = () => {
 
     return (
         <div>
+            <Link to="/gestion/contabilidad/crear-movimiento">Crear movimiento</Link>
             <Filtros criteria={movimientosSearch ? movimientosSearch.criteria : {}}/>
             <Movimientos movimientos={movimientosSearch ? movimientosSearch.result.items : []}/>
             <Pager back={{

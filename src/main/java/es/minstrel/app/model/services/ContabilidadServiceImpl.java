@@ -231,12 +231,13 @@ public class ContabilidadServiceImpl implements ContabilidadService {
     }
 
     @Override
-    public void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId) {
+    public void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
+            throws InstanceNotFoundException {
 
-        RazonSocial razonSocial = razonSocialDao.findById(razonSocialId).orElse(null);
-        Concepto concepto = conceptoDao.findById(razonSocialId).orElse(null);
-        Categoria categoria = categoriaDao.findById(categoriaId).orElse(null);
-        Cuenta cuenta = cuentaDao.findById(cuentaId).orElse(null);
+        RazonSocial razonSocial = razonSocialId != null ? recuperarRazonSocial(razonSocialId) : null;
+        Concepto concepto = conceptoId != null ? recuperarConcepto(conceptoId) : null;
+        Categoria categoria = categoriaId != null ? recuperarCategoria(categoriaId) : null;
+        Cuenta cuenta = cuentaId != null ? recuperarCuenta(cuentaId) : null;
 
         movimiento.setRazonSocial(razonSocial);
         movimiento.setConcepto(concepto);
@@ -255,10 +256,10 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
         Movimiento movimiento = recuperarMovimiento(id);
 
-        RazonSocial razonSocial = razonSocialDao.findById(razonSocialId).orElse(null);
-        Concepto concepto = conceptoDao.findById(razonSocialId).orElse(null);
-        Categoria categoria = categoriaDao.findById(categoriaId).orElse(null);
-        Cuenta cuenta = cuentaDao.findById(cuentaId).orElse(null);
+        RazonSocial razonSocial = razonSocialId != null ? recuperarRazonSocial(razonSocialId) : null;
+        Concepto concepto = conceptoId != null ? recuperarConcepto(conceptoId) : null;
+        Categoria categoria = categoriaId != null ? recuperarCategoria(categoriaId) : null;
+        Cuenta cuenta = cuentaId != null ? recuperarCuenta(cuentaId) : null;
 
         movimiento.setFecha(fecha);
         movimiento.setEsGasto(esGasto);

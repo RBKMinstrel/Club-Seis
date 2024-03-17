@@ -124,7 +124,7 @@ public class ContabilidadController {
 
     @PostMapping("/movimientos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createMovimientos(@RequestBody MovimientoDto movimientoDto) {
+    public void createMovimientos(@RequestBody MovimientoDto movimientoDto) throws InstanceNotFoundException {
         contabilidadService.createMovimiento(toMovimiento(movimientoDto), movimientoDto.getRazonSocial(),
                 movimientoDto.getConcepto(), movimientoDto.getCategoria(), movimientoDto.getCuenta());
     }

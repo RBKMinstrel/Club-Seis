@@ -16,9 +16,11 @@ public class MovimientoConversor {
     }
 
     public final static ShortMovimientoDto toShortMovimientoDto(Movimiento movimiento) {
-        return new ShortMovimientoDto(movimiento.getId(), toDays(movimiento.getFecha()),
-                toRazonSocialText(movimiento.getRazonSocial()), movimiento.getConcepto().getName(),
-                movimiento.getCategoria().getName(), movimiento.getCuenta().getName(), movimiento.getTotal(), movimiento.isEsGasto());
+        return new ShortMovimientoDto(movimiento.getId(), toDays(movimiento.getFecha()), toRazonSocialText(movimiento.getRazonSocial()),
+                movimiento.getConcepto() != null ? (movimiento.getConcepto().getName()) : "",
+                movimiento.getCategoria() != null ? (movimiento.getCategoria().getName()) : "",
+                movimiento.getCuenta() != null ? (movimiento.getCuenta().getName()) : "",
+                movimiento.getTotal(), movimiento.isEsGasto());
     }
 
     public final static Movimiento toMovimiento(MovimientoDto movimientoDto) {
@@ -34,10 +36,10 @@ public class MovimientoConversor {
     }
 
     private final static String toRazonSocialText(RazonSocial razonSocial) {
-        return razonSocial.getDenominacion() +
+        return razonSocial != null ? (razonSocial.getDenominacion() +
                 " (" +
                 razonSocial.getCifnif() +
-                ")";
+                ")") : "";
     }
 
     private final static long toDays(LocalDate date) {

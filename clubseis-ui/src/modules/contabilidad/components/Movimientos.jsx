@@ -41,7 +41,7 @@ const Movimientos = ({movimientos}) => {
             {movimientos.map(movimiento =>
                 <tr key={movimiento.id}>
                     <td>
-                        <FormattedDate value={new Date(movimiento.fecha)}/>
+                        <FormattedDate value={new Date(movimiento.fecha * (1000 * 60 * 60 * 24))}/>
                     </td>
                     <td>
                         <p>{movimiento.razonSocial}</p>

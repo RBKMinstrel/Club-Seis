@@ -49,7 +49,8 @@ public interface ContabilidadService {
     Movimiento getMovimiento(Long id)
             throws InstanceNotFoundException;
 
-    void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId);
+    void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
+            throws InstanceNotFoundException;
 
     void updateMovimiento(Long id, LocalDate fecha, boolean esGasto, BigDecimal base0, BigDecimal base4, BigDecimal base10,
                           BigDecimal base21, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
