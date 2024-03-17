@@ -24,8 +24,8 @@ const Filtros = ({criteria}) => {
     const conceptos = useSelector(selectors.getConceptos);
     const categorias = useSelector(selectors.getCategorias);
     const cuentas = useSelector(selectors.getCuentas);
-    const [razonSocialId, setRazonSocialId] = useState(criteria.razonSocialId ? criteria.razonSocialId : -1);
     const [fecha, setFecha] = useState(criteria.fecha ? numberChange(criteria.fecha) : '');
+    const [razonSocialId, setRazonSocialId] = useState(criteria.razonSocialId ? criteria.razonSocialId : -1);
     const [conceptoId, setConceptoId] = useState(criteria.conceptoId ? criteria.conceptoId : -1);
     const [categoriaId, setCategoriaId] = useState(criteria.categoriaId ? criteria.categoriaId : -1);
     const [cuentaId, setCuentaId] = useState(criteria.cuentaId ? criteria.cuentaId : -1);
@@ -53,8 +53,8 @@ const Filtros = ({criteria}) => {
 
         dispatch(actions.findMovimientos({
             page: 0,
-            razonSocialId: razonSocialId !== -1 ? razonSocialId : null,
             fecha: fecha !== '' ? dateChange(fecha) : null,
+            razonSocialId: razonSocialId !== -1 ? razonSocialId : null,
             conceptoId: conceptoId !== -1 ? conceptoId : null,
             categoriaId: categoriaId !== -1 ? categoriaId : null,
             cuentaId: cuentaId !== -1 ? cuentaId : null,

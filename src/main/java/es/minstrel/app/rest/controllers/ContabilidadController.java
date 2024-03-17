@@ -103,8 +103,8 @@ public class ContabilidadController {
 
     //TODO: Añadir campo razon social
     @GetMapping("/movimientos")
-    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Long razonSocialId,
-                                                       @RequestParam(required = false) Long fecha,
+    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Long fecha,
+                                                       @RequestParam(required = false) Long razonSocialId,
                                                        @RequestParam(required = false) Long conceptoId,
                                                        @RequestParam(required = false) Long categoriaId,
                                                        @RequestParam(required = false) Long cuentaId,

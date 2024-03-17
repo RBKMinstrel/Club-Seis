@@ -44,7 +44,7 @@ export const findMovimientos = ({razonSocialId, fecha, conceptoId, categoriaId, 
     path += razonSocialId ? `&razonSocialId=${razonSocialId}` : "";
     path += fecha ? `&fecha=${fecha}` : "";
     path += conceptoId ? `&conceptoId=${conceptoId}` : "";
-    path += categoriaId ? `&categoryId=${categoriaId}` : "";
+    path += categoriaId ? `&categoriaId=${categoriaId}` : "";
     path += cuentaId ? `&cuentaId=${cuentaId}` : "";
     path += size ? `&size=${size}` : "";
 

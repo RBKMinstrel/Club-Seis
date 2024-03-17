@@ -38,6 +38,7 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
             }
 
             queryString += "m.concepto.id = :conceptoId";
+            aux = true;
 
         }
 
@@ -48,6 +49,7 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
             }
 
             queryString += "m.categoria.id = :categoriaId";
+            aux = true;
 
         }
 
