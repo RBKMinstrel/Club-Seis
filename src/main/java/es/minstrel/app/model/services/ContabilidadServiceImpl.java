@@ -218,9 +218,10 @@ public class ContabilidadServiceImpl implements ContabilidadService {
     }
 
     @Override
-    public Block<Movimiento> getMovimientos(LocalDate fecha, Long conceptoId, Long categoriaId, Long cuentaId, int page, int size) {
+    public Block<Movimiento> getMovimientos(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId,
+                                            Long cuentaId, int page, int size) {
 
-        Slice<Movimiento> slice = movimientoDao.find(fecha, conceptoId, categoriaId, cuentaId, page, size);
+        Slice<Movimiento> slice = movimientoDao.find(fecha, razonSocialId, conceptoId, categoriaId, cuentaId, page, size);
 
         return new Block<>(slice.getContent(), slice.hasNext());
     }

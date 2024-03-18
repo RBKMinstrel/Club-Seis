@@ -111,8 +111,8 @@ public class ContabilidadController {
                                                        @RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "12") int size) {
 
-        Block<Movimiento> movimientoBlock = contabilidadService.getMovimientos(fromDays(fecha), conceptoId, categoriaId,
-                cuentaId, page, size);
+        Block<Movimiento> movimientoBlock = contabilidadService.getMovimientos(fromDays(fecha), razonSocialId,
+                conceptoId, categoriaId, cuentaId, page, size);
 
         return new BlockDto<>(toShortMovimientoDtos(movimientoBlock.getItems()), movimientoBlock.getExistMoreItems());
     }

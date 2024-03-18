@@ -44,7 +44,7 @@ public interface ContabilidadService {
     void updateCuentas(Long id, String name)
             throws DuplicateInstanceException, InstanceNotFoundException;
 
-    Block<Movimiento> getMovimientos(LocalDate fecha, Long conceptoId, Long categoriaId, Long cuentaId, int page, int size);
+    Block<Movimiento> getMovimientos(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, int page, int size);
 
     Movimiento getMovimiento(Long id)
             throws InstanceNotFoundException;
