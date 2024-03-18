@@ -74,6 +74,14 @@ const Filtros = ({criteria}) => {
 
     return (
         <form className="form-filter-contabilidad" onSubmit={e => handleSubmit(e)}>
+            <div className="column">
+                <label>Fecha</label>
+                <input
+                    type="date"
+                    value={fecha}
+                    onChange={e => setFecha(e.target.value)}
+                />
+            </div>
             <div>
                 <label>Razon Social</label>
                 <Select
@@ -83,14 +91,6 @@ const Filtros = ({criteria}) => {
                     value={selectRazonSocial()}
                     onChange={e => setRazonSocialId(e ? e.value : -1)}
                     options={razonesSociales ? razonesSociales.map(r => (selectMapper(r.id, r.denominacion + "(" + r.cifnif + ")"))) : []}
-                />
-            </div>
-            <div>
-                <label>Fecha</label>
-                <input
-                    type="date"
-                    value={fecha}
-                    onChange={e => setFecha(e.target.value)}
                 />
             </div>
             <div>

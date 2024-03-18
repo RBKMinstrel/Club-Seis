@@ -1,6 +1,8 @@
 import {FormattedDate} from "react-intl";
 import {Link} from "react-router-dom";
 
+import {AiTwotoneDelete, AiTwotoneEdit, AiTwotoneEye} from "react-icons/ai";
+
 const Movimientos = ({movimientos}) => {
 
     return (
@@ -34,6 +36,9 @@ const Movimientos = ({movimientos}) => {
                 <th scope="col">
                     Total
                 </th>
+                <th scope="col">
+                    Acciones
+                </th>
             </tr>
             </thead>
 
@@ -57,6 +62,19 @@ const Movimientos = ({movimientos}) => {
                     </td>
                     <td>
                         <p>{movimiento.gasto ? (-1 * movimiento.total) : movimiento.total}</p>
+                    </td>
+                    <td>
+                        <div className="row" style={{justifyContent: "space-around"}}>
+                            <Link to={`movimiento/${movimiento.id}`}>
+                                <AiTwotoneEye size="1.5em"/>
+                            </Link>
+                            <Link to={`movimiento-update-load/${movimiento.id}`}>
+                                <AiTwotoneEdit size="1.5em"/>
+                            </Link>
+                            <Link to={`movimiento-delete/${movimiento.id}`}>
+                                <AiTwotoneDelete size="1.5em"/>
+                            </Link>
+                        </div>
                     </td>
                 </tr>
             )}

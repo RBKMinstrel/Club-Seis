@@ -8,9 +8,12 @@ import Select from "react-select";
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 
-const numberChange = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
+
+const numberChange = (number) => {
+    const daysDifference = parseInt(number);
+    const selectedDate = new Date(daysDifference * (1000 * 60 * 60 * 24));
+
+    return selectedDate.toISOString().split('T')[0];
 };
 
 const dateChange = (date) => {
@@ -23,25 +26,44 @@ function redondear(numero) {
     return Math.round(numero * factor) / factor;
 }
 
-const CreateMovimiento = () => {
+
+const selectMapper = (value, label) => {
+    return ({value: value, label: label})
+};
+
+const razonText = (r) => {
+    return r.denominacion + "(" + r.cifnif + ")";
+}
+
+const optionMapperRS = (option) => {
+    return selectMapper(option.id, option.denominacion + "(" + option.cifnif + ")");
+}
+
+const UpdateMovimiento = () => {
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const movimiento = useSelector(selectors.getMovimiento);
     const razonSocialOptions = useSelector(selectors.getRazonesSociales);
     const conceptoOptions = useSelector(selectors.getConceptos);
     const categoriaOptions = useSelector(selectors.getCategorias);
     const cuentaOptions = useSelector(selectors.getCuentas);
 
-    const [fecha, setFecha] = useState(numberChange());
-    const [gasto, setGasto] = useState(false);
-    const [base0, setBase0] = useState(0);
-    const [base4, setBase4] = useState(0);
-    const [base10, setBase10] = useState(0);
-    const [base21, setBase21] = useState(0);
-    const [razonSocial, setRazonSocial] = useState();
-    const [concepto, setConcepto] = useState();
-    const [categoria, setCategoria] = useState();
-    const [cuenta, setCuenta] = useState();
+    const [fecha, setFecha] = useState(numberChange(movimiento.fecha));
+    const [gasto, setGasto] = useState(movimiento.esGasto);
+    const [base0, setBase0] = useState(movimiento.base0);
+    const [base4, setBase4] = useState(movimiento.base4);
+    const [base10, setBase10] = useState(movimiento.base10);
+    const [base21, setBase21] = useState(movimiento.base21);
+    const [razonSocial, setRazonSocial] = useState(movimiento.razonSocial
+        ? optionMapperRS(selectors.getRazonSocial(razonSocialOptions, movimiento.razonSocial)) : null);
+    const [concepto, setConcepto] = useState(movimiento.concepto
+        ? selectMapper(movimiento.concepto, selectors.getConcepto(conceptoOptions, movimiento.concepto)) : null);
+    const [categoria, setCategoria] = useState(movimiento.categoria
+        ? selectMapper(movimiento.categoria, selectors.getCategoria(categoriaOptions, movimiento.categoria)) : null);
+    const [cuenta, setCuenta] = useState(movimiento.cuenta
+        ? selectMapper(movimiento.cuenta, selectors.getCuenta(cuentaOptions, movimiento.cuenta)) : null);
     const [backendErrors, setBackendErrors] = useState(null);
 
     const iva4 = redondear(base4 * 0.04);
@@ -59,7 +81,8 @@ const CreateMovimiento = () => {
 
         if (form.checkValidity()) {
 
-            dispatch(actions.createMovimiento({
+            dispatch(actions.updateMovimiento({
+                    id: movimiento.id,
                     fecha: dateChange(fecha),
                     esGasto: gasto,
                     base0: base0,
@@ -79,15 +102,6 @@ const CreateMovimiento = () => {
             setBackendErrors(null);
         }
 
-    }
-
-
-    const selectMapper = (value, label) => {
-        return ({value: value, label: label})
-    };
-
-    const razonText = (r) => {
-        return r.denominacion + "(" + r.cifnif + ")";
     }
 
     return (
@@ -225,7 +239,7 @@ const CreateMovimiento = () => {
                 </div>
                 <div className="row end">
                     <button type="submit">
-                        Crear
+                        Actualizar
                     </button>
                 </div>
             </form>
@@ -233,4 +247,4 @@ const CreateMovimiento = () => {
     );
 }
 
-export default CreateMovimiento;
+export default UpdateMovimiento;

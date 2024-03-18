@@ -77,9 +77,12 @@ const findMovimientoByIdCompleted = movimiento => ({
     movimiento
 });
 
-export const findMovimientoById = id => dispatch => {
+export const findMovimientoById = (id, onSuccess) => dispatch => {
     backend.contabilidadService.findMovimientoById(id,
-        movimiento => dispatch(findMovimientoByIdCompleted(movimiento)));
+        movimiento => {
+            dispatch(findMovimientoByIdCompleted(movimiento));
+            onSuccess();
+        });
 }
 
 export const clearMovimiento = () => ({

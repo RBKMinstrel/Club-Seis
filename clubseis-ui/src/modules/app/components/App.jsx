@@ -13,7 +13,11 @@ import {
     ContabilidadBase,
     CreateMovimiento,
     Cuentas,
-    RazonesSociales
+    DeleteMovimiento,
+    LoadUpdateMovimiento,
+    MovimientoDetails,
+    RazonesSociales,
+    UpdateMovimiento
 } from "../../contabilidad";
 
 const App = () => {
@@ -57,6 +61,10 @@ const App = () => {
                                 <Route path="categorias" element={<Categorias/>}/>
                                 <Route path="razones-sociales" element={<RazonesSociales/>}/>
                                 <Route path="crear-movimiento" element={<CreateMovimiento/>}/>
+                                <Route path="movimiento/:id" element={<MovimientoDetails/>}/>
+                                <Route path="movimiento-update-load/:id" element={<LoadUpdateMovimiento/>}/>
+                                <Route path="movimiento-update" element={<UpdateMovimiento/>}/>
+                                <Route path="movimiento-delete/:id" element={<DeleteMovimiento/>}/>
                             </Route>
                         }
                     </Route>

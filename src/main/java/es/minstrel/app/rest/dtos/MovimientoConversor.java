@@ -31,8 +31,10 @@ public class MovimientoConversor {
     public final static MovimientoDto toMovimientoDto(Movimiento movimiento) {
         return new MovimientoDto(movimiento.getId(), toDays(movimiento.getFecha()), movimiento.isEsGasto(),
                 movimiento.getBase0(), movimiento.getBase4(), movimiento.getBase10(), movimiento.getBase21(),
-                movimiento.getRazonSocial().getId(), movimiento.getConcepto().getId(), movimiento.getCategoria().getId(),
-                movimiento.getCuenta().getId());
+                movimiento.getRazonSocial() != null ? movimiento.getRazonSocial().getId() : null,
+                movimiento.getConcepto() != null ? movimiento.getConcepto().getId() : null,
+                movimiento.getCategoria() != null ? movimiento.getCategoria().getId() : null,
+                movimiento.getCuenta() != null ? movimiento.getCuenta().getId() : null);
     }
 
     private final static String toRazonSocialText(RazonSocial razonSocial) {

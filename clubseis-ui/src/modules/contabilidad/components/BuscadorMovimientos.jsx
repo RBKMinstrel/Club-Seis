@@ -17,7 +17,7 @@ const BuscadorMovimientos = () => {
     }, [dispatch]);
 
     return (
-        <div>
+        <div className="column" style={{alignItems: "center"}}>
             <Link to="/gestion/contabilidad/crear-movimiento">Crear movimiento</Link>
             <Filtros criteria={movimientosSearch ? movimientosSearch.criteria : {}}/>
             <Movimientos movimientos={movimientosSearch ? movimientosSearch.result.items : []}/>
