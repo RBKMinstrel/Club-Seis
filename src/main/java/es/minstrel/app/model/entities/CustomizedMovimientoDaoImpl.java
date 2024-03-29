@@ -38,7 +38,11 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
                 queryString += " AND ";
             }
 
-            queryString += "m.razonSocial.id = :razonSocialId";
+            if (razonSocialId != -1)
+                queryString += "m.razonSocial.id = :razonSocialId";
+            else
+                queryString += "m.razonSocial IS NULL";
+
             aux = true;
 
         }
@@ -49,7 +53,11 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
                 queryString += " AND ";
             }
 
-            queryString += "m.concepto.id = :conceptoId";
+            if (conceptoId != -1)
+                queryString += "m.concepto.id = :conceptoId";
+            else
+                queryString += "m.concepto IS NULL";
+
             aux = true;
 
         }
@@ -60,7 +68,11 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
                 queryString += " AND ";
             }
 
-            queryString += "m.categoria.id = :categoriaId";
+            if (categoriaId != -1)
+                queryString += "m.categoria.id = :categoriaId";
+            else
+                queryString += "m.categoria IS NULL";
+
             aux = true;
 
         }
@@ -71,7 +83,10 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
                 queryString += " AND ";
             }
 
-            queryString += "m.cuenta.id = :cuentaId";
+            if (cuentaId != -1)
+                queryString += "m.cuenta.id = :cuentaId";
+            else
+                queryString += "m.cuenta IS NULL";
 
         }
 
@@ -83,19 +98,19 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
             query.setParameter("fecha", fecha);
         }
 
-        if (razonSocialId != null) {
+        if (razonSocialId != null && razonSocialId != -1) {
             query.setParameter("razonSocialId", razonSocialId);
         }
 
-        if (conceptoId != null) {
+        if (conceptoId != null && conceptoId != -1) {
             query.setParameter("conceptoId", conceptoId);
         }
 
-        if (categoriaId != null) {
+        if (categoriaId != null && categoriaId != -1) {
             query.setParameter("categoriaId", categoriaId);
         }
 
-        if (cuentaId != null) {
+        if (cuentaId != null && cuentaId != -1) {
             query.setParameter("cuentaId", cuentaId);
         }
 

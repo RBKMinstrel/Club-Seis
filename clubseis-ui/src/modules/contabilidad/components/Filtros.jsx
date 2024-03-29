@@ -4,6 +4,7 @@ import Select from "react-select";
 
 import * as actions from '../actions';
 import * as selectors from "../selectors.js";
+import {parseListToSelect} from "../../utils/selectorUtils.js";
 
 const numberChange = (number) => {
     const daysDifference = parseInt(number);
@@ -24,11 +25,28 @@ const Filtros = ({criteria}) => {
     const conceptos = useSelector(selectors.getConceptos);
     const categorias = useSelector(selectors.getCategorias);
     const cuentas = useSelector(selectors.getCuentas);
+
+    const razonSocialOptions =
+        parseListToSelect(razonesSociales || [], (x) => ({
+            label: (x.denominacion + "(" + x.cifnif + ")"),
+            value: x.id
+        }), true);
+    const conceptoOptions =
+        parseListToSelect(conceptos || [], (x) => ({label: x.name, value: x.id}), true);
+    const categoriaOptions =
+        parseListToSelect(categorias || [], (x) => ({label: x.name, value: x.id}), true);
+    const cuentaOptions =
+        parseListToSelect(cuentas || [], (x) => ({label: x.name, value: x.id}), true);
+
     const [fecha, setFecha] = useState(criteria.fecha ? numberChange(criteria.fecha) : '');
-    const [razonSocialId, setRazonSocialId] = useState(criteria.razonSocialId ? criteria.razonSocialId : -1);
-    const [conceptoId, setConceptoId] = useState(criteria.conceptoId ? criteria.conceptoId : -1);
-    const [categoriaId, setCategoriaId] = useState(criteria.categoriaId ? criteria.categoriaId : -1);
-    const [cuentaId, setCuentaId] = useState(criteria.cuentaId ? criteria.cuentaId : -1);
+    const [razonSocial, setRazonSocial] =
+        useState(razonSocialOptions ? razonSocialOptions.find((x) => (x.value === criteria.razonSocialId)) : {});
+    const [concepto, setConcepto] =
+        useState(conceptoOptions ? conceptoOptions.find((x) => (x.value === criteria.conceptoId)) : {});
+    const [categoria, setCategoria] =
+        useState(categoriaOptions ? categoriaOptions.find((x) => (x.value === criteria.categoriaId)) : {});
+    const [cuenta, setCuenta] =
+        useState(cuentaOptions ? cuentaOptions.find((x) => (x.value === criteria.cuentaId)) : {});
     const [size, setSize] = useState(criteria.size ? criteria.size : 12);
     const sizes = [12, 25, 50, 75, 100];
 
@@ -54,10 +72,10 @@ const Filtros = ({criteria}) => {
         dispatch(actions.findMovimientos({
             page: 0,
             fecha: fecha !== '' ? dateChange(fecha) : null,
-            razonSocialId: razonSocialId !== -1 ? razonSocialId : null,
-            conceptoId: conceptoId !== -1 ? conceptoId : null,
-            categoriaId: categoriaId !== -1 ? categoriaId : null,
-            cuentaId: cuentaId !== -1 ? cuentaId : null,
+            razonSocialId: razonSocial ? razonSocial.value : null,
+            conceptoId: concepto ? concepto.value : null,
+            categoriaId: categoria ? categoria.value : null,
+            cuentaId: cuenta ? cuenta.value : null,
             size: size,
         }));
     };
@@ -88,9 +106,9 @@ const Filtros = ({criteria}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={selectRazonSocial()}
-                    onChange={e => setRazonSocialId(e ? e.value : -1)}
-                    options={razonesSociales ? razonesSociales.map(r => (selectMapper(r.id, r.denominacion + "(" + r.cifnif + ")"))) : []}
+                    value={razonSocial}
+                    onChange={setRazonSocial}
+                    options={razonSocialOptions}
                 />
             </div>
             <div>
@@ -99,9 +117,9 @@ const Filtros = ({criteria}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={selectMapper(conceptoId, selectors.getConcepto(conceptos, conceptoId))}
-                    onChange={e => setConceptoId(e ? e.value : -1)}
-                    options={conceptos ? conceptos.map(c => (selectMapper(c.id, c.name))) : []}
+                    value={concepto}
+                    onChange={setConcepto}
+                    options={conceptoOptions}
                 />
             </div>
             <div>
@@ -110,9 +128,9 @@ const Filtros = ({criteria}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={selectMapper(categoriaId, selectors.getCategoria(categorias, categoriaId))}
-                    onChange={e => setCategoriaId(e ? e.value : -1)}
-                    options={categorias ? categorias.map(c => (selectMapper(c.id, c.name))) : []}
+                    value={categoria}
+                    onChange={setCategoria}
+                    options={categoriaOptions}
                 />
             </div>
             <div>
@@ -121,9 +139,9 @@ const Filtros = ({criteria}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={selectMapper(cuentaId, selectors.getCuenta(cuentas, cuentaId))}
-                    onChange={e => setCuentaId(e ? e.value : -1)}
-                    options={cuentas ? cuentas.map(c => (selectMapper(c.id, c.name))) : []}
+                    value={cuenta}
+                    onChange={setCuenta}
+                    options={cuentaOptions}
                 />
             </div>
             <div>
