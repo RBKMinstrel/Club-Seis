@@ -26,6 +26,12 @@ const Filtros = ({criteria}) => {
     const categorias = useSelector(selectors.getCategorias);
     const cuentas = useSelector(selectors.getCuentas);
 
+    const tipoOptions =
+        [
+            {label: "Todos", value: null},
+            {label: "Pagos", value: true},
+            {label: "Ingresos", value: false}
+        ];
     const razonSocialOptions =
         parseListToSelect(razonesSociales || [], (x) => ({
             label: (x.denominacion + "(" + x.cifnif + ")"),
@@ -38,6 +44,7 @@ const Filtros = ({criteria}) => {
     const cuentaOptions =
         parseListToSelect(cuentas || [], (x) => ({label: x.name, value: x.id}), true);
 
+    const [tipo, setTipo] = useState(tipoOptions[0]);
     const [fecha, setFecha] = useState(criteria.fecha ? numberChange(criteria.fecha) : '');
     const [razonSocial, setRazonSocial] =
         useState(razonSocialOptions ? razonSocialOptions.find((x) => (x.value === criteria.razonSocialId)) : {});
@@ -70,6 +77,7 @@ const Filtros = ({criteria}) => {
         event.preventDefault();
 
         dispatch(actions.findMovimientos({
+            tipo: tipo.value,
             page: 0,
             fecha: fecha !== '' ? dateChange(fecha) : null,
             razonSocialId: razonSocial ? razonSocial.value : null,
@@ -84,14 +92,16 @@ const Filtros = ({criteria}) => {
         return ({value: value, label: label})
     };
 
-    const selectRazonSocial = () => {
-        const razonSocial = selectors.getRazonSocial(razonesSociales, razonSocialId);
-        const aux = razonSocial ? razonSocial.denominacion + "(" + razonSocial.cifnif + ")" : "";
-        return selectMapper(razonSocialId, aux)
-    }
-
     return (
         <form className="form-filter-contabilidad" onSubmit={e => handleSubmit(e)}>
+            <div>
+                <label>Tipo</label>
+                <Select
+                    value={tipo}
+                    onChange={setTipo}
+                    options={tipoOptions}
+                />
+            </div>
             <div className="column">
                 <label>Fecha</label>
                 <input

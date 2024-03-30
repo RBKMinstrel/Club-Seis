@@ -18,12 +18,13 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
     @SuppressWarnings("unchecked")
     @Override
     public Slice<Movimiento> find(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId,
-                                  Long cuentaId, int page, int size) {
+                                  Long cuentaId, Boolean esGasto, int page, int size) {
 
         boolean aux = false;
         String queryString = "SELECT m FROM Movimiento m";
 
-        if (fecha != null || razonSocialId != null || conceptoId != null || categoriaId != null || cuentaId != null) {
+        if (fecha != null || razonSocialId != null || conceptoId != null || categoriaId != null ||
+                cuentaId != null || esGasto != null) {
             queryString += " WHERE ";
         }
 
@@ -88,6 +89,18 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
             else
                 queryString += "m.cuenta IS NULL";
 
+            aux = true;
+
+        }
+
+        if (esGasto != null) {
+
+            if (aux) {
+                queryString += " AND ";
+            }
+
+            queryString += "m.esGasto = :esGasto";
+
         }
 
         queryString += " ORDER BY m.fecha";
@@ -112,6 +125,10 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
 
         if (cuentaId != null && cuentaId != -1) {
             query.setParameter("cuentaId", cuentaId);
+        }
+
+        if (esGasto != null) {
+            query.setParameter("esGasto", esGasto);
         }
 
         List<Movimiento> movimientos = query.getResultList();

@@ -103,7 +103,8 @@ public class ContabilidadController {
 
     //TODO: Añadir campo razon social
     @GetMapping("/movimientos")
-    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Long fecha,
+    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Boolean tipo,
+                                                       @RequestParam(required = false) Long fecha,
                                                        @RequestParam(required = false) Long razonSocialId,
                                                        @RequestParam(required = false) Long conceptoId,
                                                        @RequestParam(required = false) Long categoriaId,
@@ -112,7 +113,7 @@ public class ContabilidadController {
                                                        @RequestParam(defaultValue = "12") int size) {
 
         Block<Movimiento> movimientoBlock = contabilidadService.getMovimientos(fromDays(fecha), razonSocialId,
-                conceptoId, categoriaId, cuentaId, page, size);
+                conceptoId, categoriaId, cuentaId, tipo, page, size);
 
         return new BlockDto<>(toShortMovimientoDtos(movimientoBlock.getItems()), movimientoBlock.getExistMoreItems());
     }

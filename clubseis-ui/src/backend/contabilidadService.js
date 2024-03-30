@@ -36,11 +36,12 @@ export const createRazonSocial = (razonSocial, onSuccess, onErrors) =>
 export const updateRazonSocial = (razonSocial, onSuccess, onErrors) =>
     appFetch(`/contabilidad/razon-social/${razonSocial.id}`, config('PUT', razonSocial), onSuccess, onErrors);
 
-export const findMovimientos = ({razonSocialId, fecha, conceptoId, categoriaId, cuentaId, page, size},
+export const findMovimientos = ({razonSocialId, fecha, conceptoId, categoriaId, cuentaId, page, size, tipo},
                                 onSuccess) => {
 
     let path = `/contabilidad/movimientos?page=${page}`;
 
+    path += tipo !== null ? `&tipo=${tipo}` : "";
     path += razonSocialId ? `&razonSocialId=${razonSocialId}` : "";
     path += fecha ? `&fecha=${fecha}` : "";
     path += conceptoId ? `&conceptoId=${conceptoId}` : "";

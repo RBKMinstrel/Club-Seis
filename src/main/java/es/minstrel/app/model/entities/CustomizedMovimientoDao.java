@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public interface CustomizedMovimientoDao {
 
-    Slice<Movimiento> find(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, int page, int size);
+    Slice<Movimiento> find(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId,
+                           Boolean tipo, int page, int size);
 
 }
