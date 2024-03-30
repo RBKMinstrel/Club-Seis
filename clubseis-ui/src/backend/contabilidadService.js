@@ -41,7 +41,7 @@ export const findMovimientos = ({razonSocialId, fecha, conceptoId, categoriaId, 
 
     let path = `/contabilidad/movimientos?page=${page}`;
 
-    path += tipo !== null ? `&tipo=${tipo}` : "";
+    path += (tipo != null) ? `&tipo=${tipo}` : "";
     path += razonSocialId ? `&razonSocialId=${razonSocialId}` : "";
     path += fecha ? `&fecha=${fecha}` : "";
     path += conceptoId ? `&conceptoId=${conceptoId}` : "";
