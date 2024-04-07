@@ -14,7 +14,7 @@ const LoadUpdateMovimiento = () => {
 
         if (!Number.isNaN(id)) {
             dispatch(actions.findMovimientoById(id,
-                () => navigate("/gestion/contabilidad/movimiento-update")));
+                () => navigate("/gestion/contabilidad/asientos/update")));
         } else {
             navigate(-1);
         }

@@ -17,7 +17,7 @@ const DeleteMovimiento = () => {
 
         if (!Number.isNaN(movimientoId)) {
             dispatch(actions.deleteMovimiento(movimientoId,
-                () => navigate("/gestion/contabilidad"),
+                () => navigate("/gestion/contabilidad/asientos"),
                 errors => setBackendErrors(errors)));
         }
 

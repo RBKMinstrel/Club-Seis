@@ -13,6 +13,14 @@ const isJson = response => {
 
 }
 
+const isExcel = response => {
+
+    const contentType = response.headers.get("content-type");
+
+    return contentType && contentType.indexOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") !== -1;
+
+}
+
 const handleOkResponse = (response, onSuccess) => {
 
     if (!response.ok) {
@@ -30,6 +38,10 @@ const handleOkResponse = (response, onSuccess) => {
 
     if (isJson(response)) {
         response.json().then(payload => onSuccess(payload));
+    }
+
+    if (isExcel(response)) {
+        response.blob().then(payload => onSuccess(payload));
     }
 
     return true;

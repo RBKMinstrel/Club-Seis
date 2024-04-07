@@ -30,8 +30,7 @@ const MovimientoDetails = () => {
         const movimientoId = Number(id);
 
         if (!Number.isNaN(movimientoId)) {
-            dispatch(actions.findMovimientoById(movimientoId), () => {
-            });
+            dispatch(actions.findMovimientoById(movimientoId));
         }
 
         return () => {

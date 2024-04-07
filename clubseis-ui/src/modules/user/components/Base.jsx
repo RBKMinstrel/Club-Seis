@@ -41,7 +41,7 @@ const Base = () => {
                     }
                     {roles.includes('TESORERO') &&
                         <div>
-                            <Link to="/gestion/contabilidad">
+                            <Link to="/gestion/contabilidad/asientos">
                                 Contabilidad
                             </Link>
                         </div>

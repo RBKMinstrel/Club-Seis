@@ -18,7 +18,7 @@ const BuscadorMovimientos = () => {
 
     return (
         <div className="column" style={{alignItems: "center"}}>
-            <Link to="/gestion/contabilidad/crear-movimiento">Crear movimiento</Link>
+            <Link to="/gestion/contabilidad/asientos/crear">Crear movimiento</Link>
             <Filtros criteria={movimientosSearch ? movimientosSearch.criteria : {}}/>
             <Movimientos movimientos={movimientosSearch ? movimientosSearch.result.items : []}/>
             <Pager back={{

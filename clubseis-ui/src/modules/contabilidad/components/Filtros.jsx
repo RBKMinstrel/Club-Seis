@@ -94,20 +94,20 @@ const Filtros = ({criteria}) => {
 
     return (
         <form className="form-filter-contabilidad" onSubmit={e => handleSubmit(e)}>
-            <div>
-                <label>Tipo</label>
-                <Select
-                    value={tipo}
-                    onChange={setTipo}
-                    options={tipoOptions}
-                />
-            </div>
             <div className="column">
                 <label>Fecha</label>
                 <input
                     type="date"
                     value={fecha}
                     onChange={e => setFecha(e.target.value)}
+                />
+            </div>
+            <div>
+                <label>Tipo</label>
+                <Select
+                    value={tipo}
+                    onChange={setTipo}
+                    options={tipoOptions}
                 />
             </div>
             <div>

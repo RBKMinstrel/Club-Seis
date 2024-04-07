@@ -71,7 +71,7 @@ const CreateMovimiento = () => {
                     categoria: categoria ? categoria.value : null,
                     cuenta: cuenta ? cuenta.value : null,
                 },
-                () => navigate("/gestion/contabilidad/"),
+                () => navigate("/gestion/contabilidad/asientos"),
                 errors => setBackendErrors(errors)
             ));
 

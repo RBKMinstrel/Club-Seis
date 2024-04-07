@@ -56,15 +56,18 @@ const App = () => {
                         {roles.includes('TESORERO') &&
                             <Route path="contabilidad/" element={<ContabilidadBase/>}>
                                 <Route index element={<BuscadorMovimientos/>}/>
+                                <Route path="asientos/">
+                                    <Route index element={<BuscadorMovimientos/>}/>
+                                    <Route path="crear" element={<CreateMovimiento/>}/>
+                                    <Route path="update-load/:id" element={<LoadUpdateMovimiento/>}/>
+                                    <Route path="update" element={<UpdateMovimiento/>}/>
+                                    <Route path="delete/:id" element={<DeleteMovimiento/>}/>
+                                    <Route path=":id" element={<MovimientoDetails/>}/>
+                                </Route>
                                 <Route path="conceptos" element={<Conceptos/>}/>
                                 <Route path="cuentas" element={<Cuentas/>}/>
                                 <Route path="categorias" element={<Categorias/>}/>
                                 <Route path="razones-sociales" element={<RazonesSociales/>}/>
-                                <Route path="crear-movimiento" element={<CreateMovimiento/>}/>
-                                <Route path="movimiento/:id" element={<MovimientoDetails/>}/>
-                                <Route path="movimiento-update-load/:id" element={<LoadUpdateMovimiento/>}/>
-                                <Route path="movimiento-update" element={<UpdateMovimiento/>}/>
-                                <Route path="movimiento-delete/:id" element={<DeleteMovimiento/>}/>
                             </Route>
                         }
                     </Route>

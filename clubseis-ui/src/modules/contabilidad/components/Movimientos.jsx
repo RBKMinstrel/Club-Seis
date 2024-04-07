@@ -14,6 +14,9 @@ const Movimientos = ({movimientos}) => {
                     Fecha
                 </th>
                 <th scope="col">
+                    Tipo
+                </th>
+                <th scope="col">
                     <Link to="/gestion/contabilidad/razones-sociales">
                         Razon Social
                     </Link>
@@ -49,6 +52,13 @@ const Movimientos = ({movimientos}) => {
                         <FormattedDate value={new Date(movimiento.fecha * (1000 * 60 * 60 * 24))}/>
                     </td>
                     <td>
+                        {
+                            movimiento.gasto
+                                ? (<p>Gasto</p>)
+                                : (<p>Ingreso</p>)
+                        }
+                    </td>
+                    <td>
                         <p>{movimiento.razonSocial}</p>
                     </td>
                     <td>
@@ -61,17 +71,17 @@ const Movimientos = ({movimientos}) => {
                         <p>{movimiento.cuenta}</p>
                     </td>
                     <td>
-                        <p>{movimiento.gasto ? (-1 * movimiento.total) : movimiento.total}</p>
+                        <p>{movimiento.total}</p>
                     </td>
                     <td>
                         <div className="row" style={{justifyContent: "space-around"}}>
-                            <Link to={`movimiento/${movimiento.id}`}>
+                            <Link to={`${movimiento.id}`}>
                                 <AiTwotoneEye size="1.5em"/>
                             </Link>
-                            <Link to={`movimiento-update-load/${movimiento.id}`}>
+                            <Link to={`update-load/${movimiento.id}`}>
                                 <AiTwotoneEdit size="1.5em"/>
                             </Link>
-                            <Link to={`movimiento-delete/${movimiento.id}`}>
+                            <Link to={`delete/${movimiento.id}`}>
                                 <AiTwotoneDelete size="1.5em"/>
                             </Link>
                         </div>
