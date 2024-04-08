@@ -120,3 +120,18 @@ export const createCuenta = (cuenta, onSuccess, onErrors) => () =>
 
 export const updateCuenta = (cuenta, onSuccess, onErrors) => () =>
     backend.contabilidadService.updateCuenta(cuenta, onSuccess, onErrors);
+
+const getResumenCompleted = resumen => ({
+    type: actionTypes.GET_RESUMEN_COMPLETED,
+    resumen
+});
+
+export const getResumen = (fechaInicio, fechaFin) => dispatch => {
+    dispatch(clearResumen());
+    backend.contabilidadService.getResumen(fechaInicio, fechaFin,
+        resumen => dispatch(getResumenCompleted(resumen)));
+}
+
+export const clearResumen = () => ({
+    type: actionTypes.CLEAR_RESUMEN
+});

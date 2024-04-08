@@ -17,6 +17,7 @@ import {
     LoadUpdateMovimiento,
     MovimientoDetails,
     RazonesSociales,
+    Resumen,
     UpdateMovimiento
 } from "../../contabilidad";
 
@@ -64,6 +65,7 @@ const App = () => {
                                     <Route path="delete/:id" element={<DeleteMovimiento/>}/>
                                     <Route path=":id" element={<MovimientoDetails/>}/>
                                 </Route>
+                                <Route path="resumen" element={<Resumen/>}/>
                                 <Route path="conceptos" element={<Conceptos/>}/>
                                 <Route path="cuentas" element={<Cuentas/>}/>
                                 <Route path="categorias" element={<Categorias/>}/>

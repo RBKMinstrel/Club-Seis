@@ -6,3 +6,5 @@ export const FIND_MOVIMIENTOS_COMPLETED = "project/contabilidad/findMovimientosC
 export const CLEAR_MOVIMIENTO_SEARCH = "project/contabilidad/clearMovimientoSearch";
 export const FIND_MOVIMIENTO_BY_ID_COMPLETED = "project/contabilidad/findMovimientoByIdCompleted";
 export const CLEAR_MOVIMIENTO = "project/contabilidad/clearMovimiento";
+export const GET_RESUMEN_COMPLETED = "project/contabilidad/getResumenCompleted";
+export const CLEAR_RESUMEN = "project/contabilidad/clearResumen";

@@ -4,6 +4,7 @@ import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.exceptions.PermissionException;
+import es.minstrel.app.model.services.utils.Block;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;

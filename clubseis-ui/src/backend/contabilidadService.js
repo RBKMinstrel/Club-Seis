@@ -64,3 +64,6 @@ export const updateMovimiento = (movimiento, onSuccess, onErrors) =>
 
 export const deleteMovimiento = (id, onSuccess, onErrors) =>
     appFetch(`/contabilidad/movimientos/${id}`, config('DELETE'), onSuccess, onErrors);
+
+export const getResumen = (fechaInicio, fechaFin, onSuccess) =>
+    appFetch(`/contabilidad/summary?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, config('GET'), onSuccess);

@@ -9,6 +9,7 @@ const initialState = {
     cuentas: null,
     movimientoSearch: null,
     movimiento: null,
+    resumen: null
 };
 
 const razonSocial = (state = initialState.razonSocial, action) => {
@@ -100,6 +101,24 @@ const movimiento = (state = initialState.movimiento, action) => {
     }
 
 }
+
+const resumen = (state = initialState.resumen, action) => {
+
+    switch (action.type) {
+
+        case actionTypes.GET_RESUMEN_COMPLETED:
+            return action.resumen;
+
+        case actionTypes.CLEAR_RESUMEN:
+            return initialState.resumen;
+
+        default:
+            return state;
+
+    }
+
+}
+
 const reducer = combineReducers({
     razonSocial,
     conceptos,
@@ -107,6 +126,7 @@ const reducer = combineReducers({
     cuentas,
     movimientoSearch,
     movimiento,
+    resumen,
 });
 
 export default reducer;

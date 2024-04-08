@@ -1,4 +1,4 @@
-package es.minstrel.app.model.services;
+package es.minstrel.app.model.services.utils;
 
 import java.util.List;
 

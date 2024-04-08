@@ -5,7 +5,7 @@ import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.exceptions.PermissionException;
 import es.minstrel.app.model.services.AdminService;
-import es.minstrel.app.model.services.Block;
+import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.rest.dtos.BlockDto;
 import es.minstrel.app.rest.dtos.RolDto;
 import es.minstrel.app.rest.dtos.UserDto;

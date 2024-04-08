@@ -33,18 +33,14 @@ const Base = () => {
                 </div>
                 <nav className="top-subnav">
                     {roles.includes('ADMIN') &&
-                        <div>
-                            <Link to="/gestion/admin">
-                                Admin
-                            </Link>
-                        </div>
+                        <Link to="/gestion/admin">
+                            Admin
+                        </Link>
                     }
                     {roles.includes('TESORERO') &&
-                        <div>
-                            <Link to="/gestion/contabilidad/asientos">
-                                Contabilidad
-                            </Link>
-                        </div>
+                        <Link to="/gestion/contabilidad/asientos">
+                            Contabilidad
+                        </Link>
                     }
                 </nav>
             </header>

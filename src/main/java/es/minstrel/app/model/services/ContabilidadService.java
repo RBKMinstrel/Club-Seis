@@ -3,6 +3,8 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.SummaryConta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -58,5 +60,7 @@ public interface ContabilidadService {
 
     void deleteMovimiento(Long id)
             throws InstanceNotFoundException;
+
+    SummaryConta getResumenBalance(LocalDate fechaInicio, LocalDate fechaFin);
 
 }

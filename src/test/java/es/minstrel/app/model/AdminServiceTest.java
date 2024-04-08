@@ -5,7 +5,7 @@ import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.exceptions.PermissionException;
 import es.minstrel.app.model.services.AdminService;
-import es.minstrel.app.model.services.Block;
+import es.minstrel.app.model.services.utils.Block;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

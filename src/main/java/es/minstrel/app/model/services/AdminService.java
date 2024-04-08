@@ -5,6 +5,7 @@ import es.minstrel.app.model.entities.User;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.exceptions.PermissionException;
+import es.minstrel.app.model.services.utils.Block;
 
 import java.util.List;
 

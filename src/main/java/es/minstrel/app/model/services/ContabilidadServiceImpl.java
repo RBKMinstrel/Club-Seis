@@ -3,6 +3,9 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.SummaryConta;
+import es.minstrel.app.model.services.utils.SummaryGeneric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -286,5 +289,56 @@ public class ContabilidadServiceImpl implements ContabilidadService {
         else
             throw new InstanceNotFoundException("project.entities.movimiento", id);
 
+    }
+
+    @Override
+    public SummaryConta getResumenBalance(LocalDate fechaInicio, LocalDate fechaFin) {
+
+        SummaryConta summaryConta = new SummaryConta();
+
+        List<Concepto> conceptoList = conceptoDao.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        conceptoList.add(null);
+        List<Categoria> categoriaList = categoriaDao.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        categoriaList.add(null);
+        List<Cuenta> cuentaList = cuentaDao.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        cuentaList.add(null);
+
+        for (Concepto concepto : conceptoList) {
+            SummaryGeneric summaryConcepto = new SummaryGeneric(concepto != null ? concepto.getName() : null);
+            List<Movimiento> movimientoList = movimientoDao.findByConceptoAndFechaBetween(concepto, fechaInicio, fechaFin);
+            for (Movimiento movimiento : movimientoList) {
+                if (movimiento.isEsGasto())
+                    summaryConcepto.addGasto(movimiento.getTotal());
+                else
+                    summaryConcepto.addIngreso(movimiento.getTotal());
+            }
+            summaryConta.addConceptoSummary(summaryConcepto);
+        }
+
+        for (Categoria categoria : categoriaList) {
+            SummaryGeneric summaryCategotia = new SummaryGeneric(categoria != null ? categoria.getName() : null);
+            List<Movimiento> movimientoList = movimientoDao.findByCategoriaAndFechaBetween(categoria, fechaInicio, fechaFin);
+            for (Movimiento movimiento : movimientoList) {
+                if (movimiento.isEsGasto())
+                    summaryCategotia.addGasto(movimiento.getTotal());
+                else
+                    summaryCategotia.addIngreso(movimiento.getTotal());
+            }
+            summaryConta.addCategoriaSummary(summaryCategotia);
+        }
+
+        for (Cuenta cuenta : cuentaList) {
+            SummaryGeneric summaryCuenta = new SummaryGeneric(cuenta != null ? cuenta.getName() : null);
+            List<Movimiento> movimientoList = movimientoDao.findByCuentaAndFechaBetween(cuenta, fechaInicio, fechaFin);
+            for (Movimiento movimiento : movimientoList) {
+                if (movimiento.isEsGasto())
+                    summaryCuenta.addGasto(movimiento.getTotal());
+                else
+                    summaryCuenta.addIngreso(movimiento.getTotal());
+            }
+            summaryConta.addCuentaSummary(summaryCuenta);
+        }
+
+        return summaryConta;
     }
 }

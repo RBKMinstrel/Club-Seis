@@ -3,13 +3,15 @@ package es.minstrel.app.rest.controllers;
 import es.minstrel.app.model.entities.Movimiento;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
-import es.minstrel.app.model.services.Block;
 import es.minstrel.app.model.services.ContabilidadService;
+import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.SummaryConta;
 import es.minstrel.app.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static es.minstrel.app.rest.dtos.MovimientoConversor.*;
@@ -144,6 +146,22 @@ public class ContabilidadController {
     public void deleteMovimiento(@PathVariable Long id)
             throws InstanceNotFoundException {
         contabilidadService.deleteMovimiento(id);
+    }
+
+    @GetMapping("/summary")
+    public SummaryContaDto getSummaryMovimientos(@RequestParam Long fechaInicio, @RequestParam Long fechaFin) {
+        LocalDate fechaInicioParse = fromDays(fechaInicio);
+        LocalDate fechaFinParse = fromDays(fechaFin);
+        System.out.println(fechaInicioParse.toString());
+        System.out.println(fechaFinParse.toString());
+        SummaryConta summaryConta = contabilidadService.getResumenBalance(fechaInicioParse, fechaFinParse);
+        return new SummaryContaDto(
+                summaryConta.getConceptoSummaryList().stream()
+                        .map(x -> new SummaryGenericDto(x.getName(), x.getGasto(), x.getIngreso())).toList(),
+                summaryConta.getCategoriaSummaryList().stream()
+                        .map(x -> new SummaryGenericDto(x.getName(), x.getGasto(), x.getIngreso())).toList(),
+                summaryConta.getCuentaSummaryList().stream()
+                        .map(x -> new SummaryGenericDto(x.getName(), x.getGasto(), x.getIngreso())).toList());
     }
 
 }

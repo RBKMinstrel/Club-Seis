@@ -81,3 +81,6 @@ export const getMovimientoSearch = state =>
 
 export const getMovimiento = state =>
     getModuleState(state).movimiento;
+
+export const getResumen = state =>
+    getModuleState(state).resumen;
