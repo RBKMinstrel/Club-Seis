@@ -6,12 +6,18 @@ import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.SummaryConta;
 import es.minstrel.app.model.services.utils.SummaryGeneric;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -340,5 +346,101 @@ public class ContabilidadServiceImpl implements ContabilidadService {
         }
 
         return summaryConta;
+    }
+
+    @Override
+    public byte[] getExcel(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, Boolean tipo) throws IOException {
+        List<Movimiento> movimientos = movimientoDao.find(fecha, razonSocialId, conceptoId, categoriaId, cuentaId, tipo);
+        Workbook workbook = new XSSFWorkbook();
+
+        // Hoja para gastos
+        if (tipo == null || tipo) {
+            Sheet sheetGastos = workbook.createSheet("Gastos");
+            generarContenidoHoja(movimientos, sheetGastos, true);
+        }
+
+        // Hoja para ingresos
+        if (tipo == null || !tipo) {
+            Sheet sheetIngresos = workbook.createSheet("Ingresos");
+            generarContenidoHoja(movimientos, sheetIngresos, false);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+        byte[] excelBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return excelBytes;
+
+    }
+
+    private static void generarContenidoHoja(List<Movimiento> movimientos, Sheet sheet, boolean esGasto) {
+        int rowNum = 0;
+        int aux = 0;
+        Row rowFirst = sheet.createRow(rowNum++);
+        rowFirst.createCell(aux++).setCellValue("Fecha");
+        rowFirst.createCell(aux++).setCellValue("Cif/Nif");
+        rowFirst.createCell(aux++).setCellValue("Denominacion");
+        rowFirst.createCell(aux++).setCellValue("Concepto");
+        rowFirst.createCell(aux++).setCellValue("Categoria");
+        rowFirst.createCell(aux++).setCellValue("Cuenta");
+        rowFirst.createCell(aux++).setCellValue("Base0");
+        rowFirst.createCell(aux++).setCellValue("Base4");
+        rowFirst.createCell(aux++).setCellValue("Iva4");
+        rowFirst.createCell(aux++).setCellValue("Base10");
+        rowFirst.createCell(aux++).setCellValue("Iva10");
+        rowFirst.createCell(aux++).setCellValue("Base21");
+        rowFirst.createCell(aux++).setCellValue("Iva21");
+        rowFirst.createCell(aux++).setCellValue("Base Total");
+        rowFirst.createCell(aux++).setCellValue("Iva Total");
+        rowFirst.createCell(aux).setCellValue("Total");
+
+        for (Movimiento movimiento : movimientos) {
+            if (movimiento.isEsGasto() == esGasto) {
+                Row row = sheet.createRow(rowNum++);
+
+                row.createCell(0).setCellValue(movimiento.getFecha().toString());
+
+                if (movimiento.getRazonSocial() != null) {
+                    row.createCell(1).setCellValue(movimiento.getRazonSocial().getCifnif());
+                    row.createCell(2).setCellValue(movimiento.getRazonSocial().getDenominacion());
+                } else {
+                    row.createCell(1).setCellValue("");
+                    row.createCell(2).setCellValue("");
+                }
+
+                if (movimiento.getConcepto() != null) {
+                    row.createCell(3).setCellValue(movimiento.getConcepto().getName());
+                } else {
+                    row.createCell(3).setCellValue("");
+                }
+
+                if (movimiento.getCategoria() != null) {
+                    row.createCell(4).setCellValue(movimiento.getCategoria().getName());
+                } else {
+                    row.createCell(4).setCellValue("");
+                }
+
+                if (movimiento.getCuenta() != null) {
+                    row.createCell(5).setCellValue(movimiento.getCuenta().getName());
+                } else {
+                    row.createCell(5).setCellValue("");
+                }
+
+                // Bases y totales
+                int columnNum = 6;
+                row.createCell(columnNum++).setCellValue(movimiento.getBase0().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getBase4().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getIva4().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getBase10().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getIva10().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getBase21().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getIva21().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getBaseTotal().doubleValue());
+                row.createCell(columnNum++).setCellValue(movimiento.getIvaTotal().doubleValue());
+                row.createCell(columnNum).setCellValue(movimiento.getTotal().doubleValue());
+            }
+        }
     }
 }

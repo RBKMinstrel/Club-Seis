@@ -67,6 +67,7 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.PUT, "/api/contabilidad/movimientos/*")).hasRole("TESORERO")
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/contabilidad/movimientos/*")).hasRole("TESORERO")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/summary")).hasRole("TESORERO")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/descargar-excel")).hasRole("TESORERO")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

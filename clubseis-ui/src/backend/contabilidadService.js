@@ -49,7 +49,7 @@ export const findMovimientos = ({razonSocialId, fecha, conceptoId, categoriaId, 
     path += cuentaId ? `&cuentaId=${cuentaId}` : "";
     path += size ? `&size=${size}` : "";
 
-    appFetch(path, config('GET'), onSuccess);
+    return appFetch(path, config('GET'), onSuccess);
 
 }
 
@@ -67,3 +67,19 @@ export const deleteMovimiento = (id, onSuccess, onErrors) =>
 
 export const getResumen = (fechaInicio, fechaFin, onSuccess) =>
     appFetch(`/contabilidad/summary?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, config('GET'), onSuccess);
+
+export const dowloadExcel = ({razonSocialId, fecha, conceptoId, categoriaId, cuentaId, tipo},
+                             onSuccess, onErrors) => {
+
+    let path = `/contabilidad/descargar-excel?page=0`;
+
+    path += (tipo != null) ? `&tipo=${tipo}` : "";
+    path += razonSocialId ? `&razonSocialId=${razonSocialId}` : "";
+    path += fecha ? `&fecha=${fecha}` : "";
+    path += conceptoId ? `&conceptoId=${conceptoId}` : "";
+    path += categoriaId ? `&categoriaId=${categoriaId}` : "";
+    path += cuentaId ? `&cuentaId=${cuentaId}` : "";
+
+    return appFetch(path, config('GET'), onSuccess, onErrors);
+
+}

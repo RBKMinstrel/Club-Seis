@@ -140,4 +140,122 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
 
         return new SliceImpl<>(movimientos, PageRequest.of(page, size), hasNext);
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Movimiento> find(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, Boolean esGasto) {
+
+        boolean aux = false;
+        String queryString = "SELECT m FROM Movimiento m";
+
+        if (fecha != null || razonSocialId != null || conceptoId != null || categoriaId != null ||
+                cuentaId != null || esGasto != null) {
+            queryString += " WHERE ";
+        }
+
+        if (fecha != null) {
+            queryString += "m.fecha = :fecha";
+            aux = true;
+        }
+
+        if (razonSocialId != null) {
+
+            if (aux) {
+                queryString += " AND ";
+            }
+
+            if (razonSocialId != -1)
+                queryString += "m.razonSocial.id = :razonSocialId";
+            else
+                queryString += "m.razonSocial IS NULL";
+
+            aux = true;
+
+        }
+
+        if (conceptoId != null) {
+
+            if (aux) {
+                queryString += " AND ";
+            }
+
+            if (conceptoId != -1)
+                queryString += "m.concepto.id = :conceptoId";
+            else
+                queryString += "m.concepto IS NULL";
+
+            aux = true;
+
+        }
+
+        if (categoriaId != null) {
+
+            if (aux) {
+                queryString += " AND ";
+            }
+
+            if (categoriaId != -1)
+                queryString += "m.categoria.id = :categoriaId";
+            else
+                queryString += "m.categoria IS NULL";
+
+            aux = true;
+
+        }
+
+        if (cuentaId != null) {
+
+            if (aux) {
+                queryString += " AND ";
+            }
+
+            if (cuentaId != -1)
+                queryString += "m.cuenta.id = :cuentaId";
+            else
+                queryString += "m.cuenta IS NULL";
+
+            aux = true;
+
+        }
+
+        if (esGasto != null) {
+
+            if (aux) {
+                queryString += " AND ";
+            }
+
+            queryString += "m.esGasto = :esGasto";
+
+        }
+
+        queryString += " ORDER BY m.fecha";
+
+        Query query = entityManager.createQuery(queryString);
+
+        if (fecha != null) {
+            query.setParameter("fecha", fecha);
+        }
+
+        if (razonSocialId != null && razonSocialId != -1) {
+            query.setParameter("razonSocialId", razonSocialId);
+        }
+
+        if (conceptoId != null && conceptoId != -1) {
+            query.setParameter("conceptoId", conceptoId);
+        }
+
+        if (categoriaId != null && categoriaId != -1) {
+            query.setParameter("categoriaId", categoriaId);
+        }
+
+        if (cuentaId != null && cuentaId != -1) {
+            query.setParameter("cuentaId", cuentaId);
+        }
+
+        if (esGasto != null) {
+            query.setParameter("esGasto", esGasto);
+        }
+
+        return (List<Movimiento>) query.getResultList();
+    }
 }

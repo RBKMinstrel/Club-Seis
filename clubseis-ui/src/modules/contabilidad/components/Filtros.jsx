@@ -29,7 +29,7 @@ const Filtros = ({criteria}) => {
     const tipoOptions =
         [
             {label: "Todos", value: null},
-            {label: "Pagos", value: true},
+            {label: "Gastos", value: true},
             {label: "Ingresos", value: false}
         ];
     const razonSocialOptions =
@@ -86,6 +86,32 @@ const Filtros = ({criteria}) => {
             cuentaId: cuenta ? cuenta.value : null,
             size: size,
         }));
+    };
+
+    const descargar = blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'datos.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    }
+
+    const handleSubmitDowload = event => {
+        event.preventDefault();
+
+        dispatch(actions.dowloadExcel({
+                tipo: tipo.value,
+                fecha: fecha !== '' ? dateChange(fecha) : null,
+                razonSocialId: razonSocial ? razonSocial.value : null,
+                conceptoId: concepto ? concepto.value : null,
+                categoriaId: categoria ? categoria.value : null,
+                cuentaId: cuenta ? cuenta.value : null,
+            },
+            blob => descargar(blob),
+            error => console.log(error)
+        ));
     };
 
     const selectMapper = (value, label) => {
@@ -164,7 +190,10 @@ const Filtros = ({criteria}) => {
                     options={sizes.map(s => (selectMapper(s, s)))}
                 />
             </div>
-            <div>
+            <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                <button onClick={handleSubmitDowload}>
+                    Descargar
+                </button>
                 <button type="submit">
                     Buscar
                 </button>

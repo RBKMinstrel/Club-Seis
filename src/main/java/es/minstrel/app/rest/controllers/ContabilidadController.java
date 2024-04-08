@@ -6,13 +6,22 @@ import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.services.ContabilidadService;
 import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.SummaryConta;
+import es.minstrel.app.rest.common.ErrorsDto;
 import es.minstrel.app.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 import static es.minstrel.app.rest.dtos.MovimientoConversor.*;
 
@@ -20,8 +29,24 @@ import static es.minstrel.app.rest.dtos.MovimientoConversor.*;
 @RequestMapping("/api/contabilidad")
 public class ContabilidadController {
 
+    private final static String ERROR_GENERATION_FILE_EXCEPTION_CODE = "project.exceptions.IOException";
+
+    @Autowired
+    private MessageSource messageSource;
+
     @Autowired
     private ContabilidadService contabilidadService;
+
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorsDto handleIOException(IOException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(ERROR_GENERATION_FILE_EXCEPTION_CODE, null,
+                ERROR_GENERATION_FILE_EXCEPTION_CODE, locale);
+
+        return new ErrorsDto(errorMessage);
+    }
 
     @GetMapping("/conceptos")
     public List<ConceptoDto> getConceptos() {
@@ -159,6 +184,28 @@ public class ContabilidadController {
                         .map(x -> new SummaryGenericDto(x.getName(), x.getGasto(), x.getIngreso())).toList(),
                 summaryConta.getCuentaSummaryList().stream()
                         .map(x -> new SummaryGenericDto(x.getName(), x.getGasto(), x.getIngreso())).toList());
+    }
+
+    @GetMapping("/descargar-excel")
+    public ResponseEntity<Resource> descargarExcel(@RequestParam(required = false) Boolean tipo,
+                                                   @RequestParam(required = false) Long fecha,
+                                                   @RequestParam(required = false) Long razonSocialId,
+                                                   @RequestParam(required = false) Long conceptoId,
+                                                   @RequestParam(required = false) Long categoriaId,
+                                                   @RequestParam(required = false) Long cuentaId) throws IOException {
+
+        byte[] excelBytes = contabilidadService.getExcel(fromDays(fecha), razonSocialId,
+                conceptoId, categoriaId, cuentaId, tipo);
+        ByteArrayResource resource = new ByteArrayResource(excelBytes);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.setContentDispositionFormData("attachment", "movimientos.xlsx");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
     }
 
 }

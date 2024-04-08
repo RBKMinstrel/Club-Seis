@@ -135,3 +135,6 @@ export const getResumen = (fechaInicio, fechaFin) => dispatch => {
 export const clearResumen = () => ({
     type: actionTypes.CLEAR_RESUMEN
 });
+
+export const dowloadExcel = (criteria, onSuccess, onErrors) => () =>
+    backend.contabilidadService.dowloadExcel(criteria, onSuccess, onErrors);

@@ -147,7 +147,17 @@ public class Movimiento {
     }
 
     @Transient
+    public BigDecimal getBaseTotal() {
+        return base0.add(base4).add(base10).add(base21);
+    }
+
+    @Transient
+    public BigDecimal getIvaTotal() {
+        return getIva4().add(getIva10()).add(getIva21());
+    }
+
+    @Transient
     public BigDecimal getTotal() {
-        return base0.add(base4).add(getIva4()).add(base10).add(getIva10()).add(base21).add(getIva21());
+        return getBaseTotal().add(getIvaTotal());
     }
 }
