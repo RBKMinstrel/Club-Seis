@@ -103,7 +103,6 @@ public class ContabilidadController {
         contabilidadService.updateRazonSocial(id, razonSocialDto.getDenominacion(), razonSocialDto.getCifnif());
     }
 
-    //TODO: Añadir campo razon social
     @GetMapping("/movimientos")
     public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Boolean tipo,
                                                        @RequestParam(required = false) Long fecha,
@@ -152,8 +151,6 @@ public class ContabilidadController {
     public SummaryContaDto getSummaryMovimientos(@RequestParam Long fechaInicio, @RequestParam Long fechaFin) {
         LocalDate fechaInicioParse = fromDays(fechaInicio);
         LocalDate fechaFinParse = fromDays(fechaFin);
-        System.out.println(fechaInicioParse.toString());
-        System.out.println(fechaFinParse.toString());
         SummaryConta summaryConta = contabilidadService.getResumenBalance(fechaInicioParse, fechaFinParse);
         return new SummaryContaDto(
                 summaryConta.getConceptoSummaryList().stream()
