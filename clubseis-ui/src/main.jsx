@@ -5,10 +5,15 @@ import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {IntlProvider} from "react-intl";
 
+import '@fortawesome/fontawesome-free/css/fontawesome.css';
+import '@fortawesome/fontawesome-free/css/solid.css';
+
 import store from './store';
 import app, {App} from './modules/app';
 import backend, {NetworkError} from './backend';
 import {initReactIntl} from './i18n';
+
+import './main.css';
 
 /* Configure backend proxy. */
 backend.init(() => store.dispatch(app.actions.error(new NetworkError())));

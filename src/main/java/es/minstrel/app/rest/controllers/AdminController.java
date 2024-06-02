@@ -36,7 +36,7 @@ public class AdminController {
             @RequestParam(defaultValue = "5") int size) {
         Block<User> userBlock = adminService.getAllUser(page, size);
 
-        return new BlockDto<>(toUserDtos(userBlock.getItems()), userBlock.getExistMoreItems());
+        return new BlockDto<>(toUserDtos(userBlock.getItems()), userBlock.getTotalItems());
     }
 
     @PostMapping("/users")

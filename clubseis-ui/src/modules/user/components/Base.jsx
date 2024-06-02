@@ -1,52 +1,95 @@
 import {Link, Outlet} from "react-router-dom";
 import {useSelector} from "react-redux";
-import user from "../index.js";
 
 import "./Base.css";
-import appLogo from "../../../assets/logo.png";
+import NavSidebar from "../../common/components/NavSidebar.jsx";
+import * as selector from "../selectors.js";
 
 const Base = () => {
+    const userName = useSelector(selector.getUserName);
 
-    const roles = useSelector(user.selectors.getUserRoles);
+    const items = [
+        {
+            name: "Contabilidad",
+            url: "/gestion/contabilidad",
+            subItems: [
+                {name: "Movimientos", url: "/gestion/contabilidad/asientos"},
+                {name: "Razón Social", url: "/gestion/contabilidad/razones-sociales"},
+                {name: "Conceptos", url: "/gestion/contabilidad/conceptos"},
+                {name: "Categorías", url: "/gestion/contabilidad/categorias"},
+                {name: "Cuentas", url: "/gestion/contabilidad/cuentas"},
+                {name: "Resumen", url: "/gestion/contabilidad/resumen"}
+            ]
+        },
+        {
+            name: "Facturas",
+            url: "/gestion/facturas",
+            subItems: []
+        },
+        {
+            name: "Mercancías",
+            url: "/gestion/mercancias",
+            subItems: []
+        },
+        {
+            name: "Usuarios",
+            url: "/gestion/admin",
+            subItems: []
+        },
+        {
+            name: "Mi perfil",
+            url: "/gestion/mi-perfil",
+            subItems: []
+        }
+    ];
 
     return (
-        <div className="general">
-            <header className="header">
-                <div className="top-header">
-                    <Link className="logo" to="/gestion">
-                        <img src={appLogo}/>
+        <div className="patata" style={{display: "flex", height: "100vh"}}>
+            <div style={{width: "12%", backgroundColor: "#f0f0f0", display: "flex", flexDirection: "column"}}>
+                <div style={{
+                    display: "flex",
+                    height: "80px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px",
+                    backgroundColor: "#7FB6E8"
+                }}>
+                    <Link to="/gestion">
+                        <div style={{width: "100px", height: "40px", backgroundColor: "red"}}/>
                     </Link>
-                    <h1>
-                        Seis Do Nadal
-                    </h1>
-                    <div className="funciones">
-                        <Link to="/gestion/update-profile">
-                            Actualizar perfil
-                        </Link>
-                        <Link to="/gestion/change-password">
-                            Cambiar contraseña
-                        </Link>
+                </div>
+                <NavSidebar style={{flex: 1}} items={items}/>
+            </div>
+            <div style={{width: "100%"}}>
+                <header
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        height: "80px",
+                        backgroundColor: "#7FB6E8"
+                    }}
+                >
+                    <div style={{display: "flex", alignItems: "center", gap: "25px", padding: "0 20px"}}>
+                        <div>
+                            Icono
+                        </div>
+                        <h1>Seis do Nadal</h1>
+                    </div>
+                    <div style={{display: "flex", alignItems: "center", gap: "25px", padding: "0 20px"}}>
+                        <h2>{userName}</h2>
                         <Link to="/gestion/logout">
-                            Desconectarse
+                            <span
+                                className="fa-solid fa-arrow-right-from-bracket link-out"
+                                style={{color: "black", fontSize: 20}}
+                            />
                         </Link>
                     </div>
-                </div>
-                <nav className="top-subnav">
-                    {roles.includes('ADMIN') &&
-                        <Link to="/gestion/admin">
-                            Admin
-                        </Link>
-                    }
-                    {roles.includes('TESORERO') &&
-                        <Link to="/gestion/contabilidad/asientos">
-                            Contabilidad
-                        </Link>
-                    }
-                </nav>
-            </header>
-            <main className="content">
-                <Outlet/>
-            </main>
+                </header>
+                <main style={{width: "100%", height: "100%", padding: "20px"}}>
+                    <Outlet/>
+                </main>
+            </div>
         </div>
     );
 

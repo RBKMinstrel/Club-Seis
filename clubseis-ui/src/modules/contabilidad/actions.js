@@ -60,13 +60,7 @@ export const findMovimientos = criteria => dispatch => {
     backend.contabilidadService.findMovimientos(criteria,
         result => dispatch(findMovimientosCompleted({criteria, result})));
 
-}
-
-export const previousFindMovimientosResultPage = criteria =>
-    findMovimientos({...criteria, page: criteria.page - 1});
-
-export const nextFindMovimientosResultPage = criteria =>
-    findMovimientos({...criteria, page: criteria.page + 1});
+};
 
 const clearMovimientoSearch = () => ({
     type: actionTypes.CLEAR_MOVIMIENTO_SEARCH
@@ -77,10 +71,11 @@ const findMovimientoByIdCompleted = movimiento => ({
     movimiento
 });
 
-export const findMovimientoById = (id) => dispatch => {
+export const findMovimientoById = (id, onSucceess) => dispatch => {
     backend.contabilidadService.findMovimientoById(id,
         movimiento => {
             dispatch(findMovimientoByIdCompleted(movimiento));
+            onSucceess();
         });
 }
 

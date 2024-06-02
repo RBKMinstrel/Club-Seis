@@ -1,0 +1,67 @@
+.data-grid {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border: 2px solid #bbb;
+    height: 100%;
+}
+
+.data-grid thead, .data-grid tfoot {
+    flex-shrink: 0;
+}
+
+.data-grid-body {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.data-grid th, .data-grid td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-grid-header {
+    background-color: white;
+    text-align: left;
+    border-bottom: 2px solid #bbb;
+}
+
+.data-grid-loading, .data-grid-no-results {
+    text-align: center;
+}
+
+.data-grid-footer {
+    background-color: white;
+    border-top: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+}
+
+.data-grid-footer-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.data-grid-rows-per-page, .data-grid-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.data-grid-pagination input {
+    width: 50px;
+    text-align: center;
+}
+
+.data-grid thead {
+    border-bottom: 2px solid #bbb;
+}
+
+.data-grid tbody {
+    border-bottom: 2px solid #bbb;
+}
+
+.data-grid tfoot {
+    border-top: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+}

@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -230,9 +230,9 @@ public class ContabilidadServiceImpl implements ContabilidadService {
     public Block<Movimiento> getMovimientos(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId,
                                             Long cuentaId, Boolean tipo, int page, int size) {
 
-        Slice<Movimiento> slice = movimientoDao.find(fecha, razonSocialId, conceptoId, categoriaId, cuentaId, tipo, page, size);
+        Page<Movimiento> pageable = movimientoDao.find(fecha, razonSocialId, conceptoId, categoriaId, cuentaId, tipo, page, size);
 
-        return new Block<>(slice.getContent(), slice.hasNext());
+        return new Block<>(pageable.getContent(), pageable.getTotalElements());
     }
 
     @Override

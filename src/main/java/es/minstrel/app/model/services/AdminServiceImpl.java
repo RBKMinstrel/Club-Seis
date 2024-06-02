@@ -6,8 +6,8 @@ import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.exceptions.PermissionException;
 import es.minstrel.app.model.services.utils.Block;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,9 +73,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Block<User> getAllUser(int page, int size) {
 
-        Slice<User> users = userDao.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "userName")));
+        Page<User> users = userDao.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "userName")));
 
-        return new Block<>(users.getContent(), users.hasNext());
+        return new Block<>(users.getContent(), users.getTotalElements());
     }
 
     @Override

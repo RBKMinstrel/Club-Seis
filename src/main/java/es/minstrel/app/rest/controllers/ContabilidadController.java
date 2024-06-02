@@ -141,7 +141,7 @@ public class ContabilidadController {
         Block<Movimiento> movimientoBlock = contabilidadService.getMovimientos(fromDays(fecha), razonSocialId,
                 conceptoId, categoriaId, cuentaId, tipo, page, size);
 
-        return new BlockDto<>(toShortMovimientoDtos(movimientoBlock.getItems()), movimientoBlock.getExistMoreItems());
+        return new BlockDto<>(toShortMovimientoDtos(movimientoBlock.getItems()), movimientoBlock.getTotalItems());
     }
 
     @GetMapping("/movimientos/{id}")

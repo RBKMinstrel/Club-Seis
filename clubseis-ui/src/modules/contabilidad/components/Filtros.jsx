@@ -18,7 +18,7 @@ const dateChange = (date) => {
     return Math.floor(selectedDate.getTime() / (1000 * 60 * 60 * 24));
 };
 
-const Filtros = ({criteria}) => {
+const Filtros = ({criteria, resetPage}) => {
 
     const dispatch = useDispatch();
     const razonesSociales = useSelector(selectors.getRazonesSociales);
@@ -54,8 +54,6 @@ const Filtros = ({criteria}) => {
         useState(categoriaOptions ? categoriaOptions.find((x) => (x.value === criteria.categoriaId)) : {});
     const [cuenta, setCuenta] =
         useState(cuentaOptions ? cuentaOptions.find((x) => (x.value === criteria.cuentaId)) : {});
-    const [size, setSize] = useState(criteria.size ? criteria.size : 12);
-    const sizes = [12, 25, 50, 75, 100];
 
     useEffect(() => {
         dispatch(actions.findAllRazonSocial());
@@ -73,46 +71,18 @@ const Filtros = ({criteria}) => {
         dispatch(actions.findAllCuentas());
     }, []);
 
-    const handleSubmit = event => {
-        event.preventDefault();
-
+    useEffect(() => {
+        resetPage();
         dispatch(actions.findMovimientos({
+            ...criteria,
             tipo: tipo.value,
-            page: 0,
             fecha: fecha !== '' ? dateChange(fecha) : null,
             razonSocialId: razonSocial ? razonSocial.value : null,
             conceptoId: concepto ? concepto.value : null,
             categoriaId: categoria ? categoria.value : null,
             cuentaId: cuenta ? cuenta.value : null,
-            size: size,
         }));
-    };
-
-    const descargar = blob => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'datos.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
-    }
-
-    const handleSubmitDowload = event => {
-        event.preventDefault();
-
-        dispatch(actions.dowloadExcel({
-                tipo: tipo.value,
-                fecha: fecha !== '' ? dateChange(fecha) : null,
-                razonSocialId: razonSocial ? razonSocial.value : null,
-                conceptoId: concepto ? concepto.value : null,
-                categoriaId: categoria ? categoria.value : null,
-                cuentaId: cuenta ? cuenta.value : null,
-            },
-            blob => descargar(blob),
-            error => console.log(error)
-        ));
-    };
+    }, [tipo, fecha, razonSocial, concepto, categoria, cuenta]);
 
     const selectMapper = (value, label) => {
         return ({value: value, label: label})
@@ -179,24 +149,6 @@ const Filtros = ({criteria}) => {
                     onChange={setCuenta}
                     options={cuentaOptions}
                 />
-            </div>
-            <div>
-                <label>Nº</label>
-                <Select
-                    className="selector"
-                    isSearchable={true}
-                    value={selectMapper(size, size)}
-                    onChange={e => setSize(e.value)}
-                    options={sizes.map(s => (selectMapper(s, s)))}
-                />
-            </div>
-            <div style={{display: "flex", flexDirection: "column", gap: 8}}>
-                <button onClick={handleSubmitDowload}>
-                    Descargar
-                </button>
-                <button type="submit">
-                    Buscar
-                </button>
             </div>
         </form>
     );

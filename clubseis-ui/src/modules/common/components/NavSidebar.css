@@ -1,0 +1,34 @@
+.nav-sidebar {
+    background-color: #333;
+    padding: 10px;
+    width: 100%;
+    flex: 1;
+}
+
+.nav-sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.nav-sidebar a.active {
+    background-color: #555;
+}
+
+.nav-sidebar ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.nav-sidebar ul li {
+    margin: 5px 0;
+}
+
+.nav-sidebar ul li a {
+    color: #ccc;
+}
+
+.nav-sidebar ul li a.active {
+    color: white;
+}

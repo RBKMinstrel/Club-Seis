@@ -5,15 +5,15 @@ import java.util.List;
 public class BlockDto<T> {
 
     private List<T> items;
-    private boolean existMoreItems;
+    private long totalItems;
 
     public BlockDto() {
     }
 
-    public BlockDto(List<T> items, boolean existMoreItems) {
+    public BlockDto(List<T> items, long totalItems) {
 
         this.items = items;
-        this.existMoreItems = existMoreItems;
+        this.totalItems = totalItems;
 
     }
 
@@ -25,12 +25,11 @@ public class BlockDto<T> {
         this.items = items;
     }
 
-    public boolean getExistMoreItems() {
-        return existMoreItems;
+    public long getTotalItems() {
+        return totalItems;
     }
 
-    public void setExistMoreItems(boolean existMoreItems) {
-        this.existMoreItems = existMoreItems;
+    public void setTotalItems(long totalItems) {
+        this.totalItems = totalItems;
     }
-
 }
