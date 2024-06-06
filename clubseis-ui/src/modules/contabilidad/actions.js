@@ -133,3 +133,6 @@ export const clearResumen = () => ({
 
 export const dowloadExcel = (criteria, onSuccess, onErrors) => () =>
     backend.contabilidadService.dowloadExcel(criteria, onSuccess, onErrors);
+
+export const uploadExcel = (data, onSuccess, onErrors) => () =>
+    backend.contabilidadService.uploadExcel(data, onSuccess, onErrors);

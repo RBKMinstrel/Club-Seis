@@ -119,7 +119,7 @@ public class CustomizedMovimientoDaoImpl implements CustomizedMovimientoDao {
             countQueryString += "m.esGasto = :esGasto";
         }
 
-        queryString += " ORDER BY m.fecha";
+        queryString += " ORDER BY m.fecha DESC";
 
         Query query = entityManager.createQuery(queryString)
                 .setFirstResult(page * size)

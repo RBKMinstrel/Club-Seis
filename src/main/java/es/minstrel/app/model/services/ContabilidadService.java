@@ -7,6 +7,7 @@ import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.SummaryConta;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,6 +65,9 @@ public interface ContabilidadService {
 
     SummaryConta getResumenBalance(LocalDate fechaInicio, LocalDate fechaFin);
 
-    byte[] getExcel(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, Boolean tipo) throws IOException;
+    byte[] getExcel(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, Boolean tipo)
+            throws IOException;
+
+    int uploadExcel(InputStream file) throws IOException;
 
 }

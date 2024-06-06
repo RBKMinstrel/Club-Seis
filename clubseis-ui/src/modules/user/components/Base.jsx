@@ -2,7 +2,8 @@ import {Link, Outlet} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 import "./Base.css";
-import NavSidebar from "../../common/components/NavSidebar.jsx";
+import {NavSidebar} from "../../common";
+
 import * as selector from "../selectors.js";
 
 const Base = () => {

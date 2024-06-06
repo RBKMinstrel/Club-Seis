@@ -81,5 +81,7 @@ export const dowloadExcel = ({razonSocialId, fecha, conceptoId, categoriaId, cue
     path += cuentaId ? `&cuentaId=${cuentaId}` : "";
 
     return appFetch(path, config('GET'), onSuccess, onErrors);
-
 }
+
+export const uploadExcel = (data, onSuccess, onErrors) =>
+    appFetch('/contabilidad/subir-excel', config('POST', data), onSuccess, onErrors);

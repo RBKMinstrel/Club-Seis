@@ -3,9 +3,10 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import * as actions from "../actions.js";
 import * as selectors from '../selectors';
-import {DataGrid} from "../../common/index";
+import {DataGrid} from "../../common";
 import {Link} from "react-router-dom";
 import {FormattedDate, FormattedNumber} from "react-intl";
+import UploadAsientos from "./UploadAsientos.jsx";
 
 const Movimientos = () => {
 
@@ -24,16 +25,16 @@ const Movimientos = () => {
 
     useEffect(() => {
         setLoading(true);
+        dispatch(actions.findMovimientos({...criteria, size: size, page: 0}));
         resetPage();
-        dispatch(actions.findMovimientos({...criteria, page: 0, size: size}));
         setLoading(false);
-    }, [dispatch, size]);
+    }, [size]);
 
     useEffect(() => {
         setLoading(true);
         dispatch(actions.findMovimientos({...criteria, page: page}));
         setLoading(false);
-    }, [dispatch, page]);
+    }, [page]);
 
     const columns = {
         fecha: {
@@ -116,6 +117,7 @@ const Movimientos = () => {
 
     return (
         <div className="column" style={{alignItems: "center"}}>
+
             <div style={{display: "flex", justifyContent: "space-between", width: "100%", padding: 10}}>
                 <div>
                     <h2>Asientos</h2>
@@ -132,6 +134,7 @@ const Movimientos = () => {
                         style={{fontSize: '20px'}}
                         className="fa-solid fa-cloud-arrow-down"
                     />
+                    <UploadAsientos/>
                 </div>
             </div>
             <Filtros criteria={criteria} resetPage={resetPage}/>

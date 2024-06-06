@@ -6,9 +6,7 @@ import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.SummaryConta;
 import es.minstrel.app.model.services.utils.SummaryGeneric;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,9 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -348,33 +349,6 @@ public class ContabilidadServiceImpl implements ContabilidadService {
         return summaryConta;
     }
 
-    @Override
-    public byte[] getExcel(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, Boolean tipo) throws IOException {
-        List<Movimiento> movimientos = movimientoDao.find(fecha, razonSocialId, conceptoId, categoriaId, cuentaId, tipo);
-        Workbook workbook = new XSSFWorkbook();
-
-        // Hoja para gastos
-        if (tipo == null || tipo) {
-            Sheet sheetGastos = workbook.createSheet("Gastos");
-            generarContenidoHoja(movimientos, sheetGastos, true);
-        }
-
-        // Hoja para ingresos
-        if (tipo == null || !tipo) {
-            Sheet sheetIngresos = workbook.createSheet("Ingresos");
-            generarContenidoHoja(movimientos, sheetIngresos, false);
-        }
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-        byte[] excelBytes = outputStream.toByteArray();
-        outputStream.close();
-
-        return excelBytes;
-
-    }
-
     private static void generarContenidoHoja(List<Movimiento> movimientos, Sheet sheet, boolean esGasto) {
         int rowNum = 0;
         int aux = 0;
@@ -442,5 +416,170 @@ public class ContabilidadServiceImpl implements ContabilidadService {
                 row.createCell(columnNum).setCellValue(movimiento.getTotal().doubleValue());
             }
         }
+    }
+
+    @Override
+    public byte[] getExcel(LocalDate fecha, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, Boolean tipo) throws IOException {
+        List<Movimiento> movimientos = movimientoDao.find(fecha, razonSocialId, conceptoId, categoriaId, cuentaId, tipo);
+        Workbook workbook = new XSSFWorkbook();
+
+        // Hoja para gastos
+        if (tipo == null || tipo) {
+            Sheet sheetGastos = workbook.createSheet("Gastos");
+            generarContenidoHoja(movimientos, sheetGastos, true);
+        }
+
+        // Hoja para ingresos
+        if (tipo == null || !tipo) {
+            Sheet sheetIngresos = workbook.createSheet("Ingresos");
+            generarContenidoHoja(movimientos, sheetIngresos, false);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+        byte[] excelBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return excelBytes;
+
+    }
+
+    private RazonSocial getRazonSocial(String denominacion, String cifNif) {
+        if (cifNif == null || cifNif.isEmpty()) {
+            return null;
+        } else {
+            Optional<RazonSocial> razonSocialOpt = razonSocialDao.getRazonSocialsByCifnif(cifNif);
+
+            if (razonSocialOpt.isEmpty()) {
+                RazonSocial razonSocial = new RazonSocial(denominacion, cifNif);
+                return razonSocialDao.save(razonSocial);
+            } else {
+                return razonSocialOpt.get();
+            }
+        }
+    }
+
+    private Concepto getConcepto(String conceptoName) {
+        if (conceptoName == null || conceptoName.isEmpty()) {
+            return null;
+        } else {
+            Optional<Concepto> conceptoOpt = conceptoDao.getConceptoByName(conceptoName);
+
+            if (conceptoOpt.isEmpty()) {
+                Concepto concepto = new Concepto(conceptoName);
+                return conceptoDao.save(concepto);
+            } else {
+                return conceptoOpt.get();
+            }
+        }
+    }
+
+    private Categoria getCategoria(String categoriaName) {
+        if (categoriaName == null || categoriaName.isEmpty()) {
+            return null;
+        } else {
+            Optional<Categoria> categoriaOpt = categoriaDao.getCategoriaByName(categoriaName);
+
+            if (categoriaOpt.isEmpty()) {
+                Categoria categoria = new Categoria(categoriaName);
+                return categoriaDao.save(categoria);
+            } else {
+                return categoriaOpt.get();
+            }
+        }
+    }
+
+    private Cuenta getCuenta(String cuentaName) {
+        if (cuentaName == null || cuentaName.isEmpty()) {
+            return null;
+        } else {
+            Optional<Cuenta> cuentaOpt = cuentaDao.getCuentaByName(cuentaName);
+
+            if (cuentaOpt.isEmpty()) {
+                Cuenta cuenta = new Cuenta(cuentaName);
+                return cuentaDao.save(cuenta);
+            } else {
+                return cuentaOpt.get();
+            }
+        }
+    }
+
+    private void createMovimientoFromRow(Row row, Map<String, Integer> headerIndexMap, boolean esGasto) {
+        Movimiento movimiento = new Movimiento();
+        movimiento.setEsGasto(esGasto);
+        movimiento.setFecha(row.getCell(headerIndexMap.get("Fecha")).getLocalDateTimeCellValue().toLocalDate());
+        movimiento.setRazonSocial(getRazonSocial(
+                row.getCell(headerIndexMap.get("Razón Social")).getStringCellValue().trim(),
+                row.getCell(headerIndexMap.get("NIF/CIF")).getStringCellValue().trim()
+        ));
+        movimiento.setConcepto(getConcepto(row.getCell(headerIndexMap.get("Concepto")).getStringCellValue().trim()));
+        movimiento.setCategoria(getCategoria(row.getCell(headerIndexMap.get("Categoría")).getStringCellValue().trim()));
+        movimiento.setCuenta(getCuenta(row.getCell(headerIndexMap.get("Cuenta")).getStringCellValue().trim()));
+        movimiento.setBase0(BigDecimal.valueOf(row.getCell(headerIndexMap.get("Base 0")).getNumericCellValue()));
+        movimiento.setBase4(BigDecimal.valueOf(row.getCell(headerIndexMap.get("Base 4")).getNumericCellValue()));
+        movimiento.setBase10(BigDecimal.valueOf(row.getCell(headerIndexMap.get("Base 10")).getNumericCellValue()));
+        movimiento.setBase21(BigDecimal.valueOf(row.getCell(headerIndexMap.get("Base 21")).getNumericCellValue()));
+        movimientoDao.save(movimiento);
+    }
+
+    private int createMovimientosFromSheet(Sheet sheet, boolean esGasto) {
+        int cont = 0;
+
+        if (sheet == null)
+            return cont;
+
+        Row headerRow = sheet.getRow(0);
+
+        if (headerRow == null) {
+            return cont;
+        }
+
+        // Cabeceras que se esperan
+        String[] expectedHeaders = {"Fecha", "Razón Social", "NIF/CIF", "Concepto", "Categoría", "Cuenta",
+                "Base 0", "Base 4", "Base 10", "Base 21"};
+        Map<String, Integer> headerIndexMap = new HashMap<>();
+
+        // Obtención de cabezeras
+        for (Cell cell : headerRow) {
+            String headerValue = cell.getStringCellValue().trim();
+            for (String expectedHeader : expectedHeaders) {
+                if (expectedHeader.equalsIgnoreCase(headerValue)) {
+                    headerIndexMap.put(expectedHeader, cell.getColumnIndex());
+                    break;
+                }
+            }
+        }
+
+        //Comprobacion de presencia de todas las filas
+        for (String expectedHeader : expectedHeaders) {
+            if (!headerIndexMap.containsKey(expectedHeader)) {
+                return cont;
+            }
+        }
+
+        //Iterar por las columnas
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue; // Saltar col. vacias
+
+            createMovimientoFromRow(row, headerIndexMap, esGasto);
+
+            cont++;
+        }
+
+        return cont;
+    }
+
+    @Override
+    public int uploadExcel(InputStream file) throws IOException {
+        Workbook workbook = WorkbookFactory.create(file);
+        int cont = 0;
+
+        cont += createMovimientosFromSheet(workbook.getSheet("Gastos"), true);
+        cont += createMovimientosFromSheet(workbook.getSheet("Ingresos"), false);
+
+        workbook.close();
+        return cont;
     }
 }

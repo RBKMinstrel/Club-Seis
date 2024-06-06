@@ -8,6 +8,7 @@ import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.SummaryConta;
 import es.minstrel.app.rest.common.ErrorsDto;
 import es.minstrel.app.rest.dtos.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,8 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
@@ -206,6 +209,18 @@ public class ContabilidadController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(resource);
+    }
+
+    @PostMapping("/subir-excel")
+    public int subirExcel(@RequestParam("file") @NotNull MultipartFile file) {
+        try (InputStream inputStream = file.getInputStream()) {
+
+            return contabilidadService.uploadExcel(inputStream);
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
     }
 
 }

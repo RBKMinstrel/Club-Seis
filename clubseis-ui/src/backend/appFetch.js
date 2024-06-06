@@ -112,7 +112,9 @@ export const config = (method, body) => {
     if (body) {
         if (body instanceof FormData) {
             config.body = body;
+            console.log("FormData");
         } else {
+            console.log("no form data");
             config.headers = {'Content-Type': 'application/json'};
             config.body = JSON.stringify(body);
         }
