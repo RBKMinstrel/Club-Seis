@@ -5,6 +5,7 @@ import * as selectors from "../selectors";
 import * as actions from "../actions";
 import {FormattedDate, FormattedNumber} from "react-intl";
 import {useParams} from "react-router-dom";
+import {BackLink, Section} from "../../common";
 
 function redondear(numero) {
     const factor = Math.pow(10, 2);
@@ -56,90 +57,95 @@ const MovimientoDetails = () => {
 
     return (
         <div className="column">
-            <div className="column">
-                <div className="row">
-                    <h3>Tipo:</h3>
-                    <h5>{movimiento.esGasto ? "Gasto" : "Ingreso"}</h5>
-                </div>
-                <div className="row">
-                    <h3>Fecha:</h3>
-                    <FormattedDate value={new Date(movimiento.fecha * (1000 * 60 * 60 * 24))}/>
-                </div>
-            </div>
-            <div className="column">
-                <div className="column">
-                    <div className="row">
-                        <h3>Razon Social:</h3>
-                        <h5>{razonText(selectors.getRazonSocial(razonSocialOptions, movimiento.razonSocial))}</h5>
+            <BackLink style={{alignSelf: "start"}}/>
+            <Section title="Datos identificativos">
+                <div className="row" style={{justifyContent: "space-around"}}>
+                    <div className="column">
+                        <div className="row">
+                            <h3>Tipo:</h3>
+                            <h5>{movimiento.esGasto ? "Gasto" : "Ingreso"}</h5>
+                        </div>
+                        <div className="row">
+                            <h3>Fecha:</h3>
+                            <FormattedDate value={new Date(movimiento.fecha * (1000 * 60 * 60 * 24))}/>
+                        </div>
                     </div>
-                    <div className="row">
-                        <h3>Cuenta:</h3>
-                        <h5>{selectors.getCuenta(cuentaOptions, movimiento.cuenta)}</h5>
+                    <div className="column">
+                        <div className="row">
+                            <h3>Razon Social:</h3>
+                            <h5>{razonText(selectors.getRazonSocial(razonSocialOptions, movimiento.razonSocial))}</h5>
+                        </div>
+                        <div className="row">
+                            <h3>Concepto:</h3>
+                            <h5>{selectors.getConcepto(conceptoOptions, movimiento.concepto)}</h5>
+                        </div>
                     </div>
-                </div>
-                <div className="column">
-                    <div className="row">
-                        <h3>Concepto:</h3>
-                        <h5>{selectors.getConcepto(conceptoOptions, movimiento.concepto)}</h5>
-                    </div>
-                    <div className="row">
-                        <h3>Categoria:</h3>
-                        <h5>{selectors.getCategoria(categoriaOptions, movimiento.categoria)}</h5>
-                    </div>
-                </div>
-            </div>
-            <div className="row begin">
-                <div className="column">
-                    <div className="column end">
-                        <h3>Base 0:</h3>
-                        <FormattedNumber value={base0} style="currency" currency="EUR"/>
+                    <div className="column">
+                        <div className="row">
+                            <h3>Categoria:</h3>
+                            <h5>{selectors.getCategoria(categoriaOptions, movimiento.categoria)}</h5>
+                        </div>
+                        <div className="row">
+                            <h3>Cuenta:</h3>
+                            <h5>{selectors.getCuenta(cuentaOptions, movimiento.cuenta)}</h5>
+                        </div>
                     </div>
                 </div>
-                <div className="column">
-                    <div className="column end">
-                        <h3>Base 4:</h3>
-                        <FormattedNumber value={base4} style="currency" currency="EUR"/>
+            </Section>
+            <Section title="Cuantia">
+                <div className="row begin" style={{justifyContent: "space-evenly"}}>
+                    <div className="column" style={{alignItems: "start"}}>
+                        <div className="column begin">
+                            <h3>Base 0:</h3>
+                            <FormattedNumber value={base0} style="currency" currency="EUR"/>
+                        </div>
                     </div>
-                    <div className="column end">
-                        <h3>Iva 4:</h3>
-                        <FormattedNumber value={iva4} style="currency" currency="EUR"/>
+                    <div className="column" style={{alignItems: "start"}}>
+                        <div className="column begin">
+                            <h3>Base 4:</h3>
+                            <FormattedNumber value={base4} style="currency" currency="EUR"/>
+                        </div>
+                        <div className="column begin">
+                            <h3>Iva 4:</h3>
+                            <FormattedNumber value={iva4} style="currency" currency="EUR"/>
+                        </div>
+                    </div>
+                    <div className="column" style={{alignItems: "start"}}>
+                        <div className="column begin">
+                            <h3>Base 10:</h3>
+                            <FormattedNumber value={base10} style="currency" currency="EUR"/>
+                        </div>
+                        <div className="column begin">
+                            <h3>Iva 10:</h3>
+                            <FormattedNumber value={iva10} style="currency" currency="EUR"/>
+                        </div>
+                    </div>
+                    <div className="column" style={{alignItems: "start"}}>
+                        <div className="column begin">
+                            <h3>Base 21:</h3>
+                            <FormattedNumber value={base21} style="currency" currency="EUR"/>
+                        </div>
+                        <div className="column begin">
+                            <h3>Iva 21:</h3>
+                            <FormattedNumber value={iva21} style="currency" currency="EUR"/>
+                        </div>
+                    </div>
+                    <div className="column" style={{alignItems: "start"}}>
+                        <div className="column begin">
+                            <h3>Total Base:</h3>
+                            <FormattedNumber value={baseTotal} style="currency" currency="EUR"/>
+                        </div>
+                        <div className="column begin">
+                            <h3>Total Iva:</h3>
+                            <FormattedNumber value={ivaTotal} style="currency" currency="EUR"/>
+                        </div>
+                        <div className="column begin">
+                            <h3>Total:</h3>
+                            <FormattedNumber value={total} style="currency" currency="EUR"/>
+                        </div>
                     </div>
                 </div>
-                <div className="column">
-                    <div className="column end">
-                        <h3>Base 10:</h3>
-                        <FormattedNumber value={base10} style="currency" currency="EUR"/>
-                    </div>
-                    <div className="column end">
-                        <h3>Iva 10:</h3>
-                        <FormattedNumber value={iva10} style="currency" currency="EUR"/>
-                    </div>
-                </div>
-                <div className="column">
-                    <div className="column end">
-                        <h3>Base 21:</h3>
-                        <FormattedNumber value={base21} style="currency" currency="EUR"/>
-                    </div>
-                    <div className="column end">
-                        <h3>Iva 21:</h3>
-                        <FormattedNumber value={iva21} style="currency" currency="EUR"/>
-                    </div>
-                </div>
-                <div className="column">
-                    <div className="column end">
-                        <h3>Total Base:</h3>
-                        <FormattedNumber value={baseTotal} style="currency" currency="EUR"/>
-                    </div>
-                    <div className="column end">
-                        <h3>Total Iva:</h3>
-                        <FormattedNumber value={ivaTotal} style="currency" currency="EUR"/>
-                    </div>
-                    <div className="column end">
-                        <h3>Total:</h3>
-                        <FormattedNumber value={total} style="currency" currency="EUR"/>
-                    </div>
-                </div>
-            </div>
+            </Section>
         </div>
     );
 }

@@ -46,7 +46,13 @@ const Base = () => {
 
     return (
         <div className="patata" style={{display: "flex", height: "100vh"}}>
-            <div style={{width: "12%", backgroundColor: "#f0f0f0", display: "flex", flexDirection: "column"}}>
+            <div style={{
+                width: "12%",
+                height: "100%",
+                backgroundColor: "#f0f0f0",
+                display: "flex",
+                flexDirection: "column"
+            }}>
                 <div style={{
                     display: "flex",
                     height: "80px",
@@ -61,7 +67,7 @@ const Base = () => {
                 </div>
                 <NavSidebar style={{flex: 1}} items={items}/>
             </div>
-            <div style={{width: "100%"}}>
+            <div style={{width: "100%", height: "100%"}}>
                 <header
                     style={{
                         display: "flex",
@@ -87,7 +93,13 @@ const Base = () => {
                         </Link>
                     </div>
                 </header>
-                <main style={{width: "100%", height: "100%", padding: "20px"}}>
+                <main style={{
+                    width: "100%",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    boxSizing: "border-box",
+                    padding: "20px"
+                }}>
                     <Outlet/>
                 </main>
             </div>

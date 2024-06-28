@@ -1,7 +1,7 @@
 import './DataGrid.css';
 import Select from "react-select";
 
-const DataGrid = ({dataList, getRowId, columns, loading, page, setPage, size, setSize, total, height}) => {
+const DataGrid = ({dataList, getRowId, columns, loading, page, searchByPage, size, setSize, total, height}) => {
     const keys = Object.keys(columns);
     const sizeOptions = [
         {value: 12, label: "12"},
@@ -10,10 +10,10 @@ const DataGrid = ({dataList, getRowId, columns, loading, page, setPage, size, se
         {value: 100, label: "100"},
     ];
 
-    const maxPage = Math.ceil(total / size);
-    const realMaxPage = maxPage - 1;
-    const a = size * page;
-    const b = a + dataList.length;
+    const lastPage = Math.ceil(total / size);
+    const realLastPage = lastPage - 1;
+    const startIndex = size * page;
+    const b = startIndex + dataList.length;
 
     return (
         <>
@@ -60,24 +60,25 @@ const DataGrid = ({dataList, getRowId, columns, loading, page, setPage, size, se
                                     value={sizeOptions.find((e) => e.value === size)}
                                     onChange={(e) => setSize(e.value)}
                                     options={sizeOptions}
+                                    menuPlacement="auto"
                                 />
-                                <p>{a + 1} - {b} de {total} elementos</p>
+                                <p>{startIndex + 1} - {b} de {total} elementos</p>
                             </div>
                             <div className="data-grid-pagination">
-                                <span className="fa-solid fa-angles-left" onClick={() => setPage(0)}/>
+                                <span className="fa-solid fa-angles-left" onClick={() => searchByPage(0)}/>
                                 <span className="fa-solid fa-angle-left"
-                                      onClick={() => (page > 0 && setPage(page - 1))}/>
+                                      onClick={() => (page > 0 && searchByPage(page - 1))}/>
                                 <input
                                     type="number"
                                     min={1}
-                                    max={maxPage}
+                                    max={lastPage}
                                     value={page + 1}
-                                    onChange={(e) => setPage(Number(e.target.value) - 1)}
+                                    onChange={(e) => searchByPage(Number(e.target.value) - 1)}
                                 />
-                                <p> de {maxPage}</p>
+                                <p> de {lastPage}</p>
                                 <span className="fa-solid fa-angle-right"
-                                      onClick={() => (page < realMaxPage && setPage(page + 1))}/>
-                                <span className="fa-solid fa-angles-right" onClick={() => setPage(realMaxPage)}/>
+                                      onClick={() => (page < realLastPage && searchByPage(page + 1))}/>
+                                <span className="fa-solid fa-angles-right" onClick={() => searchByPage(realLastPage)}/>
                             </div>
                         </div>
                     </td>

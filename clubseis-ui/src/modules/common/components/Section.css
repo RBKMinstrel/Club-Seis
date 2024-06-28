@@ -1,0 +1,25 @@
+/*Componente principal*/
+.section-component {
+    margin: 20px 0;
+    width: 100%;
+    border: 1px solid #000;
+}
+
+/*Cabecera del componente*/
+.section-head {
+    padding: 10px 10px;
+    width: 100%;
+    background-color: #95A5A6;
+}
+
+/*Titulo del componente*/
+.section-title {
+    width: 100%;
+
+}
+
+/*Contenido de la seccion*/
+.section-content {
+    padding: 20px 10px;
+    width: 100%;
+}

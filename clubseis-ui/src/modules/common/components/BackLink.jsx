@@ -1,20 +1,32 @@
 import {useNavigate} from 'react-router-dom';
+import ActionButton from "./ActionButton";
+import PropTypes from "prop-types";
 
-const BackLink = () => {
+const BackLink = ({style = {}}) => {
 
     const navigate = useNavigate();
 
+    const action = () => navigate(-1);
+
     return (
-
-        <button type="button"
-                onClick={() => navigate(-1)}>
-
+        <ActionButton
+            htmlType="button"
+            type="secondary"
+            onClick={action}
+            style={style}
+        >
+            <span
+                style={{color: "white", fontSize: '15px', paddingRight: 5}}
+                className="fa-solid fa-angle-left"
+            />
             Regresar
-
-        </button>
-
+        </ActionButton>
     );
 
+};
+
+ActionButton.propTypes = {
+    style: PropTypes.object,
 };
 
 export default BackLink;

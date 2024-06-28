@@ -21,20 +21,23 @@ const Movimientos = () => {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(12);
 
-    const resetPage = () => setPage(0);
+    const resetPage = () => {
+        setPage(0);
+    }
 
     useEffect(() => {
         setLoading(true);
-        dispatch(actions.findMovimientos({...criteria, size: size, page: 0}));
         resetPage();
+        dispatch(actions.findMovimientos({...criteria, size: size, page: 0}));
         setLoading(false);
     }, [size]);
 
-    useEffect(() => {
+    const searchByPage = (page) => {
+        setPage(page);
         setLoading(true);
         dispatch(actions.findMovimientos({...criteria, page: page}));
         setLoading(false);
-    }, [page]);
+    };
 
     const columns = {
         fecha: {
@@ -117,7 +120,6 @@ const Movimientos = () => {
 
     return (
         <div className="column" style={{alignItems: "center"}}>
-
             <div style={{display: "flex", justifyContent: "space-between", width: "100%", padding: 10}}>
                 <div>
                     <h2>Asientos</h2>
@@ -145,7 +147,7 @@ const Movimientos = () => {
                 columns={columns}
                 loading={loading}
                 page={page}
-                setPage={setPage}
+                searchByPage={searchByPage}
                 size={size}
                 setSize={setSize}
                 total={movimientos ? movimientos.result.totalItems : 0}

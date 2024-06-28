@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-import {Errors} from "../../common/index.js";
+import {ActionButton, BackLink, Errors, Section} from "../../common";
 import Select from "react-select";
 
 import * as selectors from "../selectors";
@@ -97,137 +97,145 @@ const CreateMovimiento = () => {
                   className="column"
                   noValidate
                   onSubmit={e => handleSubmit(e)}>
-                <div className="row">
-                    <div className="column">
-                        <div>
-                            <input type="radio" value="gasto" checked={gasto} onChange={() => setGasto(true)}/>
-                            <label>Gasto</label>
+                <BackLink style={{alignSelf: "start"}}/>
+                <Section title="Datos identificativos">
+                    <div className="row" style={{justifyContent: "space-around"}}>
+                        <div className="column">
+                            <div className="column">
+                                <div>
+                                    <input type="radio" value="ingreso" checked={!gasto}
+                                           onChange={() => setGasto(false)}/>
+                                    <label>Ingreso</label>
+                                </div>
+                                <div>
+                                    <input type="radio" value="gasto" checked={gasto} onChange={() => setGasto(true)}/>
+                                    <label>Gasto</label>
+                                </div>
+                            </div>
+                            <div className="column">
+                                <label>Fecha</label>
+                                <input
+                                    type="date"
+                                    value={fecha}
+                                    onChange={e => setFecha(e.target.value)}
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <input type="radio" value="gasto" checked={!gasto} onChange={() => setGasto(false)}/>
-                            <label>Ingreso</label>
+                        <div className="column">
+                            <div>
+                                <label>Razon Social</label>
+                                <Select
+                                    className="selector"
+                                    isClearable
+                                    isSearchable
+                                    value={razonSocial}
+                                    onChange={setRazonSocial}
+                                    options={razonSocialOptions ? razonSocialOptions.map(r => selectMapper(r.id, razonText(r))) : []}
+                                />
+                            </div>
+                            <div>
+                                <label>Concepto</label>
+                                <Select
+                                    className="selector"
+                                    isClearable
+                                    isSearchable
+                                    value={concepto}
+                                    onChange={setConcepto}
+                                    options={conceptoOptions ? conceptoOptions.map(c => selectMapper(c.id, c.name)) : []}
+                                />
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div>
+                                <label>Categoria</label>
+                                <Select
+                                    className="selector"
+                                    isClearable
+                                    isSearchable
+                                    value={categoria}
+                                    onChange={setCategoria}
+                                    options={categoriaOptions ? categoriaOptions.map(c => selectMapper(c.id, c.name)) : []}
+                                />
+                            </div>
+                            <div>
+                                <label>Cuenta</label>
+                                <Select
+                                    className="selector"
+                                    isClearable
+                                    isSearchable
+                                    value={cuenta}
+                                    onChange={setCuenta}
+                                    options={cuentaOptions ? cuentaOptions.map(c => selectMapper(c.id, c.name)) : []}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="column">
-                        <label>Fecha</label>
-                        <input
-                            type="date"
-                            value={fecha}
-                            onChange={e => setFecha(e.target.value)}
-                        />
-                    </div>
-                </div>
-                <div className="column">
-                    <div className="row">
-                        <div>
-                            <label>Razon Social</label>
-                            <Select
-                                className="selector"
-                                isClearable
-                                isSearchable
-                                value={razonSocial}
-                                onChange={setRazonSocial}
-                                options={razonSocialOptions ? razonSocialOptions.map(r => selectMapper(r.id, razonText(r))) : []}
-                            />
-                        </div>
-                        <div>
-                            <label>Cuenta</label>
-                            <Select
-                                className="selector"
-                                isClearable
-                                isSearchable
-                                value={cuenta}
-                                onChange={setCuenta}
-                                options={cuentaOptions ? cuentaOptions.map(c => selectMapper(c.id, c.name)) : []}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div>
-                            <label>Concepto</label>
-                            <Select
-                                className="selector"
-                                isClearable
-                                isSearchable
-                                value={concepto}
-                                onChange={setConcepto}
-                                options={conceptoOptions ? conceptoOptions.map(c => selectMapper(c.id, c.name)) : []}
-                            />
-                        </div>
-                        <div>
-                            <label>Categoria</label>
-                            <Select
-                                className="selector"
-                                isClearable
-                                isSearchable
-                                value={categoria}
-                                onChange={setCategoria}
-                                options={categoriaOptions ? categoriaOptions.map(c => selectMapper(c.id, c.name)) : []}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="row begin">
-                    <div className="column">
+                </Section>
+                <Section title="Cuantia">
+                    <div className="row begin" style={{justifyContent: "space-evenly"}}>
                         <div className="column">
-                            <label>Base 0:</label>
-                            <input type="number" step="0.01" min="0" value={base0}
-                                   onChange={e => setBase0(Number(e.target.value))}/>
+                            <div className="column begin">
+                                <label>Base 0:</label>
+                                <input type="number" step="0.01" min="0" value={base0}
+                                       onChange={e => setBase0(Number(e.target.value))}/>
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div className="column begin">
+                                <label>Base 4:</label>
+                                <input type="number" step="0.01" min="0" value={base4}
+                                       onChange={e => setBase4(Number(e.target.value))}/>
+                            </div>
+                            <div className="column begin">
+                                <label>Iva 4:</label>
+                                <input type="number" value={iva4} disabled/>
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div className="column begin">
+                                <label>Base 10:</label>
+                                <input type="number" step="0.01" min="0" value={base10}
+                                       onChange={e => setBase10(Number(e.target.value))}/>
+                            </div>
+                            <div className="column begin">
+                                <label>Iva 10:</label>
+                                <input type="number" value={iva10} disabled/>
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div className="column begin">
+                                <label>Base 21:</label>
+                                <input type="number" step="0.01" min="0" value={base21}
+                                       onChange={e => setBase21(Number(e.target.value))}/>
+                            </div>
+                            <div className="column begin">
+                                <label>Iva 21:</label>
+                                <input type="number" value={iva21} disabled/>
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div className="column begin">
+                                <label>Total Base:</label>
+                                <input type="number" value={baseTotal} disabled/>
+                            </div>
+                            <div className="column begin">
+                                <label>Total Iva:</label>
+                                <input type="number" value={ivaTotal} disabled/>
+                            </div>
+                            <div className="column begin">
+                                <label>Total:</label>
+                                <input type="number" value={total} disabled/>
+                            </div>
                         </div>
                     </div>
-                    <div className="column">
-                        <div className="column">
-                            <label>Base 4:</label>
-                            <input type="number" step="0.01" min="0" value={base4}
-                                   onChange={e => setBase4(Number(e.target.value))}/>
-                        </div>
-                        <div className="column">
-                            <label>Iva 4:</label>
-                            <input type="number" value={iva4} disabled/>
-                        </div>
-                    </div>
-                    <div className="column">
-                        <div className="column">
-                            <label>Base 10:</label>
-                            <input type="number" step="0.01" min="0" value={base10}
-                                   onChange={e => setBase10(Number(e.target.value))}/>
-                        </div>
-                        <div className="column">
-                            <label>Iva 10:</label>
-                            <input type="number" value={iva10} disabled/>
-                        </div>
-                    </div>
-                    <div className="column">
-                        <div className="column">
-                            <label>Base 21:</label>
-                            <input type="number" step="0.01" min="0" value={base21}
-                                   onChange={e => setBase21(Number(e.target.value))}/>
-                        </div>
-                        <div className="column">
-                            <label>Iva 21:</label>
-                            <input type="number" value={iva21} disabled/>
-                        </div>
-                    </div>
-                    <div className="column">
-                        <div className="column">
-                            <label>Total Base:</label>
-                            <input type="number" value={baseTotal} disabled/>
-                        </div>
-                        <div className="column">
-                            <label>Total Iva:</label>
-                            <input type="number" value={ivaTotal} disabled/>
-                        </div>
-                        <div className="column">
-                            <label>Total:</label>
-                            <input type="number" value={total} disabled/>
-                        </div>
-                    </div>
-                </div>
-                <div className="row end">
-                    <button type="submit">
-                        Crear
-                    </button>
-                </div>
+                </Section>
+                <ActionButton
+                    type="submit"
+                    htmlType="submit"
+                    style={{alignSelf: "end"}}
+                >
+                    Crear
+                </ActionButton>
             </form>
         </div>
     );

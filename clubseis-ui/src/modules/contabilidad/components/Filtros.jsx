@@ -81,6 +81,7 @@ const Filtros = ({criteria, resetPage}) => {
             conceptoId: concepto ? concepto.value : null,
             categoriaId: categoria ? categoria.value : null,
             cuentaId: cuenta ? cuenta.value : null,
+            page: 0,
         }));
     }, [tipo, fecha, razonSocial, concepto, categoria, cuenta]);
 
