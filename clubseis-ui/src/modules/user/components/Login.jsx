@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
-import {Errors} from '../../common';
+import {Errors, Section} from '../../common';
 import * as actions from '../actions';
 
 const Login = () => {
@@ -37,16 +37,15 @@ const Login = () => {
     }
 
     return (
-        <div className="center-content">
-            <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-            <div>
-                <h5>
-                    Titulo login
-                </h5>
-                <div>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100vh"}}>
+            <div style={{width: 250}}>
+                <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
+                <Section title="Titulo login">
                     <form ref={node => form = node}
                           noValidate
-                          onSubmit={e => handleSubmit(e)}>
+                          onSubmit={e => handleSubmit(e)}
+                          className="column"
+                    >
                         <div>
                             <label htmlFor="userName">
                                 Nombre de usuario
@@ -76,15 +75,13 @@ const Login = () => {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div>
+                        <div style={{display: "flex", justifyContent: "center"}}>
                                 <button type="submit">
                                     Entrar
                                 </button>
                             </div>
-                        </div>
                     </form>
-                </div>
+                </Section>
             </div>
         </div>
     );

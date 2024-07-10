@@ -1,5 +1,7 @@
 package es.minstrel.app;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
@@ -8,9 +10,15 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import java.io.File;
+
 @SpringBootApplication
 public class App 
 {
+
+    @Value("${app.folders}")
+    private String[] folderPaths;
+
     public static void main( String[] args )
     {
         SpringApplication.run(App.class, args);
@@ -41,6 +49,29 @@ public class App
 
         return bean;
 
+    }
+
+    @Bean
+    public CommandLineRunner createFoldersAtStartup() {
+        return args -> {
+            createFoldersIfNotExist(folderPaths);
+        };
+    }
+
+    private void createFoldersIfNotExist(String... folderPaths) {
+        for (String path : folderPaths) {
+            File folder = new File(path);
+            if (!folder.exists()) {
+                boolean created = folder.mkdirs();
+                if (created) {
+                    System.out.println("Folder created: " + path);
+                } else {
+                    System.out.println("Failed to create folder: " + path);
+                }
+            } else {
+                System.out.println("Folder already exists: " + path);
+            }
+        }
     }
 
 }

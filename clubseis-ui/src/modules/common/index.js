@@ -5,3 +5,5 @@ export {default as Errors} from "./components/Errors";
 export {default as Modal} from "./components/Modal";
 export {default as NavSidebar} from "./components/NavSidebar";
 export {default as Section} from "./components/Section";
+export {default as Visible} from "./components/Visible";
+export {default as DynamicList} from "./components/DynamicList";

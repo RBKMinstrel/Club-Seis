@@ -117,3 +117,35 @@
     color: inherit;
     text-decoration: none;
 }
+
+.base {
+    display: grid;
+    grid-template-rows: max-content;
+    grid-template-columns: auto 1fr;
+    height: 100%;
+    width: 100vw;
+    position: relative;
+}
+
+. base-header {
+    grid-row: 1;
+    grid-column: 1 / 3;
+}
+
+. base-navegation {
+    --navigation-width: 280px;
+    display: flex;
+    flex-direction: column;
+    width: var(--navigation-width);
+    min-width: var(--navigation-width);
+    height: 100%;
+    overflow: hidden;
+    z-index: 10;
+}
+
+. base-body {
+    overflow-y: auto;
+    height: 100%;
+    position: relative;
+    z-index: 0;
+}

@@ -20,6 +20,12 @@ import {
     Resumen,
     UpdateMovimiento
 } from "../../contabilidad";
+import {
+    MercanciaBase,
+    FindArticulos,
+    FindExistencias,
+    CrearArticulo, Carrito,
+} from "../../mercancias";
 
 const App = () => {
 
@@ -71,6 +77,17 @@ const App = () => {
                             <Route path="razones-sociales" element={<RazonesSociales/>}/>
                         </Route>
                     }
+                    <Route path="mercancias/" element={<MercanciaBase/>}>
+                        <Route index element={<FindArticulos/>}/>
+                        <Route path="articulos">
+                            <Route index element={<FindArticulos/>}/>
+                            <Route path="carrito" element={<Carrito/>}/>
+                        </Route>
+                        <Route path="stock/">
+                            <Route index element={<FindExistencias/>}/>
+                            <Route path="crearArticulo" element={<CrearArticulo/>}/>
+                        </Route>
+                    </Route>
                 </Route>
             }
         </Routes>

@@ -1,0 +1,27 @@
+/* DynamicList.css */
+.dynamic-list-container {
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+.dynamic-list-header,
+.dynamic-list-footer {
+    padding: 10px;
+    background-color: white;
+}
+
+.dynamic-list-content {
+    overflow-y: auto;
+}
+
+.dynamic-list-item {
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.dynamic-list-item:last-child {
+    border-bottom: none;
+}

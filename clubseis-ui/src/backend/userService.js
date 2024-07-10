@@ -28,7 +28,7 @@ export const tryLoginFromServiceToken = (onSuccess, reauthenticationCallback) =>
 
     setReauthenticationCallback(reauthenticationCallback);
 
-    appFetch('/user/loginFromServiceToken', config('POST'),
+    return appFetch('/user/loginFromServiceToken', config('POST'),
         authenticatedUser => onSuccess(authenticatedUser),
         () => removeServiceToken()
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Section.css';
 
-const Section = ({title, children}) => {
+const Section = ({title, extras = null, children}) => {
 
     return (
         <section className="section-component">
@@ -9,6 +9,7 @@ const Section = ({title, children}) => {
                 <h2 className="section-title">
                     {title}
                 </h2>
+                {extras}
             </div>
             <div className="section-content">
                 {children}

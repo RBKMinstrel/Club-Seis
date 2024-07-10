@@ -30,7 +30,10 @@ const Base = () => {
         {
             name: "Mercancías",
             url: "/gestion/mercancias",
-            subItems: []
+            subItems: [
+                {name: "Articulos", url: "/gestion/mercancias/articulos"},
+                {name: "Stock", url: "/gestion/mercancias/stock"},
+            ]
         },
         {
             name: "Usuarios",
@@ -48,7 +51,6 @@ const Base = () => {
         <div className="patata" style={{display: "flex", height: "100vh"}}>
             <div style={{
                 width: "12%",
-                height: "100%",
                 backgroundColor: "#f0f0f0",
                 display: "flex",
                 flexDirection: "column"
@@ -95,10 +97,11 @@ const Base = () => {
                 </header>
                 <main style={{
                     width: "100%",
+                    height: "100%",
                     overflowX: "auto",
                     overflowY: "auto",
                     boxSizing: "border-box",
-                    padding: "20px"
+                    padding: 20
                 }}>
                     <Outlet/>
                 </main>
