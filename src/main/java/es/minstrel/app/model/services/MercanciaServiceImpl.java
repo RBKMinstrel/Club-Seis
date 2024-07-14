@@ -1,14 +1,11 @@
 package es.minstrel.app.model.services;
 
 import es.minstrel.app.model.entities.*;
-
 import es.minstrel.app.model.exceptions.*;
-
 import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.FileType;
 import es.minstrel.app.model.services.utils.StockArticulo;
 import es.minstrel.app.model.services.utils.StockTalla;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,13 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -420,18 +414,14 @@ public class MercanciaServiceImpl implements MercanciaService {
 
         }
 
+        existenciasDao.deleteAll(articulo.getExistencias());
+        articulo.setExistencias(new HashSet<>());
+
         for (StockTalla stockTalla : stockTallas) {
             Talla talla = stockTalla.getIdTalla() == null ? null : getTallaFromId(stockTalla.getIdTalla());
 
-            Optional<Existencias> existenciasOptional = existenciasDao.findByArticuloAndTalla(articulo, talla);
-            Existencias existencias;
-            if (existenciasOptional.isPresent()) {
-                existencias = existenciasOptional.get();
-                existencias.setCantidad(stockTalla.getStock());
-            } else {
-                existencias = new Existencias(stockTalla.getStock(), articulo, talla);
-                existenciasDao.save(existencias);
-            }
+            Existencias existencias = new Existencias(stockTalla.getStock(), articulo, talla);
+            existenciasDao.save(existencias);
         }
 
     }

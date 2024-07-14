@@ -1,151 +1,96 @@
-.general {
+:root {
+    --header-height: 80px;
+    --navigation-width: 180px;
+}
+
+.body {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
     display: flex;
     flex-direction: column;
 }
 
 .header {
+    min-height: var(--header-height);
+    height: var(--header-height);
+    max-height: var(--header-height);
+    width: 100%;
     background-color: cornflowerblue;
     color: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 160px;
-    width: 100%;
-    display: block;
+    z-index: 10;
+    display: flex;
 }
 
-.top-header {
-    height: 125px;
+.logo {
+    margin: 10px;
+    width: 160px;
+    height: 60px;
+
+}
+
+.headerContent {
+    padding: 0 20px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.logo {
-    padding: 10px;
-}
-
-.logo img {
-    width: 100px;
-    height: 100px;
-}
-
-.funciones {
-    padding: 10px;
-}
-
-.funciones a {
-    margin: 5px;
-    padding: 5px;
-    text-decoration: none;
-    color: #f1f1f1;
-    background-color: #111;
-    border-radius: 5px;
-    margin-bottom: 5px;
-}
-
-.funciones a:hover {
-    color: #111;
-    background-color: #ddd;
-}
-
-.top-subnav {
-    background-color: #111;
-    color: #f1f1f1;
-    letter-spacing: 1px;
-    height: 35px;
+.logoClub {
     width: 100%;
-    overflow-x: hidden;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.top-subnav div {
-    height: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-bottom: 2px solid transparent;
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
-.top-subnav div:hover {
-    background-color: #ddd;
-    color: black;
-    border-bottom-color: #fff;
-}
-
-.top-subnav a {
-    color: white;
-    text-decoration: none;
-    transition: border-bottom-color 0.3s;
-}
-
-.top-subnav a:hover {
-    background-color: #ddd;
-    color: black;
-    border-bottom-color: #fff;
+.userInfo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
 }
 
 .content {
-    height: 100%;
-    width: 100%;
-    display: grid;
-    place-items: center;
-}
-
-.main-admin {
-    width: 100%;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
-}
-
-.patata {
-    display: grid;
-    grid-template-rows: max-content;
-    grid-template-columns: auto 1fr;
+    width: 100%;
     height: 100%;
-    width: 100vw;
-    position: relative;
 }
 
-.link-out {
-    color: inherit;
-    text-decoration: none;
-}
-
-.base {
-    display: grid;
-    grid-template-rows: max-content;
-    grid-template-columns: auto 1fr;
-    height: 100%;
-    width: 100vw;
-    position: relative;
-}
-
-. base-header {
-    grid-row: 1;
-    grid-column: 1 / 3;
-}
-
-. base-navegation {
-    --navigation-width: 280px;
+.navigation {
     display: flex;
     flex-direction: column;
     width: var(--navigation-width);
     min-width: var(--navigation-width);
-    height: 100%;
+    height: calc(100vh - var(--header-height));
+    max-height: calc(100vh - var(--header-height));
     overflow: hidden;
     z-index: 10;
 }
 
-. base-body {
+.main {
     overflow-y: auto;
-    height: 100%;
+    height: calc(100vh - var(--header-height));
+    max-height: calc(100vh - var(--header-height));
+    color: black;
     position: relative;
+    display: flex;
+    flex-grow: 1;
     z-index: 0;
+}
+
+.section {
+    flex-grow: 1;
+    height: 100%;
+    overflow-x: hidden;
+    border-radius: 3px;
+    padding: max(.625rem, min(calc(.4733rem + .6472vw), 1.25rem));
+    overflow-y: auto;
+    width: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 100vw;
 }

@@ -58,7 +58,7 @@ export const findMovimientos = criteria => dispatch => {
 
     dispatch(clearMovimientoSearch());
     backend.contabilidadService.findMovimientos(criteria,
-        result => dispatch(findMovimientosCompleted({criteria, result})));
+        result => dispatch(findMovimientosCompleted(result)));
 
 };
 

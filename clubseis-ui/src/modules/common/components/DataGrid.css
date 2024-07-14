@@ -65,3 +65,7 @@
     border-top: 2px solid #bbb;
     border-bottom: 2px solid #bbb;
 }
+
+.nested-row {
+    background-color: #f7f7f7;
+}

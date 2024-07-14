@@ -1,5 +1,6 @@
 import React from 'react';
 import './Modal.css';
+import PropTypes from "prop-types";
 
 const Modal = ({isActive, title, children, onClose}) => {
     if (!isActive) {
@@ -27,6 +28,13 @@ const Modal = ({isActive, title, children, onClose}) => {
             </div>
         </div>
     );
+};
+
+Modal.propTypes = {
+    isActive: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+    onClose: PropTypes.func.isRequired
 };
 
 export default Modal;

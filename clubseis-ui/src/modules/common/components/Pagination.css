@@ -1,0 +1,17 @@
+
+.pagination-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagination-rows-per-page, .pagination-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.pagination-pagination input {
+    width: 50px;
+    text-align: center;
+}

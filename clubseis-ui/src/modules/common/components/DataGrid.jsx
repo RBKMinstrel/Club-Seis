@@ -1,19 +1,24 @@
 import './DataGrid.css';
-import Select from "react-select";
 
-const DataGrid = ({dataList, getRowId, columns, loading, page, searchByPage, size, setSize, total, height}) => {
+const DataGrid = ({
+                      dataList, getRowId, columns,
+                      loading = false,
+                      getNestedRows,
+                      expandedRows = {},
+                      setExpandedRows = () => {
+                      },
+                      children = null
+                  }) => {
     const keys = Object.keys(columns);
-    const sizeOptions = [
-        {value: 12, label: "12"},
-        {value: 25, label: "25"},
-        {value: 50, label: "50"},
-        {value: 100, label: "100"},
-    ];
 
-    const lastPage = Math.ceil(total / size);
-    const realLastPage = lastPage - 1;
-    const startIndex = size * page;
-    const b = startIndex + dataList.length;
+    //const [expandedRows, setExpandedRows] = useState({});
+
+    const toggleRow = (rowId) => {
+        setExpandedRows((prevState) => ({
+            ...prevState,
+            [rowId]: !prevState[rowId],
+        }));
+    };
 
     return (
         <>
@@ -34,15 +39,29 @@ const DataGrid = ({dataList, getRowId, columns, loading, page, searchByPage, siz
                         <td colSpan={keys.length} className="data-grid-loading">Cargando...</td>
                     </tr>
                 ) : dataList.length > 0 ? (
-                    dataList.map((data) =>
-                        <tr key={getRowId(data)}>
-                            {keys.map((key) => (
-                                <td key={key} scope="col" className="data-grid-cell">
-                                    {columns[key].cell(data)}
-                                </td>
-                            ))}
-                        </tr>
-                    )
+                    dataList.flatMap((data) => {
+                        const rowId = getRowId(data);
+                        const isExpanded = expandedRows[rowId];
+                        const nestedRows = getNestedRows ? getNestedRows(data) : [];
+                        return [
+                            <tr key={rowId} onClick={() => toggleRow(rowId)}>
+                                {keys.map((key) => (
+                                    <td key={key} scope="col" className="data-grid-cell">
+                                        {columns[key].cell(data)}
+                                    </td>
+                                ))}
+                            </tr>,
+                            isExpanded && nestedRows.length > 0 && nestedRows.map((nestedData) => (
+                                <tr key={getRowId(nestedData)} className="nested-row">
+                                    {keys.map((key) => (
+                                        <td key={key} scope="col" className="data-grid-cell">
+                                            {columns[key].cell(nestedData)}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
+                        ];
+                    })
                 ) : (
                     <tr key={"no-results"}>
                         <td colSpan={keys.length} className="data-grid-no-results">No hay datos disponibles</td>
@@ -50,41 +69,15 @@ const DataGrid = ({dataList, getRowId, columns, loading, page, searchByPage, siz
                 )}
                 </tbody>
 
-                <tfoot>
-                <tr>
-                    <td colSpan={keys.length} className="data-grid-footer">
-                        <div className="data-grid-footer-content">
-                            <div className="data-grid-rows-per-page">
-                                <p>Filas por página</p>
-                                <Select
-                                    value={sizeOptions.find((e) => e.value === size)}
-                                    onChange={(e) => setSize(e.value)}
-                                    options={sizeOptions}
-                                    menuPlacement="auto"
-                                />
-                                <p>{startIndex + 1} - {b} de {total} elementos</p>
-                            </div>
-                            <div className="data-grid-pagination">
-                                <span className="fa-solid fa-angles-left" onClick={() => searchByPage(0)}/>
-                                <span className="fa-solid fa-angle-left"
-                                      onClick={() => (page > 0 && searchByPage(page - 1))}/>
-                                <input
-                                    type="number"
-                                    min={1}
-                                    max={lastPage}
-                                    value={page + 1}
-                                    onChange={(e) => searchByPage(Number(e.target.value) - 1)}
-                                />
-                                <p> de {lastPage}</p>
-                                <span className="fa-solid fa-angle-right"
-                                      onClick={() => (page < realLastPage && searchByPage(page + 1))}/>
-                                <span className="fa-solid fa-angles-right" onClick={() => searchByPage(realLastPage)}/>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tfoot>
-
+                {children &&
+                    <tfoot>
+                    <tr>
+                        <td colSpan={keys.length} className="data-grid-footer">
+                            {children}
+                        </td>
+                    </tr>
+                    </tfoot>
+                }
             </table>
         </>
     );

@@ -5,12 +5,12 @@ import {useNavigate} from "react-router-dom";
 import {Section} from "../../common/index.js";
 
 
-import {tipoOptions, generoOptions} from "./Options.jsx";
+import {generoOptions, tipoOptions} from "./Options.jsx";
 
 import * as actions from "../actions.js";
 import * as selectors from '../selectors';
 import Select from "react-select";
-import AddMoreExistencias from "./AddMoreExistencias.jsx";
+import AddToCarrito from "./AddToCarrito.jsx";
 
 const FindArticulos = () => {
     const dispatch = useDispatch();
@@ -28,6 +28,10 @@ const FindArticulos = () => {
     const [size, setSize] = useState(12);
 
     useEffect(() => {
+        dispatch(actions.getCarrito());
+    }, []);
+
+    useEffect(() => {
         dispatch(actions.findArticulos({
             name: name.length !== 0 ? name.trim() : null,
             tipo: tipo.value,
@@ -40,11 +44,7 @@ const FindArticulos = () => {
     const articuloFuctions = (item) => {
         return (
             <>
-              <span
-                  style={{fontSize: '20px', paddingRight: 10}}
-                  className="fa-solid fa-cart-arrow-down"
-              />
-                <AddMoreExistencias articulo={item}/>
+                <AddToCarrito idArticulo={item.id} typeArticulo={item.esRopa}/>
             </>
         );
     };

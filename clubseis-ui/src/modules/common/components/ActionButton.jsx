@@ -4,7 +4,11 @@ import './ActionButton.css';
 
 const ActionButton = ({
                           onClick = () => {
-                          }, children, type, htmlType = 'button', style = {}
+                          },
+                          children,
+                          type,
+                          htmlType = 'button',
+                          style = {}
                       }) => {
     return (
         <button

@@ -61,7 +61,8 @@ public class ArticuloConversor {
     }
 
     public final static StockDto toStockDto(Existencias existencias) {
-        return new StockDto(existencias.getTalla().getId(), existencias.getTalla().getName(), existencias.getCantidad());
+        boolean isNull = existencias.getTalla() == null;
+        return new StockDto(isNull ? null : existencias.getTalla().getId(), isNull ? null : existencias.getTalla().getName(), existencias.getCantidad());
     }
 
     public final static List<StockDto> toStockDtosFromStockTallas(List<StockTalla> stockTallas) {

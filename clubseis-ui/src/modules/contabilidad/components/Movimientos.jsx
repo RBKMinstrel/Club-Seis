@@ -1,44 +1,61 @@
-import Filtros from "./Filtros";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import * as actions from "../actions.js";
-import * as selectors from '../selectors';
-import {DataGrid} from "../../common";
 import {Link} from "react-router-dom";
 import {FormattedDate, FormattedNumber} from "react-intl";
+
+import {DataGrid, Pagination} from "../../common";
+import Filtros from "./Filtros";
 import UploadAsientos from "./UploadAsientos.jsx";
 
+import {dateChange} from "../../utils/dataUtils.js";
+
+import * as actions from "../actions.js";
+import * as selectors from '../selectors';
+
 const Movimientos = () => {
-
-    const movimientos = useSelector(selectors.getMovimientoSearch);
-    const criteria = movimientos ? movimientos.criteria : {};
     const dispatch = useDispatch();
+    const movimientos = useSelector(selectors.getMovimientoSearch);
 
+    const [forceUpdate, setForceUpdate] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    const getRowId = (row) => "mov-" + row.id;
-
+    const [fecha, setFecha] = useState('');
+    const [tipo, setTipo] = useState(null);
+    const [razonSocial, setRazonSocial] = useState(null);
+    const [concepto, setConcepto] = useState(null);
+    const [categoria, setCategoria] = useState(null);
+    const [cuenta, setCuenta] = useState(null);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(12);
 
-    const resetPage = () => {
+    const sizeOptions = [
+        {label: "6", value: 6},
+        {label: "12", value: 12},
+        {label: "24", value: 24},
+        {label: "48", value: 48},
+    ];
+
+    useEffect(() => {
         setPage(0);
-    }
+        setForceUpdate((prev) => !prev);
+    }, [fecha, tipo, razonSocial, concepto, categoria, cuenta, size]);
 
     useEffect(() => {
         setLoading(true);
-        resetPage();
-        dispatch(actions.findMovimientos({...criteria, size: size, page: 0}));
+        dispatch(actions.findMovimientos({
+            fecha: fecha !== '' ? dateChange(fecha) : null,
+            tipo: tipo,
+            razonSocialId: razonSocial,
+            conceptoId: concepto,
+            categoriaId: categoria,
+            cuentaId: cuenta,
+            size: size,
+            page: page,
+        }));
         setLoading(false);
-    }, [size]);
+    }, [page, forceUpdate]);
 
-    const searchByPage = (page) => {
-        setPage(page);
-        setLoading(true);
-        dispatch(actions.findMovimientos({...criteria, page: page}));
-        setLoading(false);
-    };
-
+    const getRowId = (row) => "mov-id-" + row.id;
     const columns = {
         fecha: {
             header: () => <h4>Fecha</h4>,
@@ -112,7 +129,14 @@ const Movimientos = () => {
     const excelDowload = () => {
 
         dispatch(actions.dowloadExcel(
-            criteria,
+            {
+                fecha: fecha !== '' ? dateChange(fecha) : null,
+                tipo: tipo,
+                razonSocialId: razonSocial,
+                conceptoId: concepto,
+                categoriaId: categoria,
+                cuentaId: cuenta,
+            },
             blob => descargar(blob),
             error => console.log(error)
         ));
@@ -139,19 +163,36 @@ const Movimientos = () => {
                     <UploadAsientos/>
                 </div>
             </div>
-            <Filtros criteria={criteria} resetPage={resetPage}/>
+            <Filtros
+                tipo={tipo}
+                setTipo={setTipo}
+                fecha={fecha}
+                setFecha={setFecha}
+                razonSocial={razonSocial}
+                setRazonSocial={setRazonSocial}
+                concepto={concepto}
+                setConcepto={setConcepto}
+                categoria={categoria}
+                setCategoria={setCategoria}
+                cuenta={cuenta}
+                setCuenta={setCuenta}
+            />
             <DataGrid
-                dataList={movimientos ? movimientos.result.items : []}
-                height={400}
+                dataList={movimientos ? movimientos.items : []}
                 getRowId={getRowId}
                 columns={columns}
                 loading={loading}
-                page={page}
-                searchByPage={searchByPage}
-                size={size}
-                setSize={setSize}
-                total={movimientos ? movimientos.result.totalItems : 0}
-            />
+            >
+                <Pagination
+                    page={page}
+                    setPage={setPage}
+                    size={size}
+                    setSize={setSize}
+                    sizeOptions={sizeOptions}
+                    actualItems={movimientos ? movimientos.items.length : 0}
+                    totalItems={movimientos ? movimientos.totalItems : 0}
+                />
+            </DataGrid>
         </div>
     );
 }

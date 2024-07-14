@@ -33,6 +33,8 @@ const Base = () => {
             subItems: [
                 {name: "Articulos", url: "/gestion/mercancias/articulos"},
                 {name: "Stock", url: "/gestion/mercancias/stock"},
+                {name: "Demanda", url: "/gestion/mercancias/demanda"},
+                {name: "Reservas", url: "/gestion/mercancias/reservas"},
             ]
         },
         {
@@ -48,62 +50,37 @@ const Base = () => {
     ];
 
     return (
-        <div className="patata" style={{display: "flex", height: "100vh"}}>
-            <div style={{
-                width: "12%",
-                backgroundColor: "#f0f0f0",
-                display: "flex",
-                flexDirection: "column"
-            }}>
-                <div style={{
-                    display: "flex",
-                    height: "80px",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "10px",
-                    backgroundColor: "#7FB6E8"
-                }}>
-                    <Link to="/gestion">
-                        <div style={{width: "100px", height: "40px", backgroundColor: "red"}}/>
-                    </Link>
-                </div>
-                <NavSidebar style={{flex: 1}} items={items}/>
-            </div>
-            <div style={{width: "100%", height: "100%"}}>
-                <header
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        height: "80px",
-                        backgroundColor: "#7FB6E8"
-                    }}
-                >
-                    <div style={{display: "flex", alignItems: "center", gap: "25px", padding: "0 20px"}}>
+        <div className="body">
+            <header className="header">
+                <Link to="/gestion">
+                    <div className="logo" style={{backgroundColor: "red"}}/>
+                </Link>
+                <div className="headerContent">
+                    <div className="logoClub">
                         <div>
                             Icono
                         </div>
                         <h1>Seis do Nadal</h1>
                     </div>
-                    <div style={{display: "flex", alignItems: "center", gap: "25px", padding: "0 20px"}}>
+                    <div className="userInfo">
                         <h2>{userName}</h2>
                         <Link to="/gestion/logout">
                             <span
                                 className="fa-solid fa-arrow-right-from-bracket link-out"
-                                style={{color: "black", fontSize: 20}}
+                                style={{color: "white", fontSize: 20}}
                             />
                         </Link>
                     </div>
-                </header>
-                <main style={{
-                    width: "100%",
-                    height: "100%",
-                    overflowX: "auto",
-                    overflowY: "auto",
-                    boxSizing: "border-box",
-                    padding: 20
-                }}>
-                    <Outlet/>
+                </div>
+            </header>
+            <div className="content">
+                <div className="navigation">
+                    <NavSidebar items={items}/>
+                </div>
+                <main className="main">
+                    <div className="section">
+                        <Outlet/>
+                    </div>
                 </main>
             </div>
         </div>

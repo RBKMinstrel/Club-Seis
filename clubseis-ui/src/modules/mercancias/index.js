@@ -8,6 +8,7 @@ export {default as FindExistencias} from './components/FindExistencias';
 export {default as MercanciaBase} from './components/MercanciaBase';
 export {default as Carrito} from './components/Carrito';
 export {default as CrearArticulo} from './components/CrearArticulo';
+export {default as UpdateArticulo} from './components/UpdateArticulo';
 
 
 export default {actions, actionTypes, reducer, selectors};

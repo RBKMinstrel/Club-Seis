@@ -69,7 +69,7 @@ const Categorias = () => {
                     onChange={selectCategoria}
                     options={categorias ? categorias.map(c => (selectMapper(c.id, c.name))) : []}
                 />
-                <div>
+                <div style={{display: "flex", flexDirection: "column"}}>
                     <label>Nombre</label>
                     <input
                         type="text"

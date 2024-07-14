@@ -17,7 +17,6 @@ const FindExistencias = () => {
 
     const noOption = {label: "Todos", value: null};
 
-
     const [forceUpdate, setForceUpdate] = useState(false);
 
     const [name, setName] = useState('');
@@ -56,8 +55,13 @@ const FindExistencias = () => {
                     <h2>
                         {item.name}
                     </h2>
-                    <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                    <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: 10}}>
                         <AddMoreExistencias articulo={item}/>
+                        <span
+                            onClick={() => navigate(`/gestion/mercancias/stock/actualizarArticulo/${item.id}`)}
+                            style={{fontSize: '25px'}}
+                            className="fa-regular fa-pen-to-square link-out"
+                        />
                     </div>
                 </div>
                 <div style={{display: "flex", gap: 20, padding: 10}}>
@@ -99,7 +103,7 @@ const FindExistencias = () => {
                 setPage={setPage}
                 size={size}
                 setSize={setSize}
-                height={450}
+                height={750}
                 header={
                     <div style={{display: "flex", justifyContent: "space-between"}}>
                         <ArticulosFilter

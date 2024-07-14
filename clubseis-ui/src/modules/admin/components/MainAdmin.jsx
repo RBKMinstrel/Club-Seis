@@ -2,44 +2,47 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import * as actions from '../actions';
 import * as selectors from '../selectors';
-import {DataGrid} from '../../common';
+import {DataGrid, Pagination} from '../../common';
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 const MainAdmin = () => {
 
     const users = useSelector(selectors.getUserSearch);
-    const criteria = users ? users.criteria : {};
     const dispatch = useDispatch();
 
+    const [forceUpdate, setForceUpdate] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    const getRowId = (row) => "mov-" + row.id;
+    const sizeOptions = [
+        {label: "6", value: 6},
+        {label: "12", value: 12},
+        {label: "24", value: 24},
+        {label: "48", value: 48},
+    ];
 
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(12);
 
-    const resetPage = () => setPage(0);
-
     useEffect(() => {
-
         dispatch(actions.findAllRoles());
-
     }, [dispatch]);
 
     useEffect(() => {
-        setLoading(true);
-        resetPage();
-        dispatch(actions.findUsers({...criteria, size: size, page: 0}));
-        setLoading(false);
-    }, [dispatch, size]);
+        setPage(0);
+        setForceUpdate((prev) => !prev);
+    }, [size]);
 
     useEffect(() => {
         setLoading(true);
-        dispatch(actions.findUsers({...criteria, page: page}));
+        dispatch(actions.findUsers({
+            size: size,
+            page: page,
+        }));
         setLoading(false);
-    }, [dispatch, page]);
+    }, [page, forceUpdate]);
 
+    const getRowId = (row) => "user-id-" + row.id;
     const columns = {
         usuario: {
             header: () => <h4>Usuario</h4>,
@@ -116,17 +119,21 @@ const MainAdmin = () => {
                 </Link>
             </div>
             <DataGrid
-                dataList={users ? users.result.items : []}
-                height={400}
+                dataList={users ? users.items : []}
                 getRowId={getRowId}
                 columns={columns}
                 loading={loading}
-                page={page}
-                setPage={setPage}
-                size={size}
-                setSize={setSize}
-                total={users ? users.result.totalItems : 0}
-            />
+            >
+                <Pagination
+                    page={page}
+                    setPage={setPage}
+                    size={size}
+                    setSize={setSize}
+                    sizeOptions={sizeOptions}
+                    actualItems={users ? users.items.length : 0}
+                    totalItems={users ? users.totalItems : 0}
+                />
+            </DataGrid>
         </div>
     );
 

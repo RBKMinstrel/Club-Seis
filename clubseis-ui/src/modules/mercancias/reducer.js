@@ -6,7 +6,7 @@ const initialState = {
     tallas: null,
     articulos: null,
     articulo: null,
-    carrito: [],
+    carrito: null,
 };
 
 const tallas = (state = initialState.tallas, action) => {
@@ -30,7 +30,7 @@ const articulos = (state = initialState.articulos, action) => {
         case actionTypes.FIND_ARTICULOS_COMPLETED:
             return action.articulos;
 
-        case actionTypes.CLEAR_ARTICULOS_COMPLETED:
+        case actionTypes.CLEAR_ARTICULOS:
             return initialState.articulos;
 
         default:
@@ -44,11 +44,11 @@ const articulo = (state = initialState.articulo, action) => {
 
     switch (action.type) {
 
-        //case actionTypes.FIND_ARTICULO_COMPLETED:
-        //    return action.articulo;
+        case actionTypes.FIND_ARTICULO_COMPLETED:
+            return action.articulo;
 
-        //case actionTypes.CLEAR_ARTICULO:
-        //    return initialState.articulo;
+        case actionTypes.CLEAR_ARTICULO:
+            return initialState.articulo;
 
         default:
             return state;
@@ -61,11 +61,11 @@ const carrito = (state = initialState.carrito, action) => {
 
     switch (action.type) {
 
-        //case actionTypes.UPDATE_CARRITO:
-        //    return action.carrito;
+        case actionTypes.GET_CARRITO_COMPLETED:
+            return action.carrito;
 
-        //case actionTypes.CLEAR_CARRITO:
-        //    return initialState.carrito;
+        case actionTypes.CLEAR_CARRITO:
+            return initialState.carrito;
 
         default:
             return state;

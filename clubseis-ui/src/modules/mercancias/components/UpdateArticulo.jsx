@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {ActionButton, BackLink, Errors, Section} from "../../common";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 
 import {generoOptions, tipoOptions} from "./Options.jsx";
@@ -9,10 +9,12 @@ import {generoOptions, tipoOptions} from "./Options.jsx";
 import * as actions from "../actions";
 import * as selectors from "../selectors.js";
 
-const CrearArticulo = () => {
+const UpdateArticulo = () => {
+    const {id} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const articulo = useSelector(selectors.getArticulo);
     const tallas = useSelector(selectors.getTallas);
 
     const tallasSection = tallas.map(t => ({
@@ -30,15 +32,54 @@ const CrearArticulo = () => {
     const [genero, setGenero] = useState(generoOptions[0]);
     const [stock, setStock] = useState(tallasSection);
     const [cantidadGeneral, setCantidadGeneral] = useState(0);
+    const [updateImage, setUpdateImage] = useState(false);
     const [backendErrors, setBackendErrors] = useState(null);
 
     const fileInputRef = useRef(null);
 
     let form;
 
+    const getOriginImage = () => {
+        return articulo.fileType && articulo.imageBytes
+            ? `data:${articulo.fileType};base64,${articulo.imageBytes}`
+            : null;
+    }
+
+    useEffect(() => {
+        if (!Number.isNaN(id)) {
+            dispatch(actions.findArticulo(id,
+                error => setBackendErrors(error)));
+        } else {
+            navigate(-1);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        if (articulo) {
+            setName(articulo.name);
+            setPrecio(articulo.precio);
+            setPrecioSocio(articulo.precioSocio);
+            setTipo(tipoOptions.find(option => option.value === articulo.esRopa));
+            setGenero(generoOptions.find(option => option.value === articulo.genero));
+            if (articulo.esRopa) {
+                setStock(articulo.stockList.map(stockItem => ({
+                    id: stockItem.id,
+                    name: stockItem.name,
+                    cant: stockItem.stock
+                })));
+            } else {
+                setCantidadGeneral(articulo.stockList[0].stock);
+            }
+            setSelectedImage(getOriginImage())
+            setImageExtension(articulo.fileType ? articulo.fileType : '');
+            setImageContent(articulo.imageBytes ? articulo.imageBytes : '');
+        }
+    }, [articulo]);
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setUpdateImage(true);
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result.split(',')[1];
@@ -51,9 +92,10 @@ const CrearArticulo = () => {
     };
 
     const handleResetImage = (e) => {
-        setImageExtension('');
-        setImageContent('');
-        setSelectedImage(null);
+        setUpdateImage(false);
+        setImageExtension(articulo.fileType);
+        setImageContent(articulo.imageBytes);
+        setSelectedImage(getOriginImage());
         fileInputRef.current.value = null;
     };
 
@@ -65,12 +107,14 @@ const CrearArticulo = () => {
                 ? stock.map(s => ({id: s.id, stock: s.cant}))
                 : [{id: null, stock: cantidadGeneral}];
 
-            dispatch(actions.createArticulos({
+            dispatch(actions.updateArticulo({
+                    id: articulo.id,
                     name: name,
                     precio: precio,
                     precioSocio: precioSocio,
                     genero: genero.value,
                     esRopa: tipo.value,
+                    updateImage: updateImage,
                     imageBytes: imageContent,
                     fileType: imageExtension,
                     stockList: stockList,
@@ -165,7 +209,7 @@ const CrearArticulo = () => {
                             type="submit"
                             htmlType="submit"
                         >
-                            Crear
+                            Actualizar
                         </ActionButton>
                     </div>
                 </form>
@@ -174,4 +218,4 @@ const CrearArticulo = () => {
     );
 }
 
-export default CrearArticulo;
+export default UpdateArticulo;

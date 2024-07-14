@@ -65,7 +65,9 @@ const RazonesSociales = () => {
             <form className="form-filter-contabilidad"
                   ref={node => form = node}
                   noValidate
-                  onSubmit={e => handleSubmit(e)}>
+                  onSubmit={e => handleSubmit(e)}
+                  style={{display: "flex", flexDirection: "column", gap: 20}}
+            >
                 <Select
                     className="selector"
                     isClearable={true}
@@ -74,8 +76,8 @@ const RazonesSociales = () => {
                     onChange={selectRazonSocial}
                     options={razonesSociales ? razonesSociales.map(c => (selectMapper(c.id, c.denominacion + "(" + c.cifnif + ")"))) : []}
                 />
-                <div>
-                    <label>Denominacion</label>
+                <div style={{display: "flex", flexDirection: "column", gap: 10}}>
+                    <label>Denominacion:</label>
                     <input
                         type="text"
                         value={denominacion}
@@ -83,7 +85,7 @@ const RazonesSociales = () => {
                         onChange={e => setDenominacion(e.target.value)}
                     />
                 </div>
-                <div>
+                <div style={{display: "flex", flexDirection: "column", gap: 10}}>
                     <label>Cif/Nif</label>
                     <input
                         type="text"

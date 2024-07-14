@@ -7,3 +7,4 @@ export {default as NavSidebar} from "./components/NavSidebar";
 export {default as Section} from "./components/Section";
 export {default as Visible} from "./components/Visible";
 export {default as DynamicList} from "./components/DynamicList";
+export {default as Pagination} from "./components/Pagination";

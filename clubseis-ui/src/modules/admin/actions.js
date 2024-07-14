@@ -29,15 +29,9 @@ const findUsersCompleted = userSearch => ({
 export const findUsers = criteria => dispatch => {
 
     backend.adminService.findUsers(criteria,
-        result => dispatch(findUsersCompleted({criteria, result})));
+        result => dispatch(findUsersCompleted(result)));
 
 }
-
-export const previousFindUsersResultPage = criteria =>
-    findUsers({...criteria, page: criteria.page - 1});
-
-export const nextFindUsersResultPage = criteria =>
-    findUsers({...criteria, page: criteria.page + 1});
 
 export const clearUsersSearch = () => ({
     type: actionTypes.CLEAR_USERS_SEARCH

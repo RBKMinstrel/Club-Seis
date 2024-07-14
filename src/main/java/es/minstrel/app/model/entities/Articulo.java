@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -131,5 +132,13 @@ public class Articulo {
 
     public void setExistencias(Set<Existencias> existencias) {
         this.existencias = existencias;
+    }
+
+    @Transient
+    public Optional<Existencias> getExistenciaByTalla(Talla talla) {
+        return existencias.stream().filter(
+                existencia ->
+                        existencia.getTalla() == talla
+        ).findFirst();
     }
 }

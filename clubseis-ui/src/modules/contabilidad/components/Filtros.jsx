@@ -1,37 +1,30 @@
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import Select from "react-select";
 
 import * as actions from '../actions';
 import * as selectors from "../selectors.js";
 import {parseListToSelect} from "../../utils/selectorUtils.js";
 
-const numberChange = (number) => {
-    const daysDifference = parseInt(number);
-    const selectedDate = new Date(daysDifference * (1000 * 60 * 60 * 24));
-
-    return selectedDate.toISOString().split('T')[0];
-};
-
-const dateChange = (date) => {
-    const selectedDate = new Date(date);
-    return Math.floor(selectedDate.getTime() / (1000 * 60 * 60 * 24));
-};
-
-const Filtros = ({criteria, resetPage}) => {
-
+const Filtros = ({
+                     tipo, setTipo,
+                     fecha, setFecha,
+                     razonSocial, setRazonSocial,
+                     concepto, setConcepto,
+                     categoria, setCategoria,
+                     cuenta, setCuenta
+                 }) => {
     const dispatch = useDispatch();
     const razonesSociales = useSelector(selectors.getRazonesSociales);
     const conceptos = useSelector(selectors.getConceptos);
     const categorias = useSelector(selectors.getCategorias);
     const cuentas = useSelector(selectors.getCuentas);
 
-    const tipoOptions =
-        [
-            {label: "Todos", value: null},
-            {label: "Gastos", value: true},
-            {label: "Ingresos", value: false}
-        ];
+    const tipoOptions = [
+        {label: "Todos", value: null},
+        {label: "Gastos", value: true},
+        {label: "Ingresos", value: false}
+    ];
     const razonSocialOptions =
         parseListToSelect(razonesSociales || [], (x) => ({
             label: (x.denominacion + "(" + x.cifnif + ")"),
@@ -43,17 +36,6 @@ const Filtros = ({criteria, resetPage}) => {
         parseListToSelect(categorias || [], (x) => ({label: x.name, value: x.id}), true);
     const cuentaOptions =
         parseListToSelect(cuentas || [], (x) => ({label: x.name, value: x.id}), true);
-
-    const [tipo, setTipo] = useState(tipoOptions[0]);
-    const [fecha, setFecha] = useState(criteria.fecha ? numberChange(criteria.fecha) : '');
-    const [razonSocial, setRazonSocial] =
-        useState(razonSocialOptions ? razonSocialOptions.find((x) => (x.value === criteria.razonSocialId)) : {});
-    const [concepto, setConcepto] =
-        useState(conceptoOptions ? conceptoOptions.find((x) => (x.value === criteria.conceptoId)) : {});
-    const [categoria, setCategoria] =
-        useState(categoriaOptions ? categoriaOptions.find((x) => (x.value === criteria.categoriaId)) : {});
-    const [cuenta, setCuenta] =
-        useState(cuentaOptions ? cuentaOptions.find((x) => (x.value === criteria.cuentaId)) : {});
 
     useEffect(() => {
         dispatch(actions.findAllRazonSocial());
@@ -71,24 +53,6 @@ const Filtros = ({criteria, resetPage}) => {
         dispatch(actions.findAllCuentas());
     }, []);
 
-    useEffect(() => {
-        resetPage();
-        dispatch(actions.findMovimientos({
-            ...criteria,
-            tipo: tipo.value,
-            fecha: fecha !== '' ? dateChange(fecha) : null,
-            razonSocialId: razonSocial ? razonSocial.value : null,
-            conceptoId: concepto ? concepto.value : null,
-            categoriaId: categoria ? categoria.value : null,
-            cuentaId: cuenta ? cuenta.value : null,
-            page: 0,
-        }));
-    }, [tipo, fecha, razonSocial, concepto, categoria, cuenta]);
-
-    const selectMapper = (value, label) => {
-        return ({value: value, label: label})
-    };
-
     return (
         <form className="form-filter-contabilidad" onSubmit={e => handleSubmit(e)}>
             <div className="column">
@@ -102,8 +66,8 @@ const Filtros = ({criteria, resetPage}) => {
             <div>
                 <label>Tipo</label>
                 <Select
-                    value={tipo}
-                    onChange={setTipo}
+                    value={tipoOptions.find(t => t.value === tipo)}
+                    onChange={e => setTipo(e.value)}
                     options={tipoOptions}
                 />
             </div>
@@ -113,8 +77,8 @@ const Filtros = ({criteria, resetPage}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={razonSocial}
-                    onChange={setRazonSocial}
+                    value={razonSocialOptions.find((x) => (x.value === razonSocial))}
+                    onChange={e => setRazonSocial(e ? e.value : null)}
                     options={razonSocialOptions}
                 />
             </div>
@@ -124,8 +88,8 @@ const Filtros = ({criteria, resetPage}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={concepto}
-                    onChange={setConcepto}
+                    value={conceptoOptions.find((x) => (x.value === concepto))}
+                    onChange={e => setConcepto(e ? e.value : null)}
                     options={conceptoOptions}
                 />
             </div>
@@ -135,8 +99,8 @@ const Filtros = ({criteria, resetPage}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={categoria}
-                    onChange={setCategoria}
+                    value={categoriaOptions.find((x) => (x.value === categoria))}
+                    onChange={e => setCategoria(e ? e.value : null)}
                     options={categoriaOptions}
                 />
             </div>
@@ -146,8 +110,8 @@ const Filtros = ({criteria, resetPage}) => {
                     className="selector"
                     isClearable={true}
                     isSearchable={true}
-                    value={cuenta}
-                    onChange={setCuenta}
+                    value={cuentaOptions.find((x) => (x.value === cuenta))}
+                    onChange={e => setCuenta(e ? e.value : null)}
                     options={cuentaOptions}
                 />
             </div>
