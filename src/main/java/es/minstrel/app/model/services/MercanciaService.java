@@ -45,7 +45,7 @@ public interface MercanciaService {
             throws InstanceNotFoundException, PermissionException;
 
     Carrito createVenta(Long userId, Long carritoId, boolean ventaTotal, boolean esSocio)
-            throws InstanceNotFoundException, PermissionException, EmptyCarritoException;
+            throws InstanceNotFoundException, PermissionException, EmptyCarritoException, EmptyAcquireException;
 
     void createVenta(Long pedidoId, boolean esSocio)
             throws InstanceNotFoundException, InsufficientStockException;

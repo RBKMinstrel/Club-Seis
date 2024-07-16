@@ -6,16 +6,16 @@ export const getTallas = state =>
 export const getTallaName = (tallas, id) => {
 
     if (!tallas) {
-        return 'Cantidad';
+        return '';
     }
 
     const talla = tallas.find(talla => talla.id === id);
 
     if (!talla) {
-        return 'Cantidad';
+        return '';
     }
 
-    return "Talla " + talla.name;
+    return talla.name;
 
 }
 
@@ -27,3 +27,9 @@ export const getArticulo = state =>
 
 export const getCarrito = state =>
     getModuleState(state).carrito;
+
+export const getDemanda = state =>
+    getModuleState(state).demanda;
+
+export const getPedidos = state =>
+    getModuleState(state).pedidos;

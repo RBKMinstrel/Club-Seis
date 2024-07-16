@@ -7,9 +7,7 @@ import es.minstrel.app.model.exceptions.*;
 import es.minstrel.app.model.services.MercanciaService;
 import es.minstrel.app.model.services.utils.Block;
 import es.minstrel.app.model.services.utils.FileType;
-import es.minstrel.app.model.services.utils.StockArticulo;
 import es.minstrel.app.rest.common.ErrorsDto;
-
 import es.minstrel.app.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -34,6 +32,10 @@ public class MercanciaController {
     private final static String Insufficient_Stock_Exception_CODE = "project.exceptions.InsufficientStockException";
 
     private final static String UnsupportedFileTypeException_CODE = "project.exceptions.UnsupportedFileTypeException";
+
+    private final static String EmptyCarritoException_CODE = "project.exceptions.EmptyCarritoException";
+
+    private final static String EmptyAcquireException_CODE = "project.exceptions.EmptyAcquireException";
 
 
     @Autowired
@@ -61,6 +63,30 @@ public class MercanciaController {
 
         String errorMessage = messageSource.getMessage(UnsupportedFileTypeException_CODE, null,
                 UnsupportedFileTypeException_CODE, locale);
+
+        return new ErrorsDto(errorMessage);
+
+    }
+
+    @ExceptionHandler(EmptyAcquireException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorsDto handleEmptyAcquireException(EmptyAcquireException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(EmptyAcquireException_CODE, null,
+                EmptyAcquireException_CODE, locale);
+
+        return new ErrorsDto(errorMessage);
+
+    }
+
+    @ExceptionHandler(EmptyCarritoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorsDto handleEmptyCarritoException(EmptyCarritoException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(EmptyCarritoException_CODE, null,
+                EmptyCarritoException_CODE, locale);
 
         return new ErrorsDto(errorMessage);
 
@@ -185,7 +211,7 @@ public class MercanciaController {
     public CarritoDto createVenta(@RequestAttribute Long userId, @PathVariable Long id,
                                   @RequestParam(defaultValue = "false") boolean ventaTotal,
                                   @RequestParam(defaultValue = "false") boolean esSocio)
-            throws InstanceNotFoundException, PermissionException, EmptyCarritoException {
+            throws InstanceNotFoundException, PermissionException, EmptyCarritoException, EmptyAcquireException {
 
         Carrito carrito = mercanciaService.createVenta(userId, id, ventaTotal, esSocio);
 

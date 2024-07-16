@@ -5,6 +5,7 @@ import './ActionButton.css';
 const ActionButton = ({
                           onClick = () => {
                           },
+                          disabled = false,
                           children,
                           type,
                           htmlType = 'button',
@@ -15,6 +16,7 @@ const ActionButton = ({
             type={htmlType}
             className={`action-button ${type}`}
             onClick={onClick}
+            disabled={disabled}
             style={style}
         >
             {children}
@@ -24,6 +26,7 @@ const ActionButton = ({
 
 ActionButton.propTypes = {
     onClick: PropTypes.func,
+    disabled: PropTypes.bool,
     children: PropTypes.node.isRequired,
     type: PropTypes.oneOf(['primary', 'secondary', 'danger', 'warning', 'submit']).isRequired,
     htmlType: PropTypes.oneOf(['button', 'submit', 'reset']),

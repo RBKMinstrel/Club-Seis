@@ -91,7 +91,7 @@ export const createPedido = (carritoId, reserva, onSuccess, onErrors) =>
 
 
 //.requestMatchers(antMatcher(HttpMethod.GET, "/api/mercancias/demanda")).permitAll()
-export const getVentasResumen = ({beginDate, endDate}, onSuccess) =>
+export const getVentasResumen = (beginDate, endDate, onSuccess) =>
     appFetch(`/mercancias/demanda?beginDate=${beginDate}&endDate=${endDate}`, config('GET'), onSuccess);
 
 

@@ -53,7 +53,9 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
                         type="number"
                         value={quantity}
                         onChange={e => setQuantity(Number(e.target.value))}
-                        min="1"/>
+                        min="1"
+                        step="1"
+                    />
                 </div>
                 <div>
                     <ActionButton

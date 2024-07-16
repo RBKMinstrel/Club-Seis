@@ -200,7 +200,7 @@ CREATE TABLE PedidoDetalle
     pedidoId   BIGINT NOT NULL,
     cantidad   BIGINT NOT NULL,
     articuloId BIGINT NOT NULL,
-    tallaId    BIGINT NOT NULL,
+    tallaId BIGINT,
     CONSTRAINT PedidoDetallePK PRIMARY KEY (id),
     CONSTRAINT PedidoDetallePedidoFK FOREIGN KEY (pedidoId) REFERENCES Pedido (id) ON DELETE CASCADE,
     CONSTRAINT PedidoDetalleArticuloFK FOREIGN KEY (articuloId) REFERENCES Articulo (id),

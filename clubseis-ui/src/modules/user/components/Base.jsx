@@ -34,7 +34,7 @@ const Base = () => {
                 {name: "Articulos", url: "/gestion/mercancias/articulos"},
                 {name: "Stock", url: "/gestion/mercancias/stock"},
                 {name: "Demanda", url: "/gestion/mercancias/demanda"},
-                {name: "Reservas", url: "/gestion/mercancias/reservas"},
+                {name: "Pedidos", url: "/gestion/mercancias/pedidos"},
             ]
         },
         {

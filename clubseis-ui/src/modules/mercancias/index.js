@@ -9,6 +9,8 @@ export {default as MercanciaBase} from './components/MercanciaBase';
 export {default as Carrito} from './components/Carrito';
 export {default as CrearArticulo} from './components/CrearArticulo';
 export {default as UpdateArticulo} from './components/UpdateArticulo';
+export {default as Pedidos} from './components/Pedidos';
+export {default as Demanda} from './components/Demanda';
 
 
 export default {actions, actionTypes, reducer, selectors};

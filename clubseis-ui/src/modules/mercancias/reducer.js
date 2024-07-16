@@ -7,6 +7,8 @@ const initialState = {
     articulos: null,
     articulo: null,
     carrito: null,
+    demanda: null,
+    pedidos: null,
 };
 
 const tallas = (state = initialState.tallas, action) => {
@@ -74,11 +76,47 @@ const carrito = (state = initialState.carrito, action) => {
 
 }
 
+const demanda = (state = initialState.demanda, action) => {
+
+    switch (action.type) {
+
+        case actionTypes.GET_DEMANDA_COMPLETED:
+            return action.demanda;
+
+        case actionTypes.CLEAR_DEMANDA:
+            return initialState.demanda;
+
+        default:
+            return state;
+
+    }
+
+}
+
+const pedidos = (state = initialState.pedidos, action) => {
+
+    switch (action.type) {
+
+        case actionTypes.GET_PEDIDOS_COMPLETED:
+            return action.pedidos;
+
+        case actionTypes.CLEAR_PEDIDOS:
+            return initialState.pedidos;
+
+        default:
+            return state;
+
+    }
+
+}
+
 const reducer = combineReducers({
     tallas,
     articulos,
     carrito,
     articulo,
+    demanda,
+    pedidos,
 });
 
 export default reducer;

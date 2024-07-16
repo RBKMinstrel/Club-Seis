@@ -94,3 +94,98 @@ export const addToCarrito = (carritoId, articuloId, tallaId, quantity, onSuccess
         onError
     )
 }
+
+export const updateCarritoItem = (carritoId, articuloId, tallaId, quantity, onSuccess) => dipatch => {
+    backend.mercanciaService.updateCarritoItem(
+        carritoId, articuloId, tallaId, quantity,
+        carrito => {
+            dipatch(getCarritoCompleted(carrito));
+            onSuccess();
+        },
+        error => console.log(error)
+    )
+}
+
+export const removeCarritoItem = (carritoId, articuloId, tallaId, onSuccess) => dipatch => {
+    backend.mercanciaService.removeCarritoItem(
+        carritoId, articuloId, tallaId,
+        carrito => {
+            dipatch(getCarritoCompleted(carrito));
+            onSuccess();
+        },
+        error => console.log(error)
+    )
+}
+
+export const cleanCarrito = (carritoId, onSuccess) => dipatch => {
+    backend.mercanciaService.cleanCarrito(
+        carritoId,
+        carrito => {
+            dipatch(getCarritoCompleted(carrito));
+            onSuccess();
+        },
+        error => console.log(error)
+    )
+}
+
+export const createVenta = (carritoId, ventaTotal, esSocio, onSuccess, onErrors) => dipatch => {
+    backend.mercanciaService.createVenta(
+        carritoId, ventaTotal, esSocio,
+        carrito => {
+            dipatch(getCarritoCompleted(carrito));
+            onSuccess();
+        },
+        error => onErrors(error)
+    )
+}
+
+export const createPedido = (carritoId, reserva, onSuccess, onErrors) => dipatch => {
+    backend.mercanciaService.createPedido(
+        carritoId, reserva,
+        carrito => {
+            dipatch(getCarritoCompleted(carrito));
+            onSuccess();
+        },
+        error => onErrors(error)
+    )
+}
+
+const getDemandaCompleted = demanda => ({
+    type: actionTypes.GET_DEMANDA_COMPLETED,
+    demanda
+});
+
+export const getDemanda = (beginDate, endDate) => dispatch => {
+    backend.mercanciaService.getVentasResumen(
+        beginDate, endDate,
+        demanda => dispatch(getDemandaCompleted(demanda))
+    )
+};
+
+export const cleanDemanda = () => ({
+    type: actionTypes.CLEAR_DEMANDA
+})
+
+const getPedidosCompleted = pedidos => ({
+    type: actionTypes.GET_PEDIDOS_COMPLETED,
+    pedidos
+});
+
+export const getPedidos = ({reserva, page, size}) => dispatch => {
+    backend.mercanciaService.findPedidos(
+        {reserva, page, size},
+        pedidos => dispatch(getPedidosCompleted(pedidos))
+    )
+};
+
+export const cleanPedidos = () => ({
+    type: actionTypes.CLEAR_PEDIDOS
+})
+
+export const createVentaByPedido = (pedidoId, esSocio, onSuccess, onErrors) => dispatch => {
+    backend.mercanciaService.createVentaById(pedidoId, esSocio, onSuccess, onErrors);
+}
+
+export const deletePedido = (pedidoId, onSuccess, onErrors) => dispatch => {
+    backend.mercanciaService.deletePedido(pedidoId, onSuccess, onErrors);
+}

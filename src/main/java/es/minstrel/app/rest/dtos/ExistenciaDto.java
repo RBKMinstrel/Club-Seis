@@ -3,15 +3,15 @@ package es.minstrel.app.rest.dtos;
 public class ExistenciaDto {
 
     private String articulo;
-    private String talla;
+    private Long tallaId;
     private Long cantidad;
 
     public ExistenciaDto() {
     }
 
-    public ExistenciaDto(String articulo, String talla, Long cantidad) {
+    public ExistenciaDto(String articulo, Long tallaId, Long cantidad) {
         this.articulo = articulo;
-        this.talla = talla;
+        this.tallaId = tallaId;
         this.cantidad = cantidad;
     }
 
@@ -23,12 +23,12 @@ public class ExistenciaDto {
         this.articulo = articulo;
     }
 
-    public String getTalla() {
-        return talla;
+    public Long getTallaId() {
+        return tallaId;
     }
 
-    public void setTalla(String talla) {
-        this.talla = talla;
+    public void setTallaId(Long tallaId) {
+        this.tallaId = tallaId;
     }
 
     public Long getCantidad() {

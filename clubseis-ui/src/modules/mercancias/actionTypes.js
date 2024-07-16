@@ -5,3 +5,7 @@ export const FIND_ARTICULO_COMPLETED = "project/mercancia/clearArticulosComplete
 export const CLEAR_ARTICULO = "project/mercancia/clearArticulo";
 export const GET_CARRITO_COMPLETED = "project/mercancia/getCarritoCompleted";
 export const CLEAR_CARRITO = "project/mercancia/clearCarrito";
+export const GET_DEMANDA_COMPLETED = "project/mercancia/getDemandaCompleted";
+export const CLEAR_DEMANDA = "project/mercancia/clearDemandas";
+export const GET_PEDIDOS_COMPLETED = "project/mercancia/getPedidosCompleted";
+export const CLEAR_PEDIDOS = "project/mercancia/clearPedidos";

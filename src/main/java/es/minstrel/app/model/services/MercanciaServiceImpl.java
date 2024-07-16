@@ -221,7 +221,7 @@ public class MercanciaServiceImpl implements MercanciaService {
 
     @Override
     public Carrito createVenta(Long userId, Long carritoId, boolean ventaTotal, boolean esSocio)
-            throws InstanceNotFoundException, PermissionException, EmptyCarritoException {
+            throws InstanceNotFoundException, PermissionException, EmptyCarritoException, EmptyAcquireException { //Arreglar venta vacia
         Carrito carrito = permissionChecker.checkCarritoExistsAndBelongsTo(carritoId, userId);
 
         if (carrito.isEmpty())
@@ -231,6 +231,7 @@ public class MercanciaServiceImpl implements MercanciaService {
         ventaDao.save(venta);
 
         List<CarritoItem> itemsAEliminar = new ArrayList<>();
+        boolean vacio = true;
 
         //Iteramos por el carrito
         for (CarritoItem carritoItem : carrito.getCarritoItems()) {
@@ -256,6 +257,7 @@ public class MercanciaServiceImpl implements MercanciaService {
 
                 carritoItemDao.delete(carritoItem);
                 itemsAEliminar.add(carritoItem);
+                vacio = false;
 
             } else if (existencias.getCantidad() != 0 && !ventaTotal) {
                 long cantidadPendiente = carritoItem.getQuantity() - existencias.getCantidad();
@@ -271,8 +273,13 @@ public class MercanciaServiceImpl implements MercanciaService {
                 existencias.setCantidad(0);
 
                 carritoItem.setQuantity(cantidadPendiente);
+                vacio = false;
+
             }
         }
+
+        if (vacio)
+            throw new EmptyAcquireException();
 
         for (CarritoItem carritoItem : itemsAEliminar)
             carrito.removeItem(carritoItem);
@@ -282,7 +289,7 @@ public class MercanciaServiceImpl implements MercanciaService {
 
     @Override
     public void createVenta(Long pedidoId, boolean esSocio)
-            throws InstanceNotFoundException, InsufficientStockException {
+            throws InstanceNotFoundException, InsufficientStockException {//Arreglar venta vacia
         Optional<Pedido> pedidoOptional = pedidoDao.findById(pedidoId);
 
         if (pedidoOptional.isEmpty())
@@ -458,7 +465,9 @@ public class MercanciaServiceImpl implements MercanciaService {
                 .map(v -> {
                     Articulo articulo = v.get(0).getArticulo();
                     List<StockTalla> stockTallas =
-                            v.stream().collect(Collectors.groupingBy(VentaDetalle::getTalla)).values().stream()
+                            v.stream().collect(Collectors.groupingBy(
+                                            i -> Optional.ofNullable(i.getTalla()).map(Talla::getId).orElse(-1L)
+                                    )).values().stream()
                                     .map(t -> {
                                         StockTalla stockTalla = new StockTalla();
                                         Talla talla = t.get(0).getTalla();
@@ -477,14 +486,15 @@ public class MercanciaServiceImpl implements MercanciaService {
         if (reserva == null || reserva.isEmpty()) {
             pedidoBlock = pedidoDao.findAll(PageRequest.of(page, size));
         } else {
-            pedidoBlock = pedidoDao.findByReserva(reserva, PageRequest.of(page, size));
+            pedidoBlock = pedidoDao.findByReservaIsLikeIgnoreCase("%" + reserva + "%", PageRequest.of(page, size));
         }
 
         return new Block<>(pedidoBlock.getContent(), pedidoBlock.getTotalElements());
     }
 
     @Override
-    public void deletePedido(Long pedidoId) throws InstanceNotFoundException {
+    public void deletePedido(Long pedidoId)
+            throws InstanceNotFoundException {
         Optional<Pedido> pedidoOptional = pedidoDao.findById(pedidoId);
         if (pedidoOptional.isPresent()) {
             pedidoDao.delete(pedidoOptional.get());

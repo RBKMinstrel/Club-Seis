@@ -23,6 +23,7 @@ public class PedidoConversor {
     }
 
     public final static ExistenciaDto toExistenciaDto(PedidoDetalle pedidoDetalle) {
-        return new ExistenciaDto(pedidoDetalle.getArticulo().getName(), pedidoDetalle.getTalla().getName(), pedidoDetalle.getCantidad());
+        boolean isNull = pedidoDetalle.getTalla() == null;
+        return new ExistenciaDto(pedidoDetalle.getArticulo().getName(), isNull ? null : pedidoDetalle.getTalla().getId(), pedidoDetalle.getCantidad());
     }
 }
