@@ -3,7 +3,6 @@ package es.minstrel.app.model.entities;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,8 +28,9 @@ public class ArticuloDaoCustomImpl implements ArticuloDaoCustom {
         }
 
         if (name != null) {
-            queryString += "a.name = :name";
-            countQueryString += "a.name = :name";
+            queryString += "LOWER(a.name) LIKE LOWER(:name)";
+            ;
+            countQueryString += "LOWER(a.name) LIKE LOWER(:name)";
             aux = true;
         }
 

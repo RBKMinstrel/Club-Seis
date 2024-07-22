@@ -3,13 +3,17 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
 import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.FileType;
 import es.minstrel.app.model.services.utils.SummaryConta;
 import es.minstrel.app.model.services.utils.SummaryGeneric;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +23,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
 public class ContabilidadServiceImpl implements ContabilidadService {
+
+    @Autowired
+    private CommonService commonService;
 
     @Autowired
     private CategoriaDao categoriaDao;
@@ -43,7 +47,13 @@ public class ContabilidadServiceImpl implements ContabilidadService {
     @Autowired
     private MovimientoDao movimientoDao;
 
-    private Categoria recuperarCategoria(Long id)
+    @Autowired
+    private FacturaDao facturaDao;
+
+    @Value("${app.folders}")
+    private String[] folderPaths;
+
+    private Categoria getCategoriaFromId(Long id)
             throws InstanceNotFoundException {
 
         Optional<Categoria> categoriaOptional = categoriaDao.findById(id);
@@ -54,51 +64,62 @@ public class ContabilidadServiceImpl implements ContabilidadService {
             return categoriaOptional.get();
     }
 
-    private Concepto recuperarConcepto(Long id)
+    private Concepto getConceptoFromId(Long id)
             throws InstanceNotFoundException {
 
         Optional<Concepto> conceptoOptional = conceptoDao.findById(id);
 
         if (conceptoOptional.isEmpty())
             throw new InstanceNotFoundException("project.entities.concepto", id);
-        else
-            return conceptoOptional.get();
+
+        return conceptoOptional.get();
 
     }
 
-    private RazonSocial recuperarRazonSocial(Long id)
+    private RazonSocial getRazonSocialFromId(Long id)
             throws InstanceNotFoundException {
-
         Optional<RazonSocial> razonSocialOptional = razonSocialDao.findById(id);
 
         if (razonSocialOptional.isEmpty())
             throw new InstanceNotFoundException("project.entities.razonSocial", id);
-        else
-            return razonSocialOptional.get();
+
+        return razonSocialOptional.get();
 
     }
 
-    private Cuenta recuperarCuenta(Long id)
+    private Cuenta getCuentaFromId(Long id)
             throws InstanceNotFoundException {
 
         Optional<Cuenta> cuentaOptional = cuentaDao.findById(id);
 
         if (cuentaOptional.isEmpty())
             throw new InstanceNotFoundException("project.entities.cuenta", id);
-        else
-            return cuentaOptional.get();
+
+        return cuentaOptional.get();
 
     }
 
-    private Movimiento recuperarMovimiento(Long id)
+    private Movimiento getMovimientoFromId(Long id)
             throws InstanceNotFoundException {
 
         Optional<Movimiento> movimientoOptional = movimientoDao.findById(id);
 
         if (movimientoOptional.isEmpty())
             throw new InstanceNotFoundException("project.entities.movimiento", id);
-        else
-            return movimientoOptional.get();
+
+        return movimientoOptional.get();
+
+    }
+
+    private Factura getFacturaFromId(Long id)
+            throws InstanceNotFoundException {
+
+        Optional<Factura> facturaOptional = facturaDao.findById(id);
+
+        if (facturaOptional.isEmpty())
+            throw new InstanceNotFoundException("project.entities.factura", id);
+
+        return facturaOptional.get();
 
     }
 
@@ -122,7 +143,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
     public void updateCategoria(Long id, String name)
             throws DuplicateInstanceException, InstanceNotFoundException {
 
-        Categoria categoria = recuperarCategoria(id);
+        Categoria categoria = getCategoriaFromId(id);
 
         if (categoria.getName().equals(name))
             return;
@@ -150,7 +171,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
     @Override
     public void updateConcepto(Long id, String name) throws DuplicateInstanceException, InstanceNotFoundException {
-        Concepto concepto = recuperarConcepto(id);
+        Concepto concepto = getConceptoFromId(id);
 
         if (concepto.getName().equals(name))
             return;
@@ -185,7 +206,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
     @Override
     public void updateRazonSocial(Long id, String denominacion, String cifnif)
             throws InstanceNotFoundException, DuplicateInstanceException {
-        RazonSocial razonSocial = recuperarRazonSocial(id);
+        RazonSocial razonSocial = getRazonSocialFromId(id);
 
         if (razonSocial.getDenominacion().equals(denominacion) && razonSocial.getCifnif().equals(cifnif))
             return;
@@ -215,7 +236,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
     @Override
     public void updateCuentas(Long id, String name) throws DuplicateInstanceException, InstanceNotFoundException {
-        Cuenta cuenta = recuperarCuenta(id);
+        Cuenta cuenta = getCuentaFromId(id);
 
         if (cuenta.getName().equals(name))
             return;
@@ -238,24 +259,36 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
     @Override
     public Movimiento getMovimiento(Long id) throws InstanceNotFoundException {
-        return recuperarMovimiento(id);
+        return getMovimientoFromId(id);
     }
 
     @Override
-    public void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
-            throws InstanceNotFoundException {
+    public void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId,
+                                 Long cuentaId, Factura factura, String fileExtension, String fileContent)
+            throws InstanceNotFoundException, UnsupportedFileTypeException, IOException {
 
-        RazonSocial razonSocial = razonSocialId != null ? recuperarRazonSocial(razonSocialId) : null;
-        Concepto concepto = conceptoId != null ? recuperarConcepto(conceptoId) : null;
-        Categoria categoria = categoriaId != null ? recuperarCategoria(categoriaId) : null;
-        Cuenta cuenta = cuentaId != null ? recuperarCuenta(cuentaId) : null;
+        RazonSocial razonSocial = razonSocialId == null ? null : getRazonSocialFromId(razonSocialId);
+        Concepto concepto = conceptoId != null ? getConceptoFromId(conceptoId) : null;
+        Categoria categoria = categoriaId != null ? getCategoriaFromId(categoriaId) : null;
+        Cuenta cuenta = cuentaId != null ? getCuentaFromId(cuentaId) : null;
 
         movimiento.setRazonSocial(razonSocial);
         movimiento.setConcepto(concepto);
         movimiento.setCategoria(categoria);
         movimiento.setCuenta(cuenta);
 
-        movimientoDao.save(movimiento);
+        Movimiento movimientoUpdate = movimientoDao.save(movimiento);
+
+        if (factura != null) {
+
+            String path = commonService.saveFile(Base64.getDecoder().decode(fileContent), fileExtension, folderPaths[0]);
+
+            factura.setFilepath(path);
+            factura.setMovimiento(movimientoUpdate);
+
+            facturaDao.save(factura);
+
+        }
 
     }
 
@@ -265,12 +298,12 @@ public class ContabilidadServiceImpl implements ContabilidadService {
                                  Long categoriaId, Long cuentaId)
             throws InstanceNotFoundException {
 
-        Movimiento movimiento = recuperarMovimiento(id);
+        Movimiento movimiento = getMovimientoFromId(id);
 
-        RazonSocial razonSocial = razonSocialId != null ? recuperarRazonSocial(razonSocialId) : null;
-        Concepto concepto = conceptoId != null ? recuperarConcepto(conceptoId) : null;
-        Categoria categoria = categoriaId != null ? recuperarCategoria(categoriaId) : null;
-        Cuenta cuenta = cuentaId != null ? recuperarCuenta(cuentaId) : null;
+        RazonSocial razonSocial = razonSocialId != null ? getRazonSocialFromId(razonSocialId) : null;
+        Concepto concepto = conceptoId != null ? getConceptoFromId(conceptoId) : null;
+        Categoria categoria = categoriaId != null ? getCategoriaFromId(categoriaId) : null;
+        Cuenta cuenta = cuentaId != null ? getCuentaFromId(cuentaId) : null;
 
         movimiento.setFecha(fecha);
         movimiento.setEsGasto(esGasto);
@@ -289,12 +322,14 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
     @Override
     public void deleteMovimiento(Long id)
-            throws InstanceNotFoundException {
+            throws InstanceNotFoundException, IOException {
 
-        if (movimientoDao.existsById(id))
-            movimientoDao.deleteById(id);
-        else
-            throw new InstanceNotFoundException("project.entities.movimiento", id);
+        Movimiento movimiento = getMovimiento(id);
+
+        if (movimiento.getFactura() != null)
+            commonService.deleteFile(movimiento.getFactura().getFilepath());
+
+        movimientoDao.delete(movimiento);
 
     }
 
@@ -582,4 +617,31 @@ public class ContabilidadServiceImpl implements ContabilidadService {
         workbook.close();
         return cont;
     }
+
+    @Override
+    public Block<Factura> getFacturasBlock(String keyword, int page, int size) {
+
+        Page<Factura> facturaPage;
+
+        if (keyword == null || keyword.isEmpty()) {
+            facturaPage = facturaDao.findAll(PageRequest.of(page, size));
+        } else {
+            facturaPage =
+                    facturaDao.findByCodigoIsLikeIgnoreCaseOrAnotacionIsLikeIgnoreCaseOrEmisorIsLikeIgnoreCaseOrReceptorIsLikeIgnoreCase(
+                            "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%",
+                            "%" + keyword + "%", PageRequest.of(page, size));
+        }
+
+        return new Block<>(facturaPage.getContent(), facturaPage.getTotalElements());
+    }
+
+    @Override
+    public FileType getFacturaFile(Long facturaId)
+            throws InstanceNotFoundException, IOException {
+
+        Factura factura = getFacturaFromId(facturaId);
+
+        return commonService.getFile(factura.getFilepath());
+    }
+
 }

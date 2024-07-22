@@ -11,12 +11,12 @@ public class MovimientoConversor {
     private MovimientoConversor() {
     }
 
-    public final static List<ShortMovimientoDto> toShortMovimientoDtos(List<Movimiento> movimientosList) {
+    public final static List<MovimientoShortDto> toShortMovimientoDtos(List<Movimiento> movimientosList) {
         return movimientosList.stream().map(MovimientoConversor::toShortMovimientoDto).toList();
     }
 
-    public final static ShortMovimientoDto toShortMovimientoDto(Movimiento movimiento) {
-        return new ShortMovimientoDto(movimiento.getId(), toDays(movimiento.getFecha()), toRazonSocialText(movimiento.getRazonSocial()),
+    public final static MovimientoShortDto toShortMovimientoDto(Movimiento movimiento) {
+        return new MovimientoShortDto(movimiento.getId(), toDays(movimiento.getFecha()), toRazonSocialText(movimiento.getRazonSocial()),
                 movimiento.getConcepto() != null ? (movimiento.getConcepto().getName()) : "",
                 movimiento.getCategoria() != null ? (movimiento.getCategoria().getName()) : "",
                 movimiento.getCuenta() != null ? (movimiento.getCuenta().getName()) : "",

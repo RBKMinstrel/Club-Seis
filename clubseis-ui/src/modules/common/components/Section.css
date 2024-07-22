@@ -1,6 +1,5 @@
 /*Componente principal*/
 .section-component {
-    margin: 20px 0;
     width: 100%;
     border: 1px solid #000;
 }
@@ -21,6 +20,6 @@
 
 /*Contenido de la seccion*/
 .section-content {
-    padding: 20px 10px;
+    padding: 20px 20px;
     width: 100%;
 }

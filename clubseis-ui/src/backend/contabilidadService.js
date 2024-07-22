@@ -85,3 +85,16 @@ export const dowloadExcel = ({razonSocialId, fecha, conceptoId, categoriaId, cue
 
 export const uploadExcel = (data, onSuccess, onErrors) =>
     appFetch('/contabilidad/subir-excel', config('POST', data), onSuccess, onErrors);
+
+export const getFacturasBlock = ({keyword, page, size}, onSuccess, onErrors) => {
+
+    let path = `/contabilidad/facturas?page=${page}&size=${size}`;
+
+    path += keyword ? `&keyword=${encodeURIComponent(keyword)}` : "";
+
+    return appFetch(path, config('GET'), onSuccess, onErrors);
+}
+
+export const getFacturaFile = (id, onSuccess, onErrors) =>
+    appFetch(`/contabilidad/facturas/${id}`, config('GET'), onSuccess, onErrors);
+

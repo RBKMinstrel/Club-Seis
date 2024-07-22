@@ -13,6 +13,7 @@ import {
     CreateMovimiento,
     Cuentas,
     DeleteMovimiento,
+    FacturasSearch,
     LoadUpdateMovimiento,
     MovimientoDetails,
     Movimientos,
@@ -75,6 +76,9 @@ const App = () => {
                                 <Route path=":id" element={<MovimientoDetails/>}/>
                             </Route>
                             <Route path="resumen" element={<Resumen/>}/>
+                            <Route path="facturas">
+                                <Route index element={<FacturasSearch/>}/>
+                            </Route>
                             <Route path="conceptos" element={<Conceptos/>}/>
                             <Route path="cuentas" element={<Cuentas/>}/>
                             <Route path="categorias" element={<Categorias/>}/>

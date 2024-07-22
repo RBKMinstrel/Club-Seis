@@ -3,6 +3,7 @@ package es.minstrel.app.rest.common;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
 import es.minstrel.app.model.exceptions.PermissionException;
+import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class CommonControllerAdvice {
     private final static String INSTANCE_NOT_FOUND_EXCEPTION_CODE = "project.exceptions.InstanceNotFoundException";
     private final static String DUPLICATE_INSTANCE_EXCEPTION_CODE = "project.exceptions.DuplicateInstanceException";
     private final static String PERMISSION_EXCEPTION_CODE = "project.exceptions.PermissionException";
+    private final static String UNSUPPORTED_FILE_TYPE_EXCEPTION_CODE = "project.exceptions.UnsupportedFileTypeException";
 
     @Autowired
     private MessageSource messageSource;
@@ -71,6 +73,18 @@ public class CommonControllerAdvice {
 
         String errorMessage = messageSource.getMessage(PERMISSION_EXCEPTION_CODE, null, PERMISSION_EXCEPTION_CODE,
                 locale);
+
+        return new ErrorsDto(errorMessage);
+
+    }
+
+    @ExceptionHandler(UnsupportedFileTypeException.class)
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ResponseBody
+    public ErrorsDto handleUnsupportedFileTypeException(UnsupportedFileTypeException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(UNSUPPORTED_FILE_TYPE_EXCEPTION_CODE, null,
+                UNSUPPORTED_FILE_TYPE_EXCEPTION_CODE, locale);
 
         return new ErrorsDto(errorMessage);
 

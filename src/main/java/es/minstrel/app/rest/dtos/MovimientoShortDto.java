@@ -2,7 +2,7 @@ package es.minstrel.app.rest.dtos;
 
 import java.math.BigDecimal;
 
-public class ShortMovimientoDto {
+public class MovimientoShortDto {
 
     private Long id;
     private Long fecha;
@@ -13,10 +13,10 @@ public class ShortMovimientoDto {
     private BigDecimal total;
     private boolean gasto;
 
-    public ShortMovimientoDto() {
+    public MovimientoShortDto() {
     }
 
-    public ShortMovimientoDto(Long id, Long fecha, String razonSocial, String concepto, String categoria, String cuenta, BigDecimal total, boolean gasto) {
+    public MovimientoShortDto(Long id, Long fecha, String razonSocial, String concepto, String categoria, String cuenta, BigDecimal total, boolean gasto) {
         this.id = id;
         this.fecha = fecha;
         this.razonSocial = razonSocial;

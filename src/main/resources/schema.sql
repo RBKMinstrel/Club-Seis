@@ -103,12 +103,15 @@ CREATE TABLE Movimiento
 CREATE TABLE Factura
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT,
-    filename     VARCHAR(120) NOT NULL,
     filepath     VARCHAR(120) NOT NULL,
-    fecha        DATE         NOT NULL,
+    codigo    VARCHAR(30),
+    tipo      TINYINT,
+    anotacion VARCHAR(120),
+    emisor    VARCHAR(120),
+    receptor  VARCHAR(120),
     movimientoId BIGINT       NOT NULL,
     CONSTRAINT FacturaPK PRIMARY KEY (id),
-    CONSTRAINT FacturaMovimientoFK FOREIGN KEY (movimientoId) REFERENCES Movimiento (id)
+    CONSTRAINT FacturaMovimientoFK FOREIGN KEY (movimientoId) REFERENCES Movimiento (id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE Articulo

@@ -84,3 +84,6 @@ export const getMovimiento = state =>
 
 export const getResumen = state =>
     getModuleState(state).resumen;
+
+export const getFacturasSearch = state =>
+    getModuleState(state).facturasSearch;

@@ -3,7 +3,9 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
 import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.FileType;
 import es.minstrel.app.model.services.utils.SummaryConta;
 
 import java.io.IOException;
@@ -53,15 +55,16 @@ public interface ContabilidadService {
     Movimiento getMovimiento(Long id)
             throws InstanceNotFoundException;
 
-    void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
-            throws InstanceNotFoundException;
+    void createMovimiento(Movimiento movimiento, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId,
+                          Factura factura, String fileExtension, String fileContent)
+            throws InstanceNotFoundException, UnsupportedFileTypeException, IOException;
 
     void updateMovimiento(Long id, LocalDate fecha, boolean esGasto, BigDecimal base0, BigDecimal base4, BigDecimal base10,
                           BigDecimal base21, Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId)
             throws InstanceNotFoundException;
 
     void deleteMovimiento(Long id)
-            throws InstanceNotFoundException;
+            throws InstanceNotFoundException, IOException;
 
     SummaryConta getResumenBalance(LocalDate fechaInicio, LocalDate fechaFin);
 
@@ -69,5 +72,10 @@ public interface ContabilidadService {
             throws IOException;
 
     int uploadExcel(InputStream file) throws IOException;
+
+    Block<Factura> getFacturasBlock(String keyword, int page, int size);
+
+    FileType getFacturaFile(Long facturaId)
+            throws InstanceNotFoundException, IOException;
 
 }

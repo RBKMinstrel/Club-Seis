@@ -1,6 +1,7 @@
 import {Link, Outlet} from "react-router-dom";
 import {useSelector} from "react-redux";
 
+import Logo from "../../../assets/logo.png";
 import "./Base.css";
 import {NavSidebar} from "../../common";
 
@@ -19,13 +20,9 @@ const Base = () => {
                 {name: "Conceptos", url: "/gestion/contabilidad/conceptos"},
                 {name: "Categorías", url: "/gestion/contabilidad/categorias"},
                 {name: "Cuentas", url: "/gestion/contabilidad/cuentas"},
-                {name: "Resumen", url: "/gestion/contabilidad/resumen"}
+                {name: "Resumen", url: "/gestion/contabilidad/resumen"},
+                {name: "Facturas", url: "/gestion/contabilidad/facturas"},
             ]
-        },
-        {
-            name: "Facturas",
-            url: "/gestion/facturas",
-            subItems: []
         },
         {
             name: "Mercancías",
@@ -57,9 +54,7 @@ const Base = () => {
                 </Link>
                 <div className="headerContent">
                     <div className="logoClub">
-                        <div>
-                            Icono
-                        </div>
+                        <img src={Logo} alt="Logo Seis do nadal"/>
                         <h1>Seis do Nadal</h1>
                     </div>
                     <div className="userInfo">

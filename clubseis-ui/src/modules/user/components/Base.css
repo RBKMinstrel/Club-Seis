@@ -44,6 +44,10 @@
     gap: 20px;
 }
 
+.logoClub img {
+    width: 60px;
+}
+
 .userInfo {
     width: 100%;
     display: flex;

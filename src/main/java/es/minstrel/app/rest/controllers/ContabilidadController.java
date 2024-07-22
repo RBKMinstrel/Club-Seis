@@ -1,10 +1,13 @@
 package es.minstrel.app.rest.controllers;
 
+import es.minstrel.app.model.entities.Factura;
 import es.minstrel.app.model.entities.Movimiento;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
 import es.minstrel.app.model.services.ContabilidadService;
 import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.FileType;
 import es.minstrel.app.model.services.utils.SummaryConta;
 import es.minstrel.app.rest.common.ErrorsDto;
 import es.minstrel.app.rest.dtos.*;
@@ -26,6 +29,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
+import static es.minstrel.app.rest.dtos.FacturaConversors.toFactura;
+import static es.minstrel.app.rest.dtos.FacturaConversors.toFacturaDtos;
 import static es.minstrel.app.rest.dtos.MovimientoConversor.*;
 
 @RestController
@@ -132,7 +137,7 @@ public class ContabilidadController {
     }
 
     @GetMapping("/movimientos")
-    public BlockDto<ShortMovimientoDto> getMovimientos(@RequestParam(required = false) Boolean tipo,
+    public BlockDto<MovimientoShortDto> getMovimientos(@RequestParam(required = false) Boolean tipo,
                                                        @RequestParam(required = false) Long fecha,
                                                        @RequestParam(required = false) Long razonSocialId,
                                                        @RequestParam(required = false) Long conceptoId,
@@ -154,9 +159,12 @@ public class ContabilidadController {
 
     @PostMapping("/movimientos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createMovimientos(@RequestBody MovimientoDto movimientoDto) throws InstanceNotFoundException {
-        contabilidadService.createMovimiento(toMovimiento(movimientoDto), movimientoDto.getRazonSocial(),
-                movimientoDto.getConcepto(), movimientoDto.getCategoria(), movimientoDto.getCuenta());
+    public void createMovimientos(@RequestBody MovimientoParamsDto movimientoParamsDto)
+            throws InstanceNotFoundException, UnsupportedFileTypeException, IOException {
+        contabilidadService.createMovimiento(toMovimiento(movimientoParamsDto), movimientoParamsDto.getRazonSocial(),
+                movimientoParamsDto.getConcepto(), movimientoParamsDto.getCategoria(), movimientoParamsDto.getCuenta(),
+                movimientoParamsDto.getFileContent() == null ? null : toFactura(movimientoParamsDto),
+                movimientoParamsDto.getFileExtension(), movimientoParamsDto.getFileContent());
     }
 
     @PutMapping("/movimientos/{id}")
@@ -171,7 +179,7 @@ public class ContabilidadController {
     @DeleteMapping("/movimientos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMovimiento(@PathVariable Long id)
-            throws InstanceNotFoundException {
+            throws InstanceNotFoundException, IOException {
         contabilidadService.deleteMovimiento(id);
     }
 
@@ -221,6 +229,27 @@ public class ContabilidadController {
             System.out.println(e.getMessage());
             return -1;
         }
+    }
+
+    @GetMapping("/facturas")
+    public BlockDto<FacturaDto> getFacturasBlock(@RequestParam(required = false) String keyword,
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "12") int size) {
+
+        Block<Factura> facturasBlock = contabilidadService.getFacturasBlock(keyword, page, size);
+
+        return new BlockDto<>(toFacturaDtos(facturasBlock.getItems()), facturasBlock.getTotalItems());
+
+    }
+
+    @GetMapping("/facturas/{id}")
+    public FileTypeDto getFacturaFile(@PathVariable Long id)
+            throws InstanceNotFoundException, IOException {
+
+        FileType facturaFile = contabilidadService.getFacturaFile(id);
+
+        return new FileTypeDto(facturaFile.getContentType(), facturaFile.getBase64Content());
+
     }
 
 }

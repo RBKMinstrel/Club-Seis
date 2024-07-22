@@ -1,5 +1,9 @@
 package es.minstrel.app.rest.dtos;
 
+import es.minstrel.app.model.entities.Factura;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
+
 import java.math.BigDecimal;
 
 public class MovimientoDto {
@@ -15,6 +19,7 @@ public class MovimientoDto {
     private Long concepto;
     private Long categoria;
     private Long cuenta;
+    private Factura factura;
 
     public MovimientoDto() {
     }
@@ -119,5 +124,14 @@ public class MovimientoDto {
 
     public void setCuenta(Long cuenta) {
         this.cuenta = cuenta;
+    }
+
+    @OneToOne(mappedBy = "movimiento", fetch = FetchType.LAZY)
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
 }

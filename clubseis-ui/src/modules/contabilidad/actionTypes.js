@@ -8,3 +8,5 @@ export const FIND_MOVIMIENTO_BY_ID_COMPLETED = "project/contabilidad/findMovimie
 export const CLEAR_MOVIMIENTO = "project/contabilidad/clearMovimiento";
 export const GET_RESUMEN_COMPLETED = "project/contabilidad/getResumenCompleted";
 export const CLEAR_RESUMEN = "project/contabilidad/clearResumen";
+export const FIND_FACTURAS_SEARCH_COMPLETED = "project/contabilidad/findFacturasSearchCompleted";
+export const CLEAR_FACTURAS_SEARCH = "project/contabilidad/clearFacturasSearch";

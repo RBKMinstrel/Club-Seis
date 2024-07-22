@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
@@ -42,7 +42,22 @@ const CreateMovimiento = () => {
     const [concepto, setConcepto] = useState();
     const [categoria, setCategoria] = useState();
     const [cuenta, setCuenta] = useState();
+    const [factura, setFactura] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [fileExtension, setFileExtension] = useState('');
+    const [fileContent, setFileContent] = useState('');
+    const [codigo, setCodigo] = useState('');
+    const [tipo, setTipo] = useState(1);
+    const [anotacion, setAnotacion] = useState('');
+    const [emisorReceptor, setEmisorReceptor] = useState('');
     const [backendErrors, setBackendErrors] = useState(null);
+
+    const tiposOptions = [
+        {label: "Factura", value: 1},
+        {label: "Recibi", value: 2},
+    ];
+
+    const fileInputRef = useRef(null);
 
     const iva4 = redondear(base4 * 0.04);
     const iva10 = redondear(base10 * 0.1);
@@ -53,13 +68,51 @@ const CreateMovimiento = () => {
 
     let form;
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1];
+                setFileExtension(file.type);
+                setFileContent(base64String);
+                setSelectedFile(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleReset = (e) => {
+        setFileExtension('');
+        setFileContent('');
+        setSelectedFile(null);
+        fileInputRef.current.value = null;
+    };
+
     const handleSubmit = event => {
 
         event.preventDefault();
 
         if (form.checkValidity()) {
 
+            let movimiento = {};
+
+            if (factura) {
+                movimiento = {
+                    tipo: tipo,
+                    codigo: codigo.trim() === '' ? null : codigo.trim(),
+                    fileContent: fileContent,
+                    fileExtension: fileExtension,
+                    anotacion: anotacion.trim() === '' ? null : anotacion.trim(),
+                }
+
+                movimiento = gasto
+                    ? {...movimiento, receptor: emisorReceptor.trim()}
+                    : {...movimiento, emisor: emisorReceptor.trim()};
+            }
+
             dispatch(actions.createMovimiento({
+                    ...movimiento,
                     fecha: dateChange(fecha),
                     esGasto: gasto,
                     base0: base0,
@@ -81,7 +134,6 @@ const CreateMovimiento = () => {
 
     }
 
-
     const selectMapper = (value, label) => {
         return ({value: value, label: label})
     };
@@ -91,17 +143,17 @@ const CreateMovimiento = () => {
     }
 
     return (
-        <div>
+        <div style={{display: "flex", flexDirection: "column", gap: 10}}>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
+            <BackLink style={{alignSelf: "start"}}/>
             <form ref={node => form = node}
                   className="column"
                   noValidate
                   onSubmit={e => handleSubmit(e)}>
-                <BackLink style={{alignSelf: "start"}}/>
                 <Section title="Datos identificativos">
                     <div className="row" style={{justifyContent: "space-around"}}>
                         <div className="column">
-                            <div className="column">
+                            <div className="row">
                                 <div>
                                     <input type="radio" value="ingreso" checked={!gasto}
                                            onChange={() => setGasto(false)}/>
@@ -119,6 +171,10 @@ const CreateMovimiento = () => {
                                     value={fecha}
                                     onChange={e => setFecha(e.target.value)}
                                 />
+                            </div>
+                            <div>
+                                <input type="checkbox" checked={factura} onChange={() => setFactura((prev) => !prev)}/>
+                                <label>Factura</label>
                             </div>
                         </div>
                         <div className="column">
@@ -229,6 +285,61 @@ const CreateMovimiento = () => {
                         </div>
                     </div>
                 </Section>
+                {factura && (
+                    <Section title="Subir factura">
+                        <div style={{display: "flex", justifyContent: "space-around", gap: 20}}>
+                            <div style={{display: "flex", flexDirection: "column", gap: 10}}>
+                                <div className="column begin">
+                                    <label>Tipo:</label>
+                                    <Select
+                                        value={tiposOptions.find(t => t.value === tipo)}
+                                        onChange={e => setTipo(e.value)}
+                                        options={tiposOptions}
+                                    />
+                                </div>
+                                <div className="column begin">
+                                    <label>Codigo:</label>
+                                    <input
+                                        type="text"
+                                        value={codigo}
+                                        onChange={e => setCodigo(e.target.value)}
+                                    />
+                                </div>
+                                <div className="column begin">
+                                    <label>Seleccione un archivo:</label>
+                                    <input
+                                        type="file"
+                                        required
+                                        onChange={handleFileChange}
+                                        accept="application/pdf"
+                                        ref={fileInputRef}
+                                    />
+                                </div>
+                            </div>
+                            <div style={{display: "flex", flexDirection: "column", gap: 10}}>
+                                <div className="column begin">
+                                    <label>Emisor/Receptor:</label>
+                                    <textarea
+                                        required
+                                        value={emisorReceptor}
+                                        onChange={e => setEmisorReceptor(e.target.value)}
+                                        rows="2"
+                                        cols="120"
+                                    />
+                                </div>
+                                <div className="column begin">
+                                    <label>Anotacion:</label>
+                                    <textarea
+                                        value={anotacion}
+                                        onChange={e => setAnotacion(e.target.value)}
+                                        rows="4"
+                                        cols="120"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </Section>
+                )}
                 <ActionButton
                     type="submit"
                     htmlType="submit"

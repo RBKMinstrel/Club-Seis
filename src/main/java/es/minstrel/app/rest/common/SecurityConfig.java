@@ -68,7 +68,9 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/contabilidad/movimientos/*")).hasRole("TESORERO")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/summary")).hasRole("TESORERO")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/descargar-excel")).hasRole("TESORERO")
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/subir-excel")).hasRole("TESORERO")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/contabilidad/subir-excel")).hasRole("TESORERO")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/facturas")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/facturas/*")).permitAll()
                         /*Peticiones relativas a mercanciaService*/
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/mercancias/tallas")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/mercancias/tallas")).permitAll()

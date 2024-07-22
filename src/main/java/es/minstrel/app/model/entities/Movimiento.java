@@ -20,6 +20,7 @@ public class Movimiento {
     private Concepto concepto;
     private Categoria categoria;
     private Cuenta cuenta;
+    private Factura factura;
 
     public Movimiento() {
     }
@@ -159,5 +160,14 @@ public class Movimiento {
     @Transient
     public BigDecimal getTotal() {
         return getBaseTotal().add(getIvaTotal());
+    }
+
+    @OneToOne(mappedBy = "movimiento")
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
 }

@@ -29,13 +29,11 @@ import static es.minstrel.app.rest.dtos.PedidoConversor.toPedidoDtos;
 @RequestMapping("/api/mercancias")
 public class MercanciaController {
 
-    private final static String Insufficient_Stock_Exception_CODE = "project.exceptions.InsufficientStockException";
+    private final static String INSUFFICIENT_STOCK_EXCEPTION_CODE = "project.exceptions.InsufficientStockException";
 
-    private final static String UnsupportedFileTypeException_CODE = "project.exceptions.UnsupportedFileTypeException";
+    private final static String EMPTY_CARRITO_EXCEPTION_CODE = "project.exceptions.EmptyCarritoException";
 
-    private final static String EmptyCarritoException_CODE = "project.exceptions.EmptyCarritoException";
-
-    private final static String EmptyAcquireException_CODE = "project.exceptions.EmptyAcquireException";
+    private final static String EMPTY_ACQUIRE_EXCEPTION_CODE = "project.exceptions.EmptyAcquireException";
 
 
     @Autowired
@@ -49,20 +47,8 @@ public class MercanciaController {
     @ResponseBody
     public ErrorsDto handleInsufficientStockException(InsufficientStockException exception, Locale locale) {
 
-        String errorMessage = messageSource.getMessage(Insufficient_Stock_Exception_CODE, null,
-                Insufficient_Stock_Exception_CODE, locale);
-
-        return new ErrorsDto(errorMessage);
-
-    }
-
-    @ExceptionHandler(UnsupportedFileTypeException.class)
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    @ResponseBody
-    public ErrorsDto handleUnsupportedFileTypeException(UnsupportedFileTypeException exception, Locale locale) {
-
-        String errorMessage = messageSource.getMessage(UnsupportedFileTypeException_CODE, null,
-                UnsupportedFileTypeException_CODE, locale);
+        String errorMessage = messageSource.getMessage(INSUFFICIENT_STOCK_EXCEPTION_CODE, null,
+                INSUFFICIENT_STOCK_EXCEPTION_CODE, locale);
 
         return new ErrorsDto(errorMessage);
 
@@ -73,8 +59,8 @@ public class MercanciaController {
     @ResponseBody
     public ErrorsDto handleEmptyAcquireException(EmptyAcquireException exception, Locale locale) {
 
-        String errorMessage = messageSource.getMessage(EmptyAcquireException_CODE, null,
-                EmptyAcquireException_CODE, locale);
+        String errorMessage = messageSource.getMessage(EMPTY_ACQUIRE_EXCEPTION_CODE, null,
+                EMPTY_ACQUIRE_EXCEPTION_CODE, locale);
 
         return new ErrorsDto(errorMessage);
 
@@ -85,8 +71,8 @@ public class MercanciaController {
     @ResponseBody
     public ErrorsDto handleEmptyCarritoException(EmptyCarritoException exception, Locale locale) {
 
-        String errorMessage = messageSource.getMessage(EmptyCarritoException_CODE, null,
-                EmptyCarritoException_CODE, locale);
+        String errorMessage = messageSource.getMessage(EMPTY_CARRITO_EXCEPTION_CODE, null,
+                EMPTY_CARRITO_EXCEPTION_CODE, locale);
 
         return new ErrorsDto(errorMessage);
 

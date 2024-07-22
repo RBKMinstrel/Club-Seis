@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -484,9 +485,9 @@ public class MercanciaServiceImpl implements MercanciaService {
         Page<Pedido> pedidoBlock;
 
         if (reserva == null || reserva.isEmpty()) {
-            pedidoBlock = pedidoDao.findAll(PageRequest.of(page, size));
+            pedidoBlock = pedidoDao.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha")));
         } else {
-            pedidoBlock = pedidoDao.findByReservaIsLikeIgnoreCase("%" + reserva + "%", PageRequest.of(page, size));
+            pedidoBlock = pedidoDao.findByReservaIsLikeIgnoreCase("%" + reserva + "%", PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha")));
         }
 
         return new Block<>(pedidoBlock.getContent(), pedidoBlock.getTotalElements());

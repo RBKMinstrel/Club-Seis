@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import backend from '../../backend';
+import {fileTypeDtoDowload} from "../utils/dowloadsUtils.js";
 
 const findAllRazonSocialCompleted = razonSocial => ({
     type: actionTypes.FIND_ALL_RAZON_SOCIAL_COMPLETED,
@@ -136,3 +137,24 @@ export const dowloadExcel = (criteria, onSuccess, onErrors) => () =>
 
 export const uploadExcel = (data, onSuccess, onErrors) => () =>
     backend.contabilidadService.uploadExcel(data, onSuccess, onErrors);
+
+const getFacturasSearchCompleted = facturasSearch => ({
+    type: actionTypes.FIND_FACTURAS_SEARCH_COMPLETED,
+    facturasSearch
+});
+
+export const getFacturasSearch = ({keyword, page, size}) => dispatch =>
+    backend.contabilidadService.getFacturasBlock(
+        {keyword, page, size},
+        facturasSearch => dispatch(getFacturasSearchCompleted(facturasSearch)),
+        error => console.error(error));
+
+const clearFacturasSearch = () => ({
+    type: actionTypes.CLEAR_FACTURAS_SEARCH
+});
+
+export const getFacturaFile = (id) => () =>
+    backend.contabilidadService.getFacturaFile(
+        id,
+        factura => fileTypeDtoDowload(factura.contentType, factura.base64Content, "factura"),
+        error => console.error(error));

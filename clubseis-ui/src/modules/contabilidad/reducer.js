@@ -9,7 +9,8 @@ const initialState = {
     cuentas: null,
     movimientoSearch: null,
     movimiento: null,
-    resumen: null
+    resumen: null,
+    facturasSearch: null
 };
 
 const razonSocial = (state = initialState.razonSocial, action) => {
@@ -119,6 +120,23 @@ const resumen = (state = initialState.resumen, action) => {
 
 }
 
+const facturasSearch = (state = initialState.facturasSearch, action) => {
+
+    switch (action.type) {
+
+        case actionTypes.FIND_FACTURAS_SEARCH_COMPLETED:
+            return action.facturasSearch;
+
+        case actionTypes.CLEAR_FACTURAS_SEARCH:
+            return initialState.facturasSearch;
+
+        default:
+            return state;
+
+    }
+
+}
+
 const reducer = combineReducers({
     razonSocial,
     conceptos,
@@ -127,6 +145,7 @@ const reducer = combineReducers({
     movimientoSearch,
     movimiento,
     resumen,
+    facturasSearch,
 });
 
 export default reducer;
