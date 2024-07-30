@@ -7,7 +7,7 @@ import {DataGrid, Pagination} from "../../common";
 import Filtros from "./Filtros";
 import UploadAsientos from "./UploadAsientos.jsx";
 
-import {dateChange} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber} from "../../utils/dataUtils.js";
 
 import * as actions from "../actions.js";
 import * as selectors from '../selectors';
@@ -43,7 +43,7 @@ const Movimientos = () => {
     useEffect(() => {
         setLoading(true);
         dispatch(actions.findMovimientos({
-            fecha: fecha !== '' ? dateChange(fecha) : null,
+            fecha: fecha !== '' ? fromStringDateToNumber(fecha) : null,
             tipo: tipo,
             razonSocialId: razonSocial,
             conceptoId: concepto,
@@ -130,7 +130,7 @@ const Movimientos = () => {
 
         dispatch(actions.dowloadExcel(
             {
-                fecha: fecha !== '' ? dateChange(fecha) : null,
+                fecha: fecha !== '' ? fromStringDateToNumber(fecha) : null,
                 tipo: tipo,
                 razonSocialId: razonSocial,
                 conceptoId: concepto,

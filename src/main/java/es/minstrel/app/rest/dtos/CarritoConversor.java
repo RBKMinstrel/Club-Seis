@@ -21,17 +21,18 @@ public class CarritoConversor {
                         .sorted(Comparator.comparing(CarritoItemDto::getArticuloName)).collect(Collectors.toList());
 
         return new CarritoDto(carrito.getId(), items, carrito.getTotalPrecio(),
-                carrito.getTotalPrecioSocio(), items.stream().allMatch(CarritoItemDto::isItemDisponible));
+                carrito.getTotalPrecioSocio(), carrito.getTotalPrecioAvaible(), carrito.getTotalPrecioSocioAvaible(),
+                items.stream().allMatch(CarritoItemDto::isItemDisponible));
 
     }
 
     private final static CarritoItemDto toCarritoItemDto(CarritoItem item) {
         Optional<Existencias> existenciasOptional = item.getArticulo().getExistenciaByTalla(item.getTalla());
-        boolean stockDisponible = existenciasOptional.isPresent() && existenciasOptional.get().getCantidad() >= item.getQuantity();
+        int stockDisponible = existenciasOptional.map(existencias -> (int) existencias.getCantidad()).orElse(0);
 
         return new CarritoItemDto(item.getArticulo().getId(), item.getArticulo().getName(),
                 item.getTalla() == null ? null : item.getTalla().getId(), item.getArticulo().getPrecio(),
-                item.getArticulo().getPrecioSocio(), (int) item.getQuantity(), stockDisponible);
+                item.getArticulo().getPrecioSocio(), (int) item.getQuantity(), stockDisponible >= item.getQuantity(), stockDisponible);
 
     }
 }

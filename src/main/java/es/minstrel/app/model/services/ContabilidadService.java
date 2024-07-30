@@ -3,8 +3,10 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.exceptions.UninitializedParameterException;
 import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
 import es.minstrel.app.model.services.utils.Block;
+import es.minstrel.app.model.services.utils.FacturaItem;
 import es.minstrel.app.model.services.utils.FileType;
 import es.minstrel.app.model.services.utils.SummaryConta;
 
@@ -13,6 +15,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 public interface ContabilidadService {
 
@@ -77,5 +80,19 @@ public interface ContabilidadService {
 
     FileType getFacturaFile(Long facturaId)
             throws InstanceNotFoundException, IOException;
+
+    FileType createRecebi(String receptor, String receptorRol, String emisor, String cantidad, String concepto, Locale locale)
+            throws IOException, UninitializedParameterException;
+
+    FileType createRecebi(Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, String receptor,
+                          String receptorRol, String emisor, BigDecimal cantidad, String concepto, Locale locale)
+            throws IOException, UninitializedParameterException, InstanceNotFoundException, UnsupportedFileTypeException;
+
+    FileType createFactura(LocalDate fecha, String codigo, String receptor, List<FacturaItem> facturaItems, Locale locale)
+            throws IOException, UninitializedParameterException;
+
+    FileType createFactura(Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, LocalDate fecha,
+                           String codigo, String receptor, List<FacturaItem> facturaItems, Locale locale)
+            throws IOException, UninitializedParameterException, InstanceNotFoundException, UnsupportedFileTypeException;
 
 }

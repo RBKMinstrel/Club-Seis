@@ -40,6 +40,11 @@ const Base = () => {
             subItems: []
         },
         {
+            name: "Configuracion",
+            url: "/gestion/configuracion",
+            subItems: []
+        },
+        {
             name: "Mi perfil",
             url: "/gestion/mi-perfil",
             subItems: []

@@ -10,7 +10,9 @@ import {
     Categorias,
     Conceptos,
     ContabilidadBase,
+    CreateFactura,
     CreateMovimiento,
+    CreateRecibi,
     Cuentas,
     DeleteMovimiento,
     FacturasSearch,
@@ -19,7 +21,7 @@ import {
     Movimientos,
     RazonesSociales,
     Resumen,
-    UpdateMovimiento
+    UpdateMovimiento,
 } from "../../contabilidad";
 import {
     Carrito,
@@ -31,6 +33,7 @@ import {
     Pedidos,
     UpdateArticulo,
 } from "../../mercancias";
+import {Configuration} from "../../configuracion";
 
 const App = () => {
 
@@ -78,6 +81,8 @@ const App = () => {
                             <Route path="resumen" element={<Resumen/>}/>
                             <Route path="facturas">
                                 <Route index element={<FacturasSearch/>}/>
+                                <Route path="crearRecibi" element={<CreateRecibi/>}/>
+                                <Route path="crearFactura" element={<CreateFactura/>}/>
                             </Route>
                             <Route path="conceptos" element={<Conceptos/>}/>
                             <Route path="cuentas" element={<Cuentas/>}/>
@@ -99,6 +104,7 @@ const App = () => {
                         <Route path="demanda" element={<Demanda/>}/>
                         <Route path="pedidos" element={<Pedidos/>}/>
                     </Route>
+                    <Route path="configuracion" element={<Configuration/>}/>
                 </Route>
             }
         </Routes>

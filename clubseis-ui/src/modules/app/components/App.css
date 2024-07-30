@@ -82,3 +82,7 @@
 .custom-table tbody tr:hover {
     background-color: #ddd;
 }
+
+.full-w {
+    width: 100%;
+}

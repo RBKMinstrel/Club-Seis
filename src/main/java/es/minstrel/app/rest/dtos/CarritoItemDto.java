@@ -11,12 +11,13 @@ public class CarritoItemDto {
     private BigDecimal articuloPrecioSocio;
     private int quantity;
     private boolean itemDisponible;
+    private int existencia;
 
     public CarritoItemDto() {
     }
 
     public CarritoItemDto(Long articuloId, String articuloName, Long tallaId, BigDecimal articuloPrecio,
-                          BigDecimal articuloPrecioSocio, int quantity, boolean itemDisponible) {
+                          BigDecimal articuloPrecioSocio, int quantity, boolean itemDisponible, int existencia) {
         this.articuloId = articuloId;
         this.articuloName = articuloName;
         this.tallaId = tallaId;
@@ -24,6 +25,7 @@ public class CarritoItemDto {
         this.articuloPrecioSocio = articuloPrecioSocio;
         this.quantity = quantity;
         this.itemDisponible = itemDisponible;
+        this.existencia = existencia;
     }
 
     public Long getArticuloId() {
@@ -80,5 +82,13 @@ public class CarritoItemDto {
 
     public void setItemDisponible(boolean itemDisponible) {
         this.itemDisponible = itemDisponible;
+    }
+
+    public int getExistencia() {
+        return existencia;
+    }
+
+    public void setExistencia(int existencia) {
+        this.existencia = existencia;
     }
 }

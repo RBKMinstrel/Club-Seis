@@ -4,6 +4,7 @@ import es.minstrel.app.model.entities.Factura;
 import es.minstrel.app.model.entities.Movimiento;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.exceptions.UninitializedParameterException;
 import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
 import es.minstrel.app.model.services.ContabilidadService;
 import es.minstrel.app.model.services.utils.Block;
@@ -29,8 +30,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
-import static es.minstrel.app.rest.dtos.FacturaConversors.toFactura;
-import static es.minstrel.app.rest.dtos.FacturaConversors.toFacturaDtos;
+import static es.minstrel.app.rest.dtos.FacturaConversors.*;
 import static es.minstrel.app.rest.dtos.MovimientoConversor.*;
 
 @RestController
@@ -247,6 +247,52 @@ public class ContabilidadController {
             throws InstanceNotFoundException, IOException {
 
         FileType facturaFile = contabilidadService.getFacturaFile(id);
+
+        return new FileTypeDto(facturaFile.getContentType(), facturaFile.getBase64Content());
+
+    }
+
+    @PostMapping("/facturas/mockRecibi")
+    public FileTypeDto mockRecibi(@RequestBody RecibiDto recibiDto, Locale locale)
+            throws IOException, UninitializedParameterException {
+
+        FileType facturaFile = contabilidadService.createRecebi(recibiDto.getReceptor(), recibiDto.getReceptorRol(),
+                recibiDto.getEmisor(), recibiDto.getPrecio().toString(), recibiDto.getConcepto(), locale);
+
+        return new FileTypeDto(facturaFile.getContentType(), facturaFile.getBase64Content());
+
+    }
+
+    @PostMapping("/facturas/createRecibi")
+    public FileTypeDto createRecibi(@RequestBody RecibiDto recibiDto, Locale locale)
+            throws IOException, UninitializedParameterException, InstanceNotFoundException, UnsupportedFileTypeException {
+
+        FileType facturaFile = contabilidadService.createRecebi(recibiDto.getRazonSocialId(), recibiDto.getConceptoId(),
+                recibiDto.getCategoriaId(), recibiDto.getCuentaId(), recibiDto.getReceptor(), recibiDto.getReceptorRol(),
+                recibiDto.getEmisor(), recibiDto.getPrecio(), recibiDto.getConcepto(), locale);
+
+        return new FileTypeDto(facturaFile.getContentType(), facturaFile.getBase64Content());
+
+    }
+
+    @PostMapping("/facturas/mockFactura")
+    public FileTypeDto mockFactura(@RequestBody FacturaParamsDto facturaParamsDto, Locale locale)
+            throws IOException, UninitializedParameterException {
+
+        FileType facturaFile = contabilidadService.createFactura(fromDays(facturaParamsDto.getFecha()),
+                facturaParamsDto.getCodigo(), facturaParamsDto.getReceptor(), toFacturaItems(facturaParamsDto.getFacturaItems()), locale);
+
+        return new FileTypeDto(facturaFile.getContentType(), facturaFile.getBase64Content());
+
+    }
+
+    @PostMapping("/facturas/createFactura")
+    public FileTypeDto createFactura(@RequestBody FacturaMovDto facturaMovDto, Locale locale)
+            throws IOException, UninitializedParameterException, InstanceNotFoundException, UnsupportedFileTypeException {
+
+        FileType facturaFile = contabilidadService.createFactura(facturaMovDto.getRazonSocialId(), facturaMovDto.getConceptoId(),
+                facturaMovDto.getCategoriaId(), facturaMovDto.getCuentaId(), fromDays(facturaMovDto.getFecha()),
+                facturaMovDto.getCodigo(), facturaMovDto.getReceptor(), toFacturaItems(facturaMovDto.getFacturaItems()), locale);
 
         return new FileTypeDto(facturaFile.getContentType(), facturaFile.getBase64Content());
 

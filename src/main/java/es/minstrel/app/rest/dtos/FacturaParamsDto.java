@@ -1,26 +1,54 @@
 package es.minstrel.app.rest.dtos;
 
-public class FacturaParamsDto extends FacturaDto {
+import java.util.List;
 
-    private String contentType;
-    private String base64Content;
+public class FacturaParamsDto {
+
+    private long fecha;
+    private String codigo;
+    private String receptor;
+    private List<FacturaItemDto> facturaItems;
 
     public FacturaParamsDto() {
     }
 
-    public String getContentType() {
-        return contentType;
+    public FacturaParamsDto(long fecha, String codigo, String receptor, List<FacturaItemDto> facturaItems) {
+        this.fecha = fecha;
+        this.codigo = codigo;
+        this.receptor = receptor;
+        this.facturaItems = facturaItems;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public long getFecha() {
+        return fecha;
     }
 
-    public String getBase64Content() {
-        return base64Content;
+    public void setFecha(long fecha) {
+        this.fecha = fecha;
     }
 
-    public void setBase64Content(String base64Content) {
-        this.base64Content = base64Content;
+    public String getCodigo() {
+        return codigo;
     }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getReceptor() {
+        return receptor;
+    }
+
+    public void setReceptor(String receptor) {
+        this.receptor = receptor;
+    }
+
+    public List<FacturaItemDto> getFacturaItems() {
+        return facturaItems;
+    }
+
+    public void setFacturaItems(List<FacturaItemDto> facturaItems) {
+        this.facturaItems = facturaItems;
+    }
+
 }

@@ -3,15 +3,21 @@ package es.minstrel.app.model.services;
 import es.minstrel.app.model.entities.*;
 import es.minstrel.app.model.exceptions.DuplicateInstanceException;
 import es.minstrel.app.model.exceptions.InstanceNotFoundException;
+import es.minstrel.app.model.exceptions.UninitializedParameterException;
 import es.minstrel.app.model.exceptions.UnsupportedFileTypeException;
-import es.minstrel.app.model.services.utils.Block;
-import es.minstrel.app.model.services.utils.FileType;
-import es.minstrel.app.model.services.utils.SummaryConta;
-import es.minstrel.app.model.services.utils.SummaryGeneric;
+import es.minstrel.app.model.services.utils.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,7 +28,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -30,7 +39,13 @@ import java.util.*;
 public class ContabilidadServiceImpl implements ContabilidadService {
 
     @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     private CommonService commonService;
+
+    @Autowired
+    private ConfiguracionService configuracionService;
 
     @Autowired
     private CategoriaDao categoriaDao;
@@ -642,6 +657,289 @@ public class ContabilidadServiceImpl implements ContabilidadService {
         Factura factura = getFacturaFromId(facturaId);
 
         return commonService.getFile(factura.getFilepath());
+    }
+
+    private static final float MARGIN_TOP = 50;
+    private static final float MARGIN_BOTTOM = 50;
+    private static final float MARGIN_LEFT = 50;
+    private static final float MARGIN_RIGHT = 50;
+    private static final float FONT_SIZE = 12;
+    private static final float LEADING = 1.5f * FONT_SIZE;
+    private final static String MAIN_BODY_RECIBI = "project.text.MainBodyRecibi";
+
+    private float writeEncabezado(PDPageContentStream contentStream, PDFont font1, float width, float height)
+            throws IOException, UninitializedParameterException {
+
+        // Escribir el título centrado
+        String titulo = configuracionService.findValorByClave("club").toUpperCase();
+        float tituloFontSize = 24;
+        contentStream.setFont(font1, tituloFontSize);
+        float tituloWidth = font1.getStringWidth(titulo) / 1000 * tituloFontSize;
+        float tituloX = (width - tituloWidth) / 2;
+        contentStream.beginText();
+        contentStream.newLineAtOffset(tituloX, height - (MARGIN_TOP + tituloFontSize));
+        contentStream.setNonStrokingColor(java.awt.Color.BLUE);
+        contentStream.showText(titulo);
+        contentStream.endText();
+
+        String subTitulo = configuracionService.findValorByClave("direccion") + ". Tfno.: " +
+                configuracionService.findValorByClave("telefono") + ". NIF " +
+                configuracionService.findValorByClave("nif") + " " + configuracionService.getValorByClave("otros");
+        float subTituloFontSize = 9;
+        contentStream.setFont(font1, subTituloFontSize);
+        float subTituloWidth = font1.getStringWidth(subTitulo) / 1000 * subTituloFontSize;
+        float subTituloX = (width - subTituloWidth) / 2;
+        contentStream.beginText();
+        contentStream.newLineAtOffset(subTituloX, height - (MARGIN_TOP + tituloFontSize + subTituloFontSize * 1.5f));
+        contentStream.showText(subTitulo);
+        contentStream.endText();
+
+        return (tituloFontSize * 1.5f + subTituloFontSize * 1.5f);
+    }
+
+    private float writeEncabezado(PDFA4 factura, PDFont font, float width, float height)
+            throws IOException, UninitializedParameterException {
+
+        // Escribir el título centrado
+        String titulo = configuracionService.findValorByClave("club").toUpperCase();
+        factura.writeTextAlignCenter(titulo, 24f, font, java.awt.Color.BLUE, height, width);
+
+        String subTitulo = configuracionService.findValorByClave("direccion") + ". Tfno.: " +
+                configuracionService.findValorByClave("telefono") + ". NIF " +
+                configuracionService.findValorByClave("nif") + " " + configuracionService.getValorByClave("otros");
+
+        float altura = factura.writeTextAlignCenter(subTitulo, 9f, font, java.awt.Color.BLUE, height - 24f, width);
+
+        return altura - 16f;
+    }
+
+    @Override
+    public FileType createRecebi(String receptor, String receptorRol, String emisor, String cantidad, String concepto, Locale locale)
+            throws IOException, UninitializedParameterException {
+
+        try (PDDocument recibi = new PDDocument()) {
+            PDFont font1 = new PDType1Font(FontName.HELVETICA);
+            PDPage page = new PDPage(PDRectangle.A4);
+            recibi.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(recibi, page);
+
+            // Obtener dimensiones de la página
+            PDRectangle mediaBox = page.getMediaBox();
+            float width = mediaBox.getWidth();
+            float height = mediaBox.getHeight();
+
+            float contentWidth = width - MARGIN_LEFT - MARGIN_RIGHT;
+
+            // Texto a escribir
+            Object[] parametros = new Object[]{
+                    receptor,
+                    receptorRol,
+                    configuracionService.findValorByClave("club"),
+                    emisor,
+                    cantidad + "€",
+                    concepto,
+            };
+            String text = messageSource.getMessage(MAIN_BODY_RECIBI, parametros, MAIN_BODY_RECIBI, locale);
+
+            //Añadir titulo
+            float heightEncabezado = writeEncabezado(contentStream, font1, width, height);
+
+            contentStream.beginText();
+            contentStream.setFont(font1, FONT_SIZE);
+            float actualHeight = height - MARGIN_TOP - heightEncabezado - 40;
+            contentStream.newLineAtOffset(MARGIN_LEFT, actualHeight);
+            contentStream.setNonStrokingColor(java.awt.Color.BLACK);
+
+            // Dividir texto en líneas que quepan en el ancho del contenido
+            List<String> lines = PDFA4.getLines(text, FONT_SIZE, font1, contentWidth);
+
+            for (String line : lines) {
+                contentStream.showText(line);
+                contentStream.newLineAtOffset(0, -LEADING);
+                actualHeight -= LEADING;
+
+                // Si la línea está fuera del área de contenido, crear una nueva página
+                if (actualHeight < MARGIN_BOTTOM) {
+                    contentStream.endText();
+                    contentStream.close();
+                    actualHeight = height - MARGIN_TOP;
+
+                    page = new PDPage(PDRectangle.A4);
+                    recibi.addPage(page);
+                    contentStream = new PDPageContentStream(recibi, page);
+                    contentStream.beginText();
+                    contentStream.setFont(font1, FONT_SIZE);
+                    contentStream.newLineAtOffset(MARGIN_LEFT, height - MARGIN_TOP);
+                }
+            }
+
+            contentStream.endText();
+            contentStream.close();
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            recibi.save(out);
+
+            return new FileType("application/pdf", out.toByteArray());
+
+        }
+
+    }
+
+    @Override
+    public FileType createRecebi(Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, String receptor,
+                                 String receptorRol, String emisor, BigDecimal cantidad, String concepto, Locale locale)
+            throws IOException, UninitializedParameterException, InstanceNotFoundException, UnsupportedFileTypeException {
+
+        Movimiento movimiento = new Movimiento(LocalDate.now(), false, cantidad, BigDecimal.ZERO,
+                BigDecimal.ZERO, BigDecimal.ZERO);
+        Factura factura = new Factura(null, Factura.Tipo.RECIBI, concepto, emisor, receptor);
+        FileType fileType = createRecebi(receptor, receptorRol, emisor, cantidad.toString(), concepto, locale);
+        createMovimiento(movimiento, razonSocialId, conceptoId, categoriaId, cuentaId, factura,
+                fileType.getContentType(), fileType.getBase64Content());
+
+        return fileType;
+    }
+
+    @Override
+    public FileType createFactura(LocalDate fecha, String codigo, String receptor, List<FacturaItem> facturaItems, Locale locale)
+            throws IOException, UninitializedParameterException {
+
+        PDFA4 factura = new PDFA4(50f);
+        PDFont font = new PDType1Font(FontName.HELVETICA);
+        float fontSize = 10f;
+        float height = factura.getAvaibleHeight();
+        float width = factura.getAvaibleWidth();
+
+        height = writeEncabezado(factura, font, width, height);
+        height -= 20f;
+
+        float withOffsetHeaderLeft = PDFA4.getWidthOfString("Factura a:", fontSize, font) + 10f;
+        factura.writeTextAlignLeft(List.of("Factura a:"), fontSize, font, null, height, width / 2);
+        float headerLeft = factura.writeTextAlignLeft(List.of(receptor.split("\n")), fontSize, font, null, height, (width / 2) - withOffsetHeaderLeft, withOffsetHeaderLeft);
+
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        float widhOffsetHeaderRight = width / 7;
+        factura.writeTextAlignRight(List.of("Nº factura: "), fontSize, font, null, height, (width / 2) - widhOffsetHeaderRight, widhOffsetHeaderRight);
+        float headerRight = factura.writeTextAlignRight(List.of(codigo), fontSize, font, null, height, widhOffsetHeaderRight);
+        factura.writeTextAlignRight(List.of("Fecha de factura: "), fontSize, font, null, headerRight, (width / 2) - widhOffsetHeaderRight, widhOffsetHeaderRight);
+        headerRight = factura.writeTextAlignRight(List.of(fecha.format(formatoFecha)), fontSize, font, null, headerRight, widhOffsetHeaderRight);
+
+        height = Math.min(headerLeft, headerRight);
+        height -= 30f;
+
+        List<Float> widthCells = List.of(width * 3 / 7, width / 7, width / 7, width / 7, width / 7);
+        List<Float> offSetCells = List.of(0f, 0f, width * 2 / 7, width / 7, 0f);
+
+        factura.writeTextAlignLeft("Concepto", fontSize, font, null, height, widthCells.get(0), offSetCells.get(0));
+        factura.writeTextAlignCenter("Cantidad", fontSize, font, null, height, widthCells.get(1), offSetCells.get(1));
+        factura.writeTextAlignRight("Precio", fontSize, font, null, height, widthCells.get(2), offSetCells.get(2));
+        factura.writeTextAlignRight("IVA", fontSize, font, null, height, widthCells.get(3), offSetCells.get(3));
+        height = factura.writeTextAlignRight("Importe", fontSize, font, null, height, widthCells.get(4), offSetCells.get(4));
+
+        height = factura.paintLine(0f, width, height);
+        height -= fontSize * 1.5f;
+
+        DecimalFormat formatoDinero = new DecimalFormat("#0.00");
+        for (FacturaItem facturaItem : facturaItems) {
+            float minHeight = height;
+            minHeight = Math.min(minHeight, factura.writeTextAlignLeft(facturaItem.getConcepto(), fontSize, font, null, height, widthCells.get(0), offSetCells.get(0)));
+            minHeight = Math.min(minHeight, factura.writeTextAlignCenter(Integer.toString(facturaItem.getCantidad()), fontSize, font, null, height, widthCells.get(1), offSetCells.get(1)));
+            minHeight = Math.min(minHeight, factura.writeTextAlignRight(formatoDinero.format(facturaItem.getPrecio()), fontSize, font, null, height, widthCells.get(2), offSetCells.get(2)));
+            minHeight = Math.min(minHeight, factura.writeTextAlignRight(facturaItem.getTipoIVA().toString(), fontSize, font, null, height, widthCells.get(3), offSetCells.get(3)));
+            minHeight = Math.min(minHeight, factura.writeTextAlignRight(formatoDinero.format(facturaItem.getPrecio().multiply(BigDecimal.valueOf(facturaItem.getCantidad()))), fontSize, font, null, height, widthCells.get(4), offSetCells.get(4)));
+
+            height = minHeight;
+        }
+
+        height = factura.paintLine(0f, width, height);
+        height -= fontSize * 1.5f;
+
+        BigDecimal subTotal = facturaItems.stream()
+                .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal subTotalIva4 = facturaItems.stream()
+                .filter(item -> item.getTipoIVA().equals(TipoIVA.IVA4))
+                .map(item ->
+                        item.getPrecio().multiply(BigDecimal.valueOf(0.04))
+                                .setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal subTotalIva10 = facturaItems.stream()
+                .filter(item -> item.getTipoIVA().equals(TipoIVA.IVA10))
+                .map(item ->
+                        item.getPrecio().multiply(BigDecimal.valueOf(0.1))
+                                .setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal subTotalIva21 = facturaItems.stream()
+                .filter(item -> item.getTipoIVA().equals(TipoIVA.IVA21))
+                .map(item ->
+                        item.getPrecio().multiply(BigDecimal.valueOf(0.21))
+                                .setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        factura.writeTextAlignLeft("Subtotal sin IVA", fontSize, font, null, height, width / 2, width / 2);
+        height = factura.writeTextAlignRight(formatoDinero.format(subTotal), fontSize, font, null, height, width / 2);
+
+        if (!subTotalIva4.equals(BigDecimal.ZERO)) {
+            factura.writeTextAlignLeft("IVA 4%", fontSize, font, null, height, width / 2, width / 2);
+            height = factura.writeTextAlignRight(formatoDinero.format(subTotalIva4), fontSize, font, null, height, width / 2);
+        }
+
+        if (!subTotalIva10.equals(BigDecimal.ZERO)) {
+            factura.writeTextAlignLeft("IVA 10%", fontSize, font, null, height, width / 2, width / 2);
+            height = factura.writeTextAlignRight(formatoDinero.format(subTotalIva10), fontSize, font, null, height, width / 2);
+        }
+
+        if (!subTotalIva21.equals(BigDecimal.ZERO)) {
+            factura.writeTextAlignLeft("IVA 21%", fontSize, font, null, height, width / 2, width / 2);
+            height = factura.writeTextAlignRight(formatoDinero.format(subTotalIva21), fontSize, font, null, height, width / 2);
+        }
+
+        factura.writeTextAlignLeft("Total EUR", fontSize, font, null, height, width / 2, width / 2);
+        height = factura.writeTextAlignRight("Subtotal sin IVA", fontSize, font, null, height, width / 2);
+
+        height = factura.paintLine(width / 2, width, height);
+        height -= fontSize * 1.5f;
+
+        BigDecimal total = subTotal.add(subTotalIva4).add(subTotalIva10).add(subTotalIva21);
+
+        factura.writeTextAlignLeft("Importe a pagar (EUR)", fontSize, font, null, height, width / 2, width / 2);
+        factura.writeTextAlignRight(formatoDinero.format(total), fontSize, font, null, height, width / 2);
+
+        return factura.close();
+    }
+
+    @Override
+    public FileType createFactura(Long razonSocialId, Long conceptoId, Long categoriaId, Long cuentaId, LocalDate fecha,
+                                  String codigo, String receptor, List<FacturaItem> facturaItems, Locale locale)
+            throws IOException, UninitializedParameterException, InstanceNotFoundException, UnsupportedFileTypeException {
+        BigDecimal subTotalIva4 = facturaItems.stream()
+                .filter(item -> item.getTipoIVA().equals(TipoIVA.IVA4))
+                .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal subTotalIva10 = facturaItems.stream()
+                .filter(item -> item.getTipoIVA().equals(TipoIVA.IVA10))
+                .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal subTotalIva21 = facturaItems.stream()
+                .filter(item -> item.getTipoIVA().equals(TipoIVA.IVA21))
+                .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Movimiento movimiento = new Movimiento(LocalDate.now(), false, BigDecimal.ZERO, subTotalIva4,
+                subTotalIva10, subTotalIva21);
+        Factura factura = new Factura(null, Factura.Tipo.FACTURA, receptor.split("\n")[0], configuracionService.findValorByClave("club"), receptor);
+        FileType fileType = createFactura(fecha, codigo, receptor, facturaItems, locale);
+        createMovimiento(movimiento, razonSocialId, conceptoId, categoriaId, cuentaId, factura,
+                fileType.getContentType(), fileType.getBase64Content());
+
+        return fileType;
+
     }
 
 }

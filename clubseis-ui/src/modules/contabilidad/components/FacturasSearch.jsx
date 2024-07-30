@@ -101,6 +101,18 @@ const FacturasSearch = () => {
                     value={keywords}
                     onChange={e => setKeywords(e.target.value)}
                 />
+                <div style={{display: "flex", gap: 10}}>
+                    <span
+                        onClick={() => navigate("/gestion/contabilidad/facturas/crearFactura")}
+                        style={{fontSize: '20px'}}
+                        className="fa-solid fa-train"
+                    />
+                    <span
+                        onClick={() => navigate("/gestion/contabilidad/facturas/crearRecibi")}
+                        style={{fontSize: '20px'}}
+                        className="fa-solid fa-circle"
+                    />
+                </div>
             </div>
             <br/>
             <DataGrid

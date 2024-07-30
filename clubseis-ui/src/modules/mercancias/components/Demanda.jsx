@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {ActionButton, DataGrid} from "../../common";
 import {useEffect, useState} from "react";
-import {dateChange} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber} from "../../utils/dataUtils.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
@@ -29,8 +29,8 @@ const Demanda = () => {
         if (form.checkValidity()) {
 
             dispatch(actions.getDemanda(
-                dateChange(beginDate),
-                dateChange(endDate)
+                fromStringDateToNumber(beginDate),
+                fromStringDateToNumber(endDate)
             ));
         }
     };

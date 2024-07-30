@@ -98,3 +98,12 @@ export const getFacturasBlock = ({keyword, page, size}, onSuccess, onErrors) => 
 export const getFacturaFile = (id, onSuccess, onErrors) =>
     appFetch(`/contabilidad/facturas/${id}`, config('GET'), onSuccess, onErrors);
 
+export const mockRecibi = (recibi, onSuccess, onErrors) =>
+    appFetch(`/contabilidad/facturas/mockRecibi`, config('POST', recibi), onSuccess, onErrors);
+
+export const createRecibi = (recibi, onSuccess, onErrors) =>
+    appFetch(`/contabilidad/facturas/createRecibi`, config('POST', recibi), onSuccess, onErrors);
+
+export const mockFactura = (file, onSuccess, onErrors) =>
+    appFetch(`/contabilidad/facturas/mockFactura`, config('POST', file), onSuccess, onErrors);
+

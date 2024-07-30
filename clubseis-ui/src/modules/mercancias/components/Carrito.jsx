@@ -54,7 +54,9 @@ const Carrito = () => {
                     {
                         item.itemDisponible
                             ? "Disponible"
-                            : "Sin stock"
+                            : item.existencia === 0
+                                ? "Sin stock"
+                                : "Disponibles solo " + item.existencia
                     }
                 </p>
         },
@@ -286,23 +288,8 @@ const Carrito = () => {
     return (
         <div style={{display: "flex", flexDirection: "column", gap: 15}}>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
-                <BackLink style={{width: 130}}/>
-                <CleanCarrito/>
-            </div>
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-end"}}>
-                <div style={{display: "flex", flexDirection: "column"}}>
-                    <div>
-                        <h3>Precio No Socios: {<FormattedNumber value={carrito.totalPrice} style="currency"
-                                                                currency="EUR"/>}</h3>
-
-                    </div>
-                    <div>
-                        <h3>Precio Socios: {<FormattedNumber value={carrito.totalPriceSocio} style="currency"
-                                                             currency="EUR"/>}</h3>
-
-                    </div>
-                </div>
+                <BackLink style={{width: 130}}/>
                 <h3>
                     {
                         carrito.allItemDisponible
@@ -310,15 +297,51 @@ const Carrito = () => {
                             : "Existen articulos no disponibles"
                     }
                 </h3>
+                <CleanCarrito/>
             </div>
             <DataGrid
                 dataList={carrito.items}
                 getRowId={getRowId}
                 columns={columns}
             />
-            <div style={{display: "flex", justifyContent: "flex-end", gap: 20}}>
-                <PedirButton/>
-                <ComprarButton/>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    width: "40%"
+                }}>
+                    <div style={{display: "flex", flexDirection: "column"}}>
+                        <div>
+                            <h3>No Socios: {<FormattedNumber value={carrito.totalPrice} style="currency"
+                                                             currency="EUR"/>}</h3>
+
+                        </div>
+                        <div>
+                            <h3>Socios: {<FormattedNumber value={carrito.totalPriceSocio} style="currency"
+                                                          currency="EUR"/>}</h3>
+
+                        </div>
+                    </div>
+                    <div style={{display: "flex", flexDirection: "column"}}>
+                        <div>
+                            <h3>Disponibles No Socios: {<FormattedNumber value={carrito.totalPriceAvaible}
+                                                                         style="currency"
+                                                                         currency="EUR"/>}</h3>
+
+                        </div>
+                        <div>
+                            <h3>Disponibles Socios: {<FormattedNumber value={carrito.totalPriceSocioAvaible}
+                                                                      style="currency"
+                                                                      currency="EUR"/>}</h3>
+
+                        </div>
+                    </div>
+                </div>
+                <div style={{display: "flex", justifyContent: "flex-end", gap: 20}}>
+                    <PedirButton/>
+                    <ComprarButton/>
+                </div>
             </div>
         </div>
     );

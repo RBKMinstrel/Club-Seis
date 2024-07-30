@@ -1,5 +1,7 @@
 import * as actionTypes from './actionTypes';
+import * as selectors from './selectors';
 import backend from '../../backend';
+
 import {fileTypeDtoDowload} from "../utils/dowloadsUtils.js";
 
 const findAllRazonSocialCompleted = razonSocial => ({
@@ -7,10 +9,17 @@ const findAllRazonSocialCompleted = razonSocial => ({
     razonSocial
 });
 
-export const findAllRazonSocial = () => dispatch => {
-    backend.contabilidadService.findAllRazonSocial(
-        razonSocial => dispatch(findAllRazonSocialCompleted(razonSocial))
-    );
+export const findAllRazonSocial = (force = false) => (dispatch, getState) => {
+
+    const razonesSociales = selectors.getRazonesSociales(getState());
+
+    if (!razonesSociales || force) {
+
+        backend.contabilidadService.findAllRazonSocial(
+            razonSocial => dispatch(findAllRazonSocialCompleted(razonSocial))
+        );
+
+    }
 
 }
 
@@ -19,10 +28,17 @@ const findAllConceptosCompleted = conceptos => ({
     conceptos
 });
 
-export const findAllConceptos = () => dispatch => {
-    backend.contabilidadService.findAllConceptos(
-        conceptos => dispatch(findAllConceptosCompleted(conceptos))
-    );
+export const findAllConceptos = (force = false) => (dispatch, getState) => {
+
+    const conceptos = selectors.getConceptos(getState());
+
+    if (!conceptos || force) {
+
+        backend.contabilidadService.findAllConceptos(
+            conceptos => dispatch(findAllConceptosCompleted(conceptos))
+        );
+
+    }
 
 }
 
@@ -31,10 +47,17 @@ const findAllCategoriasCompleted = categorias => ({
     categorias
 });
 
-export const findAllCategorias = () => dispatch => {
-    backend.contabilidadService.findAllCategorias(
-        categorias => dispatch(findAllCategoriasCompleted(categorias))
-    );
+export const findAllCategorias = (force = false) => (dispatch, getState) => {
+
+    const categorias = selectors.getCategorias(getState());
+
+    if (!categorias || force) {
+
+        backend.contabilidadService.findAllCategorias(
+            categorias => dispatch(findAllCategoriasCompleted(categorias))
+        );
+
+    }
 
 }
 
@@ -43,10 +66,17 @@ const findAllCuentasCompleted = cuentas => ({
     cuentas
 });
 
-export const findAllCuentas = () => dispatch => {
-    backend.contabilidadService.findAllCuentas(
-        cuentas => dispatch(findAllCuentasCompleted(cuentas))
-    );
+export const findAllCuentas = (force = false) => (dispatch, getState) => {
+
+    const cuentas = selectors.getCuentas(getState());
+
+    if (!cuentas || force) {
+
+        backend.contabilidadService.findAllCuentas(
+            cuentas => dispatch(findAllCuentasCompleted(cuentas))
+        );
+
+    }
 
 }
 
@@ -158,3 +188,24 @@ export const getFacturaFile = (id) => () =>
         id,
         factura => fileTypeDtoDowload(factura.contentType, factura.base64Content, "factura"),
         error => console.error(error));
+
+export const mockRecibi = (recibi, onErrors) => () =>
+    backend.contabilidadService.mockRecibi(
+        recibi,
+        factura => fileTypeDtoDowload(factura.contentType, factura.base64Content, "recibi"),
+        error => onErrors(error));
+
+export const createRecibi = (recibi, onSuccess, onErrors) => () =>
+    backend.contabilidadService.createRecibi(
+        recibi,
+        factura => {
+            fileTypeDtoDowload(factura.contentType, factura.base64Content, "recibi");
+            onSuccess();
+        },
+        error => onErrors(error));
+
+export const mockFactura = (file, onErrors) => () =>
+    backend.contabilidadService.mockFactura(
+        file,
+        factura => fileTypeDtoDowload(factura.contentType, factura.base64Content, "factura"),
+        error => onErrors(error));

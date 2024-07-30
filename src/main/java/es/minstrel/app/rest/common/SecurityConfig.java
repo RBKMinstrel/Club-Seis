@@ -36,6 +36,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(antMatcher("/*")).permitAll()
+                        /*Peticiones relativas a configuracionService*/
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/configuracion/configBase")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/configuracion/configBase")).permitAll()
                         /*Peticiones relativas a userService*/
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/login")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/user/loginFromServiceToken")).permitAll()
@@ -71,6 +74,10 @@ public class SecurityConfig {
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/contabilidad/subir-excel")).hasRole("TESORERO")
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/facturas")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/contabilidad/facturas/*")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/contabilidad/facturas/mockRecibi")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/contabilidad/facturas/createRecibi")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/contabilidad/facturas/mockFactura")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/contabilidad/facturas/createFactura")).permitAll()
                         /*Peticiones relativas a mercanciaService*/
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/mercancias/tallas")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/mercancias/tallas")).permitAll()

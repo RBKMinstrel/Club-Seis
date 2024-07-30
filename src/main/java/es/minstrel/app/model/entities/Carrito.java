@@ -78,9 +78,23 @@ public class Carrito {
     }
 
     @Transient
+    public BigDecimal getTotalPrecioAvaible() {
+        return carritoItems.stream().map(i -> i.getArticulo().getPrecio().multiply(BigDecimal.valueOf(
+                Math.min(i.getQuantity(), i.getArticulo().getExistencias().stream().filter(e -> e.getTalla() == i.getTalla()).findFirst().map(Existencias::getCantidad).orElse((long) 0))
+        ))).reduce(new BigDecimal(0), BigDecimal::add);
+    }
+
+    @Transient
     public BigDecimal getTotalPrecioSocio() {
         return carritoItems.stream().map(i -> i.getArticulo().getPrecioSocio().multiply(BigDecimal.valueOf(i.getQuantity())))
                 .reduce(new BigDecimal(0), BigDecimal::add);
+    }
+
+    @Transient
+    public BigDecimal getTotalPrecioSocioAvaible() {
+        return carritoItems.stream().map(i -> i.getArticulo().getPrecioSocio().multiply(BigDecimal.valueOf(
+                Math.min(i.getQuantity(), i.getArticulo().getExistencias().stream().filter(e -> e.getTalla() == i.getTalla()).findFirst().map(Existencias::getCantidad).orElse((long) 0))
+        ))).reduce(new BigDecimal(0), BigDecimal::add);
     }
 
     @Transient

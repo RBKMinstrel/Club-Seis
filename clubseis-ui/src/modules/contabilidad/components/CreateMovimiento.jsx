@@ -168,6 +168,7 @@ const CreateMovimiento = () => {
                                 <label>Fecha</label>
                                 <input
                                     type="date"
+                                    required
                                     value={fecha}
                                     onChange={e => setFecha(e.target.value)}
                                 />

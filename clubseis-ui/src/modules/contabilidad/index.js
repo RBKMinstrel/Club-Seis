@@ -16,5 +16,7 @@ export {default as UpdateMovimiento} from './components/UpdateMovimiento';
 export {default as DeleteMovimiento} from './components/DeleteMovimiento';
 export {default as Resumen} from './components/Resumen';
 export {default as FacturasSearch} from './components/FacturasSearch';
+export {default as CreateRecibi} from './components/CreateRecibi';
+export {default as CreateFactura} from './components/CreateFactura';
 
 export default {actions, actionTypes, reducer, selectors};
