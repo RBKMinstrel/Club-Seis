@@ -20,6 +20,8 @@ const FindArticulos = () => {
 
     const noOption = {label: "Todos", value: null};
 
+    const [forceUpdate, setForceUpdate] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [name, setName] = useState('');
     const [genero, setGenero] = useState(noOption);
@@ -32,14 +34,22 @@ const FindArticulos = () => {
     }, []);
 
     useEffect(() => {
+        setPage(0);
+        setForceUpdate((prev) => !prev);
+    }, [name, tipo, genero, size]);
+
+    useEffect(() => {
+        setLoading(true);
         dispatch(actions.findArticulos({
-            name: name.length !== 0 ? name.trim() : null,
+            name: name.trim() !== '' ? name.trim() : null,
             tipo: tipo.value,
             genero: genero.value,
             page: page,
             size: size
-        }))
-    }, [name, tipo, genero, page, size]);
+        }));
+        setLoading(false);
+
+    }, [page, forceUpdate]);
 
     const articuloFuctions = (item) => {
         return (

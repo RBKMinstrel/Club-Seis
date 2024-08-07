@@ -16,7 +16,7 @@ const FooterList = ({count, page, setPage, size, setSize, total}) => {
     return (
         <div className="data-grid-footer-content">
             <div className="data-grid-rows-per-page">
-                <p>Filas por página</p>
+                <p>Elementos por página</p>
                 <Select
                     value={sizeOptions.find((e) => e.value === size)}
                     onChange={(e) => setSize(e.value)}

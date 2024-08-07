@@ -107,3 +107,6 @@ export const createRecibi = (recibi, onSuccess, onErrors) =>
 export const mockFactura = (file, onSuccess, onErrors) =>
     appFetch(`/contabilidad/facturas/mockFactura`, config('POST', file), onSuccess, onErrors);
 
+export const createFactura = (file, onSuccess, onErrors) =>
+    appFetch(`/contabilidad/facturas/createFactura`, config('POST', file), onSuccess, onErrors);
+

@@ -18,7 +18,7 @@ public class FacturaConversors {
 
     public static final FacturaDto toFacturaDto(Factura factura) {
         return new FacturaDto(factura.getId(), factura.getCodigo(), toDays(factura.getMovimiento().getFecha()),
-                factura.getTipo().getValor(), factura.getAnotacion(), factura.getEmisor(), factura.getEmisor());
+                factura.getTipo().getValor(), factura.getAnotacion(), factura.getEmisor(), factura.getReceptor());
     }
 
     public static final Factura toFactura(MovimientoParamsDto movimientoParamsDto) {

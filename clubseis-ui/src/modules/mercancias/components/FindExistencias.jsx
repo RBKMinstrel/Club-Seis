@@ -45,7 +45,7 @@ const FindExistencias = () => {
     const renderItem = (item) => {
 
         return (
-            <div style={{width: "100%", backgroundColor: "white", border: "2px solid", borderRadius: 5}}>
+            <div style={{backgroundColor: "white", border: "2px solid", borderRadius: 5}}>
                 <div style={{
                     display: "flex",
                     justifyContent: "space-between",

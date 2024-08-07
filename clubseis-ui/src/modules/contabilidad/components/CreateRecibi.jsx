@@ -165,7 +165,7 @@ const CreateRecibi = () => {
                         htmlType="button"
                         onClick={e => handleMockSubmit(e)}
                     >
-                        Mock
+                        Vista Previa
                     </ActionButton>
                     <ActionButton
                         type="primary"

@@ -2,6 +2,7 @@ import {Link, Outlet} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 import Logo from "../../../assets/logo.png";
+import LogoClubSeis from "../../../assets/LogoClubSeis.png";
 import "./Base.css";
 import {NavSidebar} from "../../common";
 
@@ -55,7 +56,10 @@ const Base = () => {
         <div className="body">
             <header className="header">
                 <Link to="/gestion">
-                    <div className="logo" style={{backgroundColor: "red"}}/>
+                    <img
+                        src={LogoClubSeis}
+                        className="logo"
+                    />
                 </Link>
                 <div className="headerContent">
                     <div className="logoClub">

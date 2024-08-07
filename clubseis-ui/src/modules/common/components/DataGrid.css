@@ -3,7 +3,6 @@
     border-collapse: collapse;
     background-color: white;
     border: 2px solid #bbb;
-    height: 100%;
 }
 
 .data-grid thead,

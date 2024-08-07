@@ -209,3 +209,12 @@ export const mockFactura = (file, onErrors) => () =>
         file,
         factura => fileTypeDtoDowload(factura.contentType, factura.base64Content, "factura"),
         error => onErrors(error));
+
+export const createFactura = (recibi, onSuccess, onErrors) => () =>
+    backend.contabilidadService.createFactura(
+        recibi,
+        factura => {
+            fileTypeDtoDowload(factura.contentType, factura.base64Content, "factura");
+            onSuccess();
+        },
+        error => onErrors(error));

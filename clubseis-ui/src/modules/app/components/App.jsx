@@ -7,19 +7,19 @@ import {Route, Routes} from "react-router-dom";
 import user, {Base, BaseIndex, ChangePassword, Login, Logout, UpdateProfile} from "../../user";
 import {DeleteUser, MainAdmin, UpdateUser, UserForm} from "../../admin";
 import {
-    Categorias,
-    Conceptos,
+    CategoriaPage,
+    ConceptoPage,
     ContabilidadBase,
     CreateFactura,
     CreateMovimiento,
     CreateRecibi,
-    Cuentas,
+    CuentaPage,
     DeleteMovimiento,
     FacturasSearch,
     LoadUpdateMovimiento,
     MovimientoDetails,
     Movimientos,
-    RazonesSociales,
+    RazonSocialPage,
     Resumen,
     UpdateMovimiento,
 } from "../../contabilidad";
@@ -84,10 +84,10 @@ const App = () => {
                                 <Route path="crearRecibi" element={<CreateRecibi/>}/>
                                 <Route path="crearFactura" element={<CreateFactura/>}/>
                             </Route>
-                            <Route path="conceptos" element={<Conceptos/>}/>
-                            <Route path="cuentas" element={<Cuentas/>}/>
-                            <Route path="categorias" element={<Categorias/>}/>
-                            <Route path="razones-sociales" element={<RazonesSociales/>}/>
+                            <Route path="conceptos" element={<ConceptoPage/>}/>
+                            <Route path="cuentas" element={<CuentaPage/>}/>
+                            <Route path="categorias" element={<CategoriaPage/>}/>
+                            <Route path="razones-sociales" element={<RazonSocialPage/>}/>
                         </Route>
                     }
                     <Route path="mercancias/" element={<MercanciaBase/>}>

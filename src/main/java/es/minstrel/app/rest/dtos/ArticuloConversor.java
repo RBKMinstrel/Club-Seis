@@ -57,7 +57,15 @@ public class ArticuloConversor {
     }
 
     public final static List<StockDto> toStockDtos(List<Existencias> existenciasList) {
-        return existenciasList.stream().map(ArticuloConversor::toStockDto).toList();
+        return existenciasList.stream().map(ArticuloConversor::toStockDto).sorted((s1, s2) -> {
+            if (s1.getId() == null) {
+                return 1;
+            } else if (s2.getId() == null) {
+                return -1;
+            } else {
+                return Long.compare(s1.getId(), s2.getId());
+            }
+        }).toList();
     }
 
     public final static StockDto toStockDto(Existencias existencias) {

@@ -16,7 +16,10 @@ const RazonSocialSelect = ({
     const dispatch = useDispatch();
     const razonSocialList = useSelector(selectors.getRazonesSociales);
 
-    const options = !razonSocialList ? [] : razonSocialList.map(c => ({label: c.name, value: c.id}));
+    const options = !razonSocialList ? [] : razonSocialList.map(c => ({
+        label: c.denominacion + " (" + c.cifnif + ")",
+        value: c.id
+    }));
 
     useEffect(() => {
         dispatch(actions.findAllRazonSocial());

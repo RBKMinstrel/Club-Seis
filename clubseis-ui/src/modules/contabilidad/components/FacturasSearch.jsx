@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-import {DataGrid, Pagination} from "../../common/index.js";
+import {ActionButton, DataGrid, Pagination} from "../../common/index.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
@@ -49,7 +49,7 @@ const FacturasSearch = () => {
         fecha: {
             header: () => <h4>Fecha</h4>,
             cell: (item) =>
-                <FormattedDate value={new Date(item.fecha * (1000 * 60 * 60 * 24))}/>
+                <p><FormattedDate value={new Date(item.fecha * (1000 * 60 * 60 * 24))}/></p>
         },
         codigo: {
             header: () => <h4>Codigo</h4>,
@@ -58,8 +58,19 @@ const FacturasSearch = () => {
         },
         tipo: {
             header: () => <h4>Tipo</h4>,
-            cell: (item) =>
-                <p>{item.tipo}</p>
+            cell: (item) => {
+                const getTipoName = (tipo) => {
+                    switch (tipo) {
+                        case 1:
+                            return 'Factura';
+                        case 2:
+                            return 'Recibi';
+                        default:
+                            return '';
+                    }
+                }
+                return (<p>{getTipoName(item.tipo)}</p>);
+            }
         },
         anotaciones: {
             header: () => <h4>Anotaciones</h4>,
@@ -102,16 +113,20 @@ const FacturasSearch = () => {
                     onChange={e => setKeywords(e.target.value)}
                 />
                 <div style={{display: "flex", gap: 10}}>
-                    <span
+                    <ActionButton
+                        type="secondary"
+                        htmlType="button"
                         onClick={() => navigate("/gestion/contabilidad/facturas/crearFactura")}
-                        style={{fontSize: '20px'}}
-                        className="fa-solid fa-train"
-                    />
-                    <span
+                    >
+                        Crear Factura
+                    </ActionButton>
+                    <ActionButton
+                        type="secondary"
+                        htmlType="button"
                         onClick={() => navigate("/gestion/contabilidad/facturas/crearRecibi")}
-                        style={{fontSize: '20px'}}
-                        className="fa-solid fa-circle"
-                    />
+                    >
+                        Crear Recibi
+                    </ActionButton>
                 </div>
             </div>
             <br/>

@@ -29,14 +29,14 @@ const CreateFactura = () => {
     const [fecha, setFecha] = useState(todayStringDate());
     const [codigo, setCodigo] = useState("");
     const [receptor, setReceptor] = useState("");
-    const [items, setItems] = useState([{key: Date.now(), concepto: '', cantidad: 1, iva: 1, amount: 0}]);
+    const [items, setItems] = useState([{key: Date.now(), concepto: '', cantidad: 1, iva: 1, amount: 0.01}]);
 
     const [backendErrors, setBackendErrors] = useState(null);
 
     let form;
 
     const handleAddItem = () => {
-        setItems([...items, {key: Date.now(), concepto: '', cantidad: 1, iva: 1, amount: 0}]);
+        setItems([...items, {key: Date.now(), concepto: '', cantidad: 1, iva: 1, amount: 0.01}]);
     };
 
     const handleRemoveItem = (index) => {
@@ -48,7 +48,11 @@ const CreateFactura = () => {
     const handleInputChange = (index, event) => {
         const {name, value} = event.target;
         const newItems = [...items];
-        newItems[index][name] = name === 'amount' ? parseFloat(value) || 0 : value;
+        if (name === 'cantidad' || name === 'amount') {
+            newItems[index][name] = Number(value) || 0;
+        } else {
+            newItems[index][name] = value;
+        }
         setItems(newItems);
     };
 
@@ -85,12 +89,15 @@ const CreateFactura = () => {
 
         if (form.checkValidity()) {
 
-            dispatch(actions.createRecibi({
+            dispatch(actions.createFactura({
                     conceptoId: concepto,
                     razonSocialId: razonSocial,
                     categoriaId: categoria,
                     cuentaId: cuenta,
+                    fecha: fromStringDateToNumber(fecha),
+                    codigo: codigo.trim(),
                     receptor: receptor.trim(),
+                    facturaItems: items,
                 },
                 () => navigate("/gestion/contabilidad/facturas"),
                 errors => setBackendErrors(errors)
@@ -162,6 +169,17 @@ const CreateFactura = () => {
                             <div style={{display: "flex", flexDirection: "column", gap: 10, maxWidth: "100%"}}>
                                 {items.map((item, index) => (
                                     <div style={{display: "flex", gap: 8}} key={item.key}>
+                                        <input
+                                            type="number"
+                                            name="cantidad"
+                                            required
+                                            min="1"
+                                            step="1"
+                                            placeholder="Cantidad"
+                                            value={item.cantidad}
+                                            onChange={(event) => handleInputChange(index, event)}
+                                            style={{width: 80}}
+                                        />
                                         <textarea
                                             name="concepto"
                                             required
@@ -180,6 +198,7 @@ const CreateFactura = () => {
                                             type="number"
                                             name="amount"
                                             required
+                                            min="0.01"
                                             step="0.01"
                                             placeholder="Cantidad"
                                             value={item.amount}
@@ -205,7 +224,7 @@ const CreateFactura = () => {
                         htmlType="button"
                         onClick={e => handleMockSubmit(e)}
                     >
-                        Mock
+                        Vista Previa
                     </ActionButton>
                     <ActionButton
                         type="primary"

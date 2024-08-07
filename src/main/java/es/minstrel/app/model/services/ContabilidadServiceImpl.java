@@ -793,7 +793,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
         Movimiento movimiento = new Movimiento(LocalDate.now(), false, cantidad, BigDecimal.ZERO,
                 BigDecimal.ZERO, BigDecimal.ZERO);
-        Factura factura = new Factura(null, Factura.Tipo.RECIBI, concepto, emisor, receptor);
+        Factura factura = new Factura(null, Factura.Tipo.RECIBI, concepto, emisor, configuracionService.findValorByClave("club"));
         FileType fileType = createRecebi(receptor, receptorRol, emisor, cantidad.toString(), concepto, locale);
         createMovimiento(movimiento, razonSocialId, conceptoId, categoriaId, cuentaId, factura,
                 fileType.getContentType(), fileType.getBase64Content());
@@ -933,7 +933,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
 
         Movimiento movimiento = new Movimiento(LocalDate.now(), false, BigDecimal.ZERO, subTotalIva4,
                 subTotalIva10, subTotalIva21);
-        Factura factura = new Factura(null, Factura.Tipo.FACTURA, receptor.split("\n")[0], configuracionService.findValorByClave("club"), receptor);
+        Factura factura = new Factura(null, Factura.Tipo.FACTURA, null, configuracionService.findValorByClave("club"), receptor);
         FileType fileType = createFactura(fecha, codigo, receptor, facturaItems, locale);
         createMovimiento(movimiento, razonSocialId, conceptoId, categoriaId, cuentaId, factura,
                 fileType.getContentType(), fileType.getBase64Content());
