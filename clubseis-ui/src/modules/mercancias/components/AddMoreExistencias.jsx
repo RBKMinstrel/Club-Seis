@@ -9,7 +9,11 @@ const AddMoreExistencias = ({articulo}) => {
     const dispatch = useDispatch();
 
     const tallas = useSelector(selectors.getTallas);
-    const stockList = tallas ? tallas.map(t => ({id: t.id, name: t.name, stock: 0})) : [];
+    const stockList = !tallas
+        ? []
+        : articulo.esRopa
+            ? tallas.map(t => ({id: t.id, name: t.name, stock: 0}))
+            : [{id: null, name: null, stock: 0}];
 
 
     const [stock, setStock] = useState(stockList);
@@ -46,15 +50,27 @@ const AddMoreExistencias = ({articulo}) => {
             >
                 <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
                 <div style={{width: 600, height: 200, display: "flex", flexWrap: "wrap", gap: 20}}>
-                    {stock.map((talla, indice) =>
-                        <div className="column begin">
-                            <label>Talla {talla.name}:</label>
-                            <input type="number" step="0" min="0" value={talla.stock}
-                                   onChange={e => setStock(
-                                       stock.map((t, i) => indice === i ? {...t, stock: Number(e.target.value)} : t)
-                                   )}/>
-                        </div>
-                    )}
+                    {
+                        articulo.esRopa
+                            ? (stock.map((talla, indice) =>
+                                <div className="column begin">
+                                    <label>Talla {talla.name}:</label>
+                                    <input type="number" step="0" min="0" value={talla.stock}
+                                           onChange={e => setStock(
+                                               stock.map((t, i) => indice === i ? {...t, stock: Number(e.target.value)} : t)
+                                           )}/>
+                                </div>
+                            ))
+                            : (
+                                <div className="column begin">
+                                    <label>Cantidad:</label>
+                                    <input type="number" step="0" min="0" value={stock[0].stock}
+                                           onChange={e => setStock([{id: null, name: null, stock: Number(e.target.value)}]
+                                           )}/>
+                                </div>
+                            )
+                    }
+
                 </div>
                 <div className="row" style={{justifyContent: "flex-end"}}>
                     <ActionButton

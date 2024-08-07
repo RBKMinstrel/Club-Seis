@@ -64,13 +64,13 @@ const FindExistencias = () => {
                         />
                     </div>
                 </div>
-                <div style={{display: "flex", gap: 20, padding: 10}}>
+                <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: 20, padding: 10}}>
                     <Image
-                        content={{contentType: item.fileType, base64Content: item.imageBytes}}
+                        content={{contentType: item.fileType || null, base64Content: item.imageBytes || null}}
                         name={item.name}
-                        style={{width: 200}}
+                        style={{height: 200, width: "auto"}}
                     />
-                    <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
+                    <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
                         <h3><strong>Precio:</strong></h3>
                         <h3 style={{alignSelf: "flex-end"}}>
                             <FormattedNumber value={item.precio} style="currency" currency="EUR"/>
@@ -80,13 +80,16 @@ const FindExistencias = () => {
                             <FormattedNumber value={item.precioSocio} style="currency" currency="EUR"/>
                         </h3>
                     </div>
-                    <div style={{display: "flex", gap: 8}}>
-                        {item.stockList.map(stock =>
-                            <div style={{display: "flex", flexDirection: "column"}}>
-                                <h4><strong>Talla {stock.name}:</strong></h4>
-                                <h4 style={{alignSelf: "flex-end"}}>{stock.stock}</h4>
-                            </div>
-                        )}
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        flexWrap: "wrap",
+                        width: "100%",
+                        gap: "20px"
+                    }}>
+                        {item.stockList.map((stock) => (
+                            <h4><strong>{!stock.name ? "Cantidad" : "Talla " + stock.name} :</strong> {stock.stock}</h4>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -103,7 +106,7 @@ const FindExistencias = () => {
                 setPage={setPage}
                 size={size}
                 setSize={setSize}
-                height={750}
+                height={650}
                 header={
                     <div style={{display: "flex", justifyContent: "space-between"}}>
                         <ArticulosFilter

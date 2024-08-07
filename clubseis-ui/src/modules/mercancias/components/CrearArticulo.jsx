@@ -13,7 +13,7 @@ const CrearArticulo = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const tallas = useSelector(selectors.getTallas);
+    const tallas = useSelector(selectors.getTallas) || [];
 
     const tallasSection = tallas.map(t => ({
         ...t,
@@ -84,9 +84,9 @@ const CrearArticulo = () => {
     };
 
     return (
-        <>
+        <div style={{display: "flex", flexDirection: "column", gap: 10}}>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-            <BackLink/>
+            <BackLink style={{width: 130}}/>
             <Section title="Nuevo articulo">
                 <form ref={node => form = node}
                       style={{display: "flex", gap: "40px"}}
@@ -170,7 +170,7 @@ const CrearArticulo = () => {
                     </div>
                 </form>
             </Section>
-        </>
+        </div>
     );
 }
 

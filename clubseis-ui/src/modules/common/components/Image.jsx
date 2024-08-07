@@ -1,12 +1,23 @@
+import NoImage from "../../../assets/NoImage.png";
+
 const Image = ({content, name, style = {}}) => {
-    return (
-        content ? (
+
+    if (!content || !name) {
+        return (
             <img
-                src={`data:${content.contentType};base64,${content.base64Content}`}
+                src={NoImage}
                 alt={`Imagen ${name} `}
                 style={style}
             />
-        ) : null
+        );
+    }
+
+    return (
+        <img
+            src={`data:${content.contentType};base64,${content.base64Content}`}
+            alt={`Imagen ${name} `}
+            style={style}
+        />
     );
 }
 
