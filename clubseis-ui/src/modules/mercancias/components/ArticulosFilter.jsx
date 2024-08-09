@@ -1,9 +1,13 @@
 import Select from "react-select";
-import {generoOptions, tipoOptions} from "./Options.jsx";
+import {getGeneroOptions, geTipoOptions} from "./Options.jsx";
+import {useIntl} from "react-intl";
 
 const ArticulosFilter = ({name, setName, genero, setGenero, tipo, setTipo}) => {
+    const intl = useIntl();
+    const tipoOptions = geTipoOptions(intl);
+    const generoOptions = getGeneroOptions(intl);
 
-    const noOption = {label: "Todos", value: null};
+    const noOption = {label: intl.formatMessage({id: 'project.global.fields.all'}), value: null};
 
     return (
         <div style={{display: "flex", gap: 20}}>

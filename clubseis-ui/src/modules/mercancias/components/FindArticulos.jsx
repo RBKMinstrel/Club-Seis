@@ -8,16 +8,17 @@ import * as actions from "../actions.js";
 import * as selectors from '../selectors';
 import AddToCarrito from "./AddToCarrito.jsx";
 import Image from "../../common/components/Image.jsx";
-import {FormattedNumber} from "react-intl";
+import {FormattedMessage, FormattedNumber, useIntl} from "react-intl";
 import ArticulosFilter from "./ArticulosFilter.jsx";
 
 const FindArticulos = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
 
     const articulos = useSelector(selectors.getArticulos);
 
-    const noOption = {label: "Todos", value: null};
+    const noOption = {label: intl.formatMessage({id: "project.global.fields.all"}), value: null};
 
     const [forceUpdate, setForceUpdate] = useState(false);
 
@@ -68,11 +69,11 @@ const FindArticulos = () => {
                         style={{height: 200, width: "auto"}}
                     />
                     <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
-                        <h3><strong>Precio:</strong></h3>
+                        <h3><strong><FormattedMessage id="project.global.fields.price"/>:</strong></h3>
                         <h3 style={{alignSelf: "flex-end"}}>
                             <FormattedNumber value={item.precio} style="currency" currency="EUR"/>
                         </h3>
-                        <h3><strong>Precio Socio:</strong></h3>
+                        <h3><strong><FormattedMessage id="project.global.fields.memberPrice"/>:</strong></h3>
                         <h3 style={{alignSelf: "flex-end"}}>
                             <FormattedNumber value={item.precioSocio} style="currency" currency="EUR"/>
                         </h3>
@@ -85,7 +86,11 @@ const FindArticulos = () => {
                         gap: "20px"
                     }}>
                         {item.stockList.map((stock) => (
-                            <h4><strong>{!stock.name ? "Cantidad" : "Talla " + stock.name} :</strong> {stock.stock}</h4>
+                            <h4><strong>
+                                {!stock.name
+                                    ? intl.formatMessage({id: 'project.global.fields.quantity'})
+                                    : intl.formatMessage({id: 'project.global.fields.size'}) + " " + stock.name} :
+                            </strong> {stock.stock}</h4>
                         ))}
                     </div>
                 </div>

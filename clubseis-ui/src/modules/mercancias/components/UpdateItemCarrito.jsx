@@ -1,13 +1,14 @@
 import {ActionButton, Modal} from "../../common";
 
 import * as actions from "../actions.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
-const UpdateItemCarrito = (
-    {
+const UpdateItemCarrito = ({
         dispatch, carritoId, articuloId, tallaId,
         itemsData, setItemsData, modalActive, setModalActive
-    }
-) => {
+                           }) => {
+    const intl = useIntl();
+
     const encontrarIndice = (array, condicion) => {//Find index no funciona
         for (let i = 0; i < array.length; i++) {
             if (condicion(array[i])) {
@@ -40,7 +41,7 @@ const UpdateItemCarrito = (
             />
             <Modal
                 isActive={isActive}
-                title="Actualizar articulo del carrito"
+                title={intl.formatMessage({id: "project.mercancias.UpdateItemCarrito.title"})}
                 onClose={() => setModalActive(null)}
             >
                 <div style={{
@@ -51,7 +52,7 @@ const UpdateItemCarrito = (
                     gap: 20
                 }}>
                     <div>
-                        <label>Cantidad </label>
+                        <label><FormattedMessage id="project.global.fields.quantity"/></label>
                         <input
                             type="number"
                             min="1"
@@ -73,7 +74,7 @@ const UpdateItemCarrito = (
                                     () => setModalActive(null)
                                 ))}
                         >
-                            Confirmar
+                            <FormattedMessage id="project.global.button.confirm"/>
                         </ActionButton>
                     </div>
                 </div>

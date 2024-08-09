@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
 import Select from "react-select";
+import {FormattedMessage} from "react-intl";
 
 const CategoriaSelect = ({
                              categoria,
@@ -26,7 +27,7 @@ const CategoriaSelect = ({
     return (
         <div style={style}>
             {label &&
-                <label>Categoria</label>
+                <label><FormattedMessage id="project.global.fields.category"/></label>
             }
             <Select
                 className="full-w"

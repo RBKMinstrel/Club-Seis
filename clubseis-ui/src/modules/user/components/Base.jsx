@@ -7,46 +7,60 @@ import "./Base.css";
 import {NavSidebar} from "../../common";
 
 import * as selector from "../selectors.js";
+import {useIntl} from "react-intl";
 
 const Base = () => {
+    const intl = useIntl();
     const userName = useSelector(selector.getUserName);
 
     const items = [
         {
-            name: "Contabilidad",
+            name: intl.formatMessage({id: "project.user.Base.accounting"}),
             url: "/gestion/contabilidad",
             subItems: [
-                {name: "Movimientos", url: "/gestion/contabilidad/asientos"},
-                {name: "Razón Social", url: "/gestion/contabilidad/razones-sociales"},
-                {name: "Conceptos", url: "/gestion/contabilidad/conceptos"},
-                {name: "Categorías", url: "/gestion/contabilidad/categorias"},
-                {name: "Cuentas", url: "/gestion/contabilidad/cuentas"},
-                {name: "Resumen", url: "/gestion/contabilidad/resumen"},
-                {name: "Facturas", url: "/gestion/contabilidad/facturas"},
+                {
+                    name: intl.formatMessage({id: "project.user.Base.transactions"}),
+                    url: "/gestion/contabilidad/asientos"
+                },
+                {
+                    name: intl.formatMessage({id: "project.global.fields.registeredName"}),
+                    url: "/gestion/contabilidad/razones-sociales"
+                },
+                {
+                    name: intl.formatMessage({id: "project.global.fields.concepts"}),
+                    url: "/gestion/contabilidad/conceptos"
+                },
+                {
+                    name: intl.formatMessage({id: "project.global.fields.categories"}),
+                    url: "/gestion/contabilidad/categorias"
+                },
+                {name: intl.formatMessage({id: "project.global.fields.acounts"}), url: "/gestion/contabilidad/cuentas"},
+                {name: intl.formatMessage({id: "project.user.Base.summary"}), url: "/gestion/contabilidad/resumen"},
+                {name: intl.formatMessage({id: "project.user.Base.bills"}), url: "/gestion/contabilidad/facturas"},
             ]
         },
         {
-            name: "Mercancías",
+            name: intl.formatMessage({id: "project.user.Base.merchandise"}),
             url: "/gestion/mercancias",
             subItems: [
-                {name: "Articulos", url: "/gestion/mercancias/articulos"},
-                {name: "Stock", url: "/gestion/mercancias/stock"},
-                {name: "Demanda", url: "/gestion/mercancias/demanda"},
-                {name: "Pedidos", url: "/gestion/mercancias/pedidos"},
+                {name: intl.formatMessage({id: "project.user.Base.articles"}), url: "/gestion/mercancias/articulos"},
+                {name: intl.formatMessage({id: "project.user.Base.stock"}), url: "/gestion/mercancias/stock"},
+                {name: intl.formatMessage({id: "project.user.Base.demand"}), url: "/gestion/mercancias/demanda"},
+                {name: intl.formatMessage({id: "project.user.Base.orders"}), url: "/gestion/mercancias/pedidos"},
             ]
         },
         {
-            name: "Usuarios",
+            name: intl.formatMessage({id: "project.admin.MainAdmin.users"}),
             url: "/gestion/admin",
             subItems: []
         },
         {
-            name: "Configuracion",
+            name: intl.formatMessage({id: "project.user.Base.profile"}),
             url: "/gestion/configuracion",
             subItems: []
         },
         {
-            name: "Mi perfil",
+            name: intl.formatMessage({id: "project.user.Base.profile"}),
             url: "/gestion/mi-perfil",
             subItems: []
         }

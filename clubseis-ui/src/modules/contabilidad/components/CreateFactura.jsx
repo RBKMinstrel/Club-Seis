@@ -2,11 +2,13 @@ import {ActionButton, BackLink, Errors, Section} from "../../common/index.js";
 import {useState} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import Select from "react-select";
+import {FormattedMessage, useIntl} from "react-intl";
+
 import ConceptoSelect from "./ConceptoSelect.jsx";
 import CuentaSelect from "./CuentaSelect.jsx";
 import CategoriaSelect from "./CategoriaSelect.jsx";
 import RazonSocialSelect from "./RazonSocialSelect.jsx";
-import Select from "react-select";
 import {fromStringDateToNumber, todayStringDate} from "../../utils/dataUtils.js";
 
 import * as actions from "../actions.js";
@@ -14,11 +16,13 @@ import * as actions from "../actions.js";
 const CreateFactura = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
+    const ivaName = intl.formatMessage({id: "'project.global.fields.vat'"});
 
     const ivaOptions = [
-        {label: "IVA4%", value: 1},
-        {label: "IVA10%", value: 2},
-        {label: "IVA21%", value: 3},
+        {label: ivaName + "4%", value: 1},
+        {label: ivaName + "10%", value: 2},
+        {label: ivaName + "21%", value: 3},
     ]
 
     const [concepto, setConcepto] = useState(null);
@@ -116,7 +120,7 @@ const CreateFactura = () => {
             <form ref={node => form = node}
                   className="column"
                   noValidate>
-                <Section title="Datos identificativos">
+                <Section title={intl.formatMessage({id: 'project.global.title.identificationData'})}>
                     <div className="row" style={{justifyContent: "space-around"}}>
                         <ConceptoSelect concepto={concepto} setConcepto={setConcepto} label={true} isClearable={true}
                                         style={{width: "20%"}}/>
@@ -128,11 +132,11 @@ const CreateFactura = () => {
                                       style={{width: "20%"}}/>
                     </div>
                 </Section>
-                <Section title="Datos factura">
+                <Section title={intl.formatMessage({id: 'project.global.title.billData'})}>
                     <div style={{display: "flex", justifyContent: "space-between", gap: 10, padding: "0 20px"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: 10, width: "35%"}}>
                             <div style={{display: "flex", flexDirection: "column", gap: 8}}>
-                                <label>Fecha factura:</label>
+                                <label><FormattedMessage id="project.contabilidad.CreateFactura.billData"/>:</label>
                                 <input
                                     type="date"
                                     value={fecha}
@@ -140,7 +144,7 @@ const CreateFactura = () => {
                                 />
                             </div>
                             <div style={{display: "flex", flexDirection: "column", gap: 8}}>
-                                <label>Codigo factura:</label>
+                                <label><FormattedMessage id="project.contabilidad.CreateFactura.billCode"/>:</label>
                                 <input
                                     type="text"
                                     value={codigo}
@@ -148,7 +152,7 @@ const CreateFactura = () => {
                                 />
                             </div>
                             <div style={{display: "flex", flexDirection: "column", gap: 8}}>
-                                <label>Factura a:</label>
+                                <label><FormattedMessage id="project.contabilidad.CreateFactura.billTo"/>:</label>
                                 <textarea
                                     required
                                     value={receptor}
@@ -159,7 +163,7 @@ const CreateFactura = () => {
                         </div>
                         <div style={{display: "flex", flexDirection: "column", gap: 10, width: "60%"}}>
                             <div style={{display: "flex", justifyContent: "space-between", gap: 10}}>
-                                <label>Items: </label>
+                                <label><FormattedMessage id="project.contabilidad.CreateFactura.billItems"/>: </label>
                                 <span
                                     onClick={handleAddItem}
                                     style={{fontSize: '20px'}}
@@ -175,7 +179,7 @@ const CreateFactura = () => {
                                             required
                                             min="1"
                                             step="1"
-                                            placeholder="Cantidad"
+                                            placeholder={intl.formatMessage({id: 'project.global.fields.quantity'})}
                                             value={item.cantidad}
                                             onChange={(event) => handleInputChange(index, event)}
                                             style={{width: 80}}
@@ -183,7 +187,7 @@ const CreateFactura = () => {
                                         <textarea
                                             name="concepto"
                                             required
-                                            placeholder="Concepto"
+                                            placeholder={intl.formatMessage({id: 'project.global.fields.concept'})}
                                             value={item.name}
                                             onChange={(event) => handleInputChange(index, event)}
                                             style={{flexGrow: 1, resize: 'vertical'}}
@@ -192,7 +196,7 @@ const CreateFactura = () => {
                                             value={ivaOptions.find(i => i.value === item.iva)}
                                             onChange={(selectedOption) => handleSelectChange(index, selectedOption)}
                                             options={ivaOptions}
-                                            placeholder="Select an option"
+                                            placeholder={ivaName}
                                         />
                                         <input
                                             type="number"
@@ -200,7 +204,7 @@ const CreateFactura = () => {
                                             required
                                             min="0.01"
                                             step="0.01"
-                                            placeholder="Cantidad"
+                                            placeholder={intl.formatMessage({id: 'project.global.fields.amount'})}
                                             value={item.amount}
                                             onChange={(event) => handleInputChange(index, event)}
                                         />
@@ -210,7 +214,7 @@ const CreateFactura = () => {
                                             onClick={() => handleRemoveItem(index)}
                                             disabled={items.length === 1}
                                         >
-                                            Quitar
+                                            <FormattedMessage id="project.global.button.remove"/>
                                         </ActionButton>
                                     </div>
                                 ))}

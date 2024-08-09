@@ -3,8 +3,11 @@ import {useState} from "react";
 import {ActionButton, Modal} from "../../common";
 
 import * as actions from "../actions.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const DeletePedido = ({dispatch, selectedRows, setBackendErrors, setForceUpdate}) => {
+    const intl = useIntl();
+
     const [modal, setModal] = useState(false);
 
     return (
@@ -15,16 +18,16 @@ const DeletePedido = ({dispatch, selectedRows, setBackendErrors, setForceUpdate}
                 onClick={() => setModal(true)}
                 disabled={selectedRows.length !== 1}
             >
-                Eliminar
+                <FormattedMessage id="project.global.button.delete"/>
             </ActionButton>
             <Modal
                 isActive={modal}
                 onClose={() => setModal(false)}
-                title="Eliminar pedido"
+                title={intl.formatMessage({id: 'project.mercancias.DeletePedido.title'})}
             >
                 <>
                     <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                        <p>Esta accion no se puede deshacer, esta seguro?</p>
+                        <p><FormattedMessage id="project.mercancias.DeletePedido.text"/></p>
                     </div>
                     <div style={{display: "flex", justifyContent: "space-between"}}>
                         <ActionButton
@@ -32,7 +35,7 @@ const DeletePedido = ({dispatch, selectedRows, setBackendErrors, setForceUpdate}
                             htmlType="button"
                             onClick={() => setModal(false)}
                         >
-                            Cancelar
+                            <FormattedMessage id="project.global.button.cancel"/>
                         </ActionButton>
                         <ActionButton
                             type="primary"
@@ -42,7 +45,7 @@ const DeletePedido = ({dispatch, selectedRows, setBackendErrors, setForceUpdate}
                                     Number(selectedRows[0].split("-")[1]),
                                     () => {
                                         setModal(false);
-                                        alert("Pedido eliminado exitosamente")
+                                        alert(intl.formatMessage({id: "project.mercancias.DeletePedido.success"}))
                                         setForceUpdate((prev) => !prev);
                                     },
                                     errors => {
@@ -51,7 +54,7 @@ const DeletePedido = ({dispatch, selectedRows, setBackendErrors, setForceUpdate}
                                     }
                                 ))}
                         >
-                            Aceptar
+                            <FormattedMessage id="project.global.button.confirm"/>
                         </ActionButton>
                     </div>
                 </>

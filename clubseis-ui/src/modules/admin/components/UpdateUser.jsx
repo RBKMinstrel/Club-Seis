@@ -1,18 +1,20 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from 'react-router-dom';
+import {FormattedMessage, useIntl} from "react-intl";
 
-import {Errors} from '../../common';
+import {ActionButton, BackLink, Errors, Section} from '../../common';
+import RolesSelect from "./RolesSelect.jsx";
+
 import * as actions from '../actions';
 import * as selectors from "../selectors";
 
-import RolesSelector from "./RolesSelector.jsx";
-
 const UpdateUser = () => {
-
-    const user = useSelector(selectors.getUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
+    const user = useSelector(selectors.getUser);
+
     const [userName, setUserName] = useState(user.userName);
     const [changePassword, setChangePassword] = useState(false);
     const [password, setPassword] = useState('');
@@ -22,8 +24,16 @@ const UpdateUser = () => {
     const [rolesIds, setRolesIds] = useState(user.rolesIds);
     const [backendErrors, setBackendErrors] = useState(null);
     const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
+
     let form;
     let confirmPasswordInput;
+
+    useEffect(() => {
+        setUserName(user.userName);
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setRolesIds(user.rolesIds);
+    }, [user])
 
     const handleSubmit = event => {
 
@@ -44,9 +54,7 @@ const UpdateUser = () => {
                 errors => setBackendErrors(errors)));
 
         } else {
-
             setBackendErrors(null);
-
         }
 
     }
@@ -79,129 +87,99 @@ const UpdateUser = () => {
 
     }
 
-    const handleChangeRoles = event => {
-        const options = event.target.options;
-        const values = [];
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].selected)
-                values.push(options[i].value);
-        }
-        setRolesIds(values);
-    }
+    if (!user)
+        return null;
 
     return (
-        <div>
+        <div style={{display: "flex", flexDirection: "column", gap: 10}}>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-            <div>
-                <h5>
-                    Crear usuario
-                </h5>
-                <div>
-                    <form ref={node => form = node}
-                          noValidate
-                          onSubmit={e => handleSubmit(e)}>
-                        <div>
+            <BackLink style={{alignSelf: "start"}}/>
+            <Section title={intl.formatMessage({id: 'project.admin.UpdateUser.title'})}>
+                <form ref={node => form = node}
+                      noValidate
+                      onSubmit={e => handleSubmit(e)}
+                      style={{display: "flex", flexDirection: "column", gap: 10}}
+                >
+                    <div style={{display: "flex", gap: 30}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
                             <label htmlFor="userName">
-                                Nombre de usuario
+                                <FormattedMessage id="project.global.fields.userName"/>
                             </label>
-                            <div>
-                                <input type="text" id="userName"
-                                       value={userName}
-                                       onChange={e => setUserName(e.target.value)}
-                                       autoFocus
-                                       required/>
-                                <div>
-                                    Nombre de usuario requerido
-                                </div>
-                            </div>
+                            <input type="text" id="userName"
+                                   value={userName}
+                                   onChange={e => setUserName(e.target.value)}
+                                   autoFocus
+                                   required/>
                         </div>
-                        <div>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                            <label htmlFor="firstName">
+                                <FormattedMessage id="project.global.fields.firstName"/>
+                            </label>
+                            <input type="text" id="firstName"
+                                   value={firstName}
+                                   onChange={e => setFirstName(e.target.value)}
+                                   required/>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                            <label htmlFor="lastName">
+                                <FormattedMessage id="project.global.fields.lastName"/>
+                            </label>
+                            <input type="text" id="lastName"
+                                   value={lastName}
+                                   onChange={e => setLastName(e.target.value)}
+                                   required/>
+                        </div>
+                    </div>
+                    <div style={{display: "flex", alignItems: "flex-end", gap: 30}}>
+                        <label htmlFor="changePassword">
                             <input type="checkbox" id="changePassword"
                                    checked={changePassword}
                                    onChange={() => setChangePassword(!changePassword)}/>
-                            <label htmlFor="changePassword">
-                                Cambiar contraseña?
-                            </label>
-                        </div>
-                        <div>
+                            <FormattedMessage id="project.admin.UpdateUser.changePassword"/>
+                        </label>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
                             <label htmlFor="password">
-                                Contraseña
+                                <FormattedMessage id="project.global.fields.password"/>
                             </label>
-                            <div>
-                                <input type="password" id="password"
-                                       value={password}
-                                       onChange={e => setPassword(e.target.value)}
-                                       disabled={!changePassword}
-                                       required={changePassword}/>
-                                <div>
-                                    Campo obligatorio
-                                </div>
-                            </div>
+                            <input type="password" id="password"
+                                   value={password}
+                                   disabled={!changePassword}
+                                   onChange={e => setPassword(e.target.value)}
+                                   required/>
                         </div>
-                        <div>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
                             <label htmlFor="confirmPassword">
-                                Repita la contraseña
+                                <FormattedMessage id="project.global.fields.repeatPassword"/>
                             </label>
+                            <input ref={node => confirmPasswordInput = node}
+                                   type="password" id="confirmPassword"
+                                   value={confirmPassword}
+                                   disabled={!changePassword}
+                                   onChange={e => handleConfirmPasswordChange(e)}
+                                   required/>
                             <div>
-                                <input ref={node => confirmPasswordInput = node}
-                                       type="password" id="confirmPassword"
-                                       value={confirmPassword}
-                                       onChange={e => handleConfirmPasswordChange(e)}
-                                       disabled={!changePassword}
-                                       required={changePassword}/>
-                                <div>
-                                    {passwordsDoNotMatch ?
-                                        <p> Contraseña no coincide </p> :
-                                        <p> Campo requerido </p>}
-
-                                </div>
+                                {passwordsDoNotMatch &&
+                                    <FormattedMessage id="project.global.fields.passwordNotMatched"/>}
                             </div>
                         </div>
-                        <div>
-                            <label htmlFor="firstName">
-                                Nombre
-                            </label>
-                            <div>
-                                <input type="text" id="firstName"
-                                       value={firstName}
-                                       onChange={e => setFirstName(e.target.value)}
-                                       required/>
-                                <div>
-                                    Nombre requerido
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="lastName">
-                                Apellidos
-                            </label>
-                            <div>
-                                <input type="text" id="lastName"
-                                       value={lastName}
-                                       onChange={e => setLastName(e.target.value)}
-                                       required/>
-                                <div>
-                                    Apellidos requerido
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="roles">
-                                Roles
-                            </label>
-                            <RolesSelector id="roles" multiple={true} value={rolesIds}
-                                           onChange={e => handleChangeRoles(e)}/>
-                        </div>
-                        <div>
-                            <div>
-                                <button type="submit">
-                                    Guardar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                    <RolesSelect
+                        roles={rolesIds}
+                        setRoles={setRolesIds}
+                        required
+                        isClearable
+                        label
+                        style={{display: "flex", flexDirection: "column", gap: 8}}
+                    />
+                    <ActionButton
+                        type="primary"
+                        htmlType="submit"
+                        style={{alignSelf: "end"}}
+                    >
+                        <FormattedMessage id="project.global.fields.update"/>
+                    </ActionButton>
+                </form>
+            </Section>
         </div>
     );
 

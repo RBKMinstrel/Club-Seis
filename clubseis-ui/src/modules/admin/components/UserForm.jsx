@@ -2,14 +2,18 @@ import {useState} from 'react';
 import {useDispatch} from "react-redux";
 import {useNavigate} from 'react-router-dom';
 
-import {Errors} from '../../common';
+import {ActionButton, BackLink, Errors, Section} from '../../common';
+import RolesSelect from "./RolesSelect.jsx";
+
 import * as actions from '../actions';
-import RolesSelector from "./RolesSelector.jsx";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const UserForm = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
+
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,6 +22,7 @@ const UserForm = () => {
     const [rolesIds, setRolesIds] = useState([]);
     const [backendErrors, setBackendErrors] = useState(null);
     const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
+
     let form;
     let confirmPasswordInput;
 
@@ -71,119 +76,88 @@ const UserForm = () => {
 
     }
 
-    const handleChangeRoles = event => {
-        const options = event.target.options;
-        const values = [];
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].selected)
-                values.push(options[i].value);
-        }
-        setRolesIds(values);
-    }
-
     return (
-        <div>
+        <div style={{display: "flex", flexDirection: "column", gap: 10}}>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-            <div>
-                <h5>
-                    Crear usuario
-                </h5>
-                <div>
-                    <form ref={node => form = node}
-                          noValidate
-                          onSubmit={e => handleSubmit(e)}>
-                        <div>
+            <BackLink style={{alignSelf: "start"}}/>
+            <Section title={intl.formatMessage({id: 'project.admin.UserForm.title'})}>
+                <form ref={node => form = node}
+                      noValidate
+                      onSubmit={e => handleSubmit(e)}
+                      style={{display: "flex", flexDirection: "column", gap: 10}}
+                >
+                    <div style={{display: "flex", gap: 30}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
                             <label htmlFor="userName">
-                                Nombre de usuario
+                                <FormattedMessage id="project.global.fields.userName"/>
                             </label>
-                            <div>
-                                <input type="text" id="userName"
-                                       value={userName}
-                                       onChange={e => setUserName(e.target.value)}
-                                       autoFocus
-                                       required/>
-                                <div>
-                                    Nombre de usuario requerido
-                                </div>
-                            </div>
+                            <input type="text" id="userName"
+                                   value={userName}
+                                   onChange={e => setUserName(e.target.value)}
+                                   autoFocus
+                                   required/>
                         </div>
-                        <div>
-                            <label htmlFor="password">
-                                Contraseña
-                            </label>
-                            <div>
-                                <input type="password" id="password"
-                                       value={password}
-                                       onChange={e => setPassword(e.target.value)}
-                                       required/>
-                                <div>
-                                    Campo obligatorio
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="confirmPassword">
-                                Repita la contraseña
-                            </label>
-                            <div>
-                                <input ref={node => confirmPasswordInput = node}
-                                       type="password" id="confirmPassword"
-                                       value={confirmPassword}
-                                       onChange={e => handleConfirmPasswordChange(e)}
-                                       required/>
-                                <div>
-                                    {passwordsDoNotMatch ?
-                                        <p> Contraseña no coincide </p> :
-                                        <p> Campo requerido </p>}
-
-                                </div>
-                            </div>
-                        </div>
-                        <div>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
                             <label htmlFor="firstName">
-                                Nombre
+                                <FormattedMessage id="project.global.fields.firstName"/>
                             </label>
-                            <div>
-                                <input type="text" id="firstName"
-                                       value={firstName}
-                                       onChange={e => setFirstName(e.target.value)}
-                                       required/>
-                                <div>
-                                    Nombre requerido
-                                </div>
-                            </div>
+                            <input type="text" id="firstName"
+                                   value={firstName}
+                                   onChange={e => setFirstName(e.target.value)}
+                                   required/>
                         </div>
-                        <div>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
                             <label htmlFor="lastName">
-                                Apellidos
+                                <FormattedMessage id="project.global.fields.lastName"/>
                             </label>
+                            <input type="text" id="lastName"
+                                   value={lastName}
+                                   onChange={e => setLastName(e.target.value)}
+                                   required/>
+                        </div>
+                    </div>
+                    <div style={{display: "flex", gap: 30}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                            <label htmlFor="password">
+                                <FormattedMessage id="project.global.fields.password"/>
+                            </label>
+                            <input type="password" id="password"
+                                   value={password}
+                                   onChange={e => setPassword(e.target.value)}
+                                   required/>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                            <label htmlFor="confirmPassword">
+                                <FormattedMessage id="project.global.fields.repeatPassword"/>
+                            </label>
+                            <input ref={node => confirmPasswordInput = node}
+                                   type="password" id="confirmPassword"
+                                   value={confirmPassword}
+                                   onChange={e => handleConfirmPasswordChange(e)}
+                                   required/>
                             <div>
-                                <input type="text" id="lastName"
-                                       value={lastName}
-                                       onChange={e => setLastName(e.target.value)}
-                                       required/>
-                                <div>
-                                    Apellidos requerido
-                                </div>
+                                {passwordsDoNotMatch &&
+                                    <FormattedMessage id="project.global.fields.passwordNotMatched"/>}
                             </div>
                         </div>
-                        <div>
-                            <label htmlFor="roles">
-                                Roles
-                            </label>
-                            <RolesSelector id="roles" multiple={true} value={rolesIds}
-                                           onChange={e => handleChangeRoles(e)}/>
-                        </div>
-                        <div>
-                            <div>
-                                <button type="submit">
-                                    Guardar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                    <RolesSelect
+                        roles={rolesIds}
+                        setRoles={setRolesIds}
+                        required
+                        isClearable
+                        label
+                        style={{display: "flex", flexDirection: "column", gap: 8}}
+                    />
+                    <ActionButton
+                        type="primary"
+                        htmlType="submit"
+                        style={{alignSelf: "end"}}
+                    >
+                        <FormattedMessage id="project.global.fields.create"/>
+                    </ActionButton>
+                </form>
+            </Section>
         </div>
     );
 

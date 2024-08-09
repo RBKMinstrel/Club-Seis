@@ -2,21 +2,14 @@ import {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
+import {fromStringDateToNumber, todayStringDate} from "../../utils/dataUtils.js";
 import {ActionButton, BackLink, Errors, Section} from "../../common";
 import Select from "react-select";
 
 import * as selectors from "../selectors";
 import * as actions from "../actions";
+import {FormattedMessage, useIntl} from "react-intl";
 
-const numberChange = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-};
-
-const dateChange = (date) => {
-    const selectedDate = new Date(date);
-    return Math.floor(selectedDate.getTime() / (1000 * 60 * 60 * 24));
-};
 
 function redondear(numero) {
     const factor = Math.pow(10, 2);
@@ -26,13 +19,14 @@ function redondear(numero) {
 const CreateMovimiento = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
 
     const razonSocialOptions = useSelector(selectors.getRazonesSociales);
     const conceptoOptions = useSelector(selectors.getConceptos);
     const categoriaOptions = useSelector(selectors.getCategorias);
     const cuentaOptions = useSelector(selectors.getCuentas);
 
-    const [fecha, setFecha] = useState(numberChange());
+    const [fecha, setFecha] = useState(todayStringDate());
     const [gasto, setGasto] = useState(false);
     const [base0, setBase0] = useState(0);
     const [base4, setBase4] = useState(0);
@@ -113,7 +107,7 @@ const CreateMovimiento = () => {
 
             dispatch(actions.createMovimiento({
                     ...movimiento,
-                    fecha: dateChange(fecha),
+                    fecha: fromStringDateToNumber(fecha),
                     esGasto: gasto,
                     base0: base0,
                     base4: base4,
@@ -150,22 +144,22 @@ const CreateMovimiento = () => {
                   className="column"
                   noValidate
                   onSubmit={e => handleSubmit(e)}>
-                <Section title="Datos identificativos">
+                <Section title={intl.formatMessage({id: 'project.global.title.identificationData'})}>
                     <div className="row" style={{justifyContent: "space-around"}}>
                         <div className="column">
                             <div className="row">
                                 <div>
                                     <input type="radio" value="ingreso" checked={!gasto}
                                            onChange={() => setGasto(false)}/>
-                                    <label>Ingreso</label>
+                                    <label><FormattedMessage id="project.global.fields.income"/></label>
                                 </div>
                                 <div>
                                     <input type="radio" value="gasto" checked={gasto} onChange={() => setGasto(true)}/>
-                                    <label>Gasto</label>
+                                    <label><FormattedMessage id="project.global.fields.spend"/></label>
                                 </div>
                             </div>
                             <div className="column">
-                                <label>Fecha</label>
+                                <label><FormattedMessage id="project.global.fields.date"/></label>
                                 <input
                                     type="date"
                                     required
@@ -175,12 +169,12 @@ const CreateMovimiento = () => {
                             </div>
                             <div>
                                 <input type="checkbox" checked={factura} onChange={() => setFactura((prev) => !prev)}/>
-                                <label>Factura</label>
+                                <label><FormattedMessage id="project.global.fields.bill"/></label>
                             </div>
                         </div>
                         <div className="column">
                             <div>
-                                <label>Razon Social</label>
+                                <label><FormattedMessage id="project.global.fields.registeredName"/></label>
                                 <Select
                                     className="selector"
                                     isClearable
@@ -191,7 +185,7 @@ const CreateMovimiento = () => {
                                 />
                             </div>
                             <div>
-                                <label>Concepto</label>
+                                <label><FormattedMessage id="project.global.fields.concept"/></label>
                                 <Select
                                     className="selector"
                                     isClearable
@@ -204,7 +198,7 @@ const CreateMovimiento = () => {
                         </div>
                         <div className="column">
                             <div>
-                                <label>Categoria</label>
+                                <label><FormattedMessage id="project.global.fields.category"/></label>
                                 <Select
                                     className="selector"
                                     isClearable
@@ -215,7 +209,7 @@ const CreateMovimiento = () => {
                                 />
                             </div>
                             <div>
-                                <label>Cuenta</label>
+                                <label><FormattedMessage id="project.global.fields.account"/></label>
                                 <Select
                                     className="selector"
                                     isClearable
@@ -228,70 +222,70 @@ const CreateMovimiento = () => {
                         </div>
                     </div>
                 </Section>
-                <Section title="Cuantia">
+                <Section title={intl.formatMessage({id: "project.global.fields.amount"})}>
                     <div className="row begin" style={{justifyContent: "space-evenly"}}>
                         <div className="column">
                             <div className="column begin">
-                                <label>Base 0:</label>
+                                <label><FormattedMessage id="project.global.fields.base"/> 0:</label>
                                 <input type="number" step="0.01" min="0" value={base0}
                                        onChange={e => setBase0(Number(e.target.value))}/>
                             </div>
                         </div>
                         <div className="column">
                             <div className="column begin">
-                                <label>Base 4:</label>
+                                <label><FormattedMessage id="project.global.fields.base"/> 4:</label>
                                 <input type="number" step="0.01" min="0" value={base4}
                                        onChange={e => setBase4(Number(e.target.value))}/>
                             </div>
                             <div className="column begin">
-                                <label>Iva 4:</label>
+                                <label><FormattedMessage id="project.global.fields.vat"/> 4:</label>
                                 <input type="number" value={iva4} disabled/>
                             </div>
                         </div>
                         <div className="column">
                             <div className="column begin">
-                                <label>Base 10:</label>
+                                <label><FormattedMessage id="project.global.fields.base"/> 10:</label>
                                 <input type="number" step="0.01" min="0" value={base10}
                                        onChange={e => setBase10(Number(e.target.value))}/>
                             </div>
                             <div className="column begin">
-                                <label>Iva 10:</label>
+                                <label><FormattedMessage id="project.global.fields.vat"/> 10:</label>
                                 <input type="number" value={iva10} disabled/>
                             </div>
                         </div>
                         <div className="column">
                             <div className="column begin">
-                                <label>Base 21:</label>
+                                <label><FormattedMessage id="project.global.fields.base"/> 21:</label>
                                 <input type="number" step="0.01" min="0" value={base21}
                                        onChange={e => setBase21(Number(e.target.value))}/>
                             </div>
                             <div className="column begin">
-                                <label>Iva 21:</label>
+                                <label><FormattedMessage id="project.global.fields.vat"/> 21:</label>
                                 <input type="number" value={iva21} disabled/>
                             </div>
                         </div>
                         <div className="column">
                             <div className="column begin">
-                                <label>Total Base:</label>
+                                <label><FormattedMessage id="project.global.fields.totalBase"/>:</label>
                                 <input type="number" value={baseTotal} disabled/>
                             </div>
                             <div className="column begin">
-                                <label>Total Iva:</label>
+                                <label><FormattedMessage id="project.global.fields.totalVAT"/>:</label>
                                 <input type="number" value={ivaTotal} disabled/>
                             </div>
                             <div className="column begin">
-                                <label>Total:</label>
+                                <label><FormattedMessage id="project.global.fields.total"/>:</label>
                                 <input type="number" value={total} disabled/>
                             </div>
                         </div>
                     </div>
                 </Section>
                 {factura && (
-                    <Section title="Subir factura">
+                    <Section title={intl.formatMessage({id: "'project.contabilidad.CreateMovimiento.uploadBill'"})}>
                         <div style={{display: "flex", justifyContent: "space-around", gap: 20}}>
                             <div style={{display: "flex", flexDirection: "column", gap: 10}}>
                                 <div className="column begin">
-                                    <label>Tipo:</label>
+                                    <label><FormattedMessage id="project.global.fields.type"/>:</label>
                                     <Select
                                         value={tiposOptions.find(t => t.value === tipo)}
                                         onChange={e => setTipo(e.value)}
@@ -299,7 +293,7 @@ const CreateMovimiento = () => {
                                     />
                                 </div>
                                 <div className="column begin">
-                                    <label>Codigo:</label>
+                                    <label><FormattedMessage id="project.global.fields.code"/>:</label>
                                     <input
                                         type="text"
                                         value={codigo}
@@ -307,7 +301,7 @@ const CreateMovimiento = () => {
                                     />
                                 </div>
                                 <div className="column begin">
-                                    <label>Seleccione un archivo:</label>
+                                    <label><FormattedMessage id="'project.global.fields.selectFile'"/>:</label>
                                     <input
                                         type="file"
                                         required
@@ -319,7 +313,8 @@ const CreateMovimiento = () => {
                             </div>
                             <div style={{display: "flex", flexDirection: "column", gap: 10}}>
                                 <div className="column begin">
-                                    <label>Emisor/Receptor:</label>
+                                    <label><FormattedMessage id="project.global.fields.transmitter"/>/<FormattedMessage
+                                        id="project.global.fields.receiver"/>:</label>
                                     <textarea
                                         required
                                         value={emisorReceptor}
@@ -329,7 +324,7 @@ const CreateMovimiento = () => {
                                     />
                                 </div>
                                 <div className="column begin">
-                                    <label>Anotacion:</label>
+                                    <label><FormattedMessage id="project.global.fields.annotation"/>:</label>
                                     <textarea
                                         value={anotacion}
                                         onChange={e => setAnotacion(e.target.value)}
@@ -346,7 +341,7 @@ const CreateMovimiento = () => {
                     htmlType="submit"
                     style={{alignSelf: "end"}}
                 >
-                    Crear
+                    <FormattedMessage id="project.global.fields.create"/>
                 </ActionButton>
             </form>
         </div>

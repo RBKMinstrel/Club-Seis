@@ -1,12 +1,13 @@
 import {useNavigate} from 'react-router-dom';
 import ActionButton from "./ActionButton";
 import PropTypes from "prop-types";
+import {FormattedMessage} from "react-intl";
 
-const BackLink = ({style = {}}) => {
+const BackLink = ({double = false, style = {}}) => {
 
     const navigate = useNavigate();
 
-    const action = () => navigate(-1);
+    const action = () => navigate(double ? -2 : -1);
 
     return (
         <ActionButton
@@ -19,7 +20,7 @@ const BackLink = ({style = {}}) => {
                 style={{color: "white", fontSize: '15px', paddingRight: 5}}
                 className="fa-solid fa-angle-left"
             />
-            Regresar
+            <FormattedMessage id="project.common.BackLink.title"/>
         </ActionButton>
     );
 

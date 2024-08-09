@@ -3,6 +3,7 @@ import * as actions from "../actions.js";
 import {Errors} from "../../common/index.js";
 import {useState} from "react";
 import {useDispatch} from "react-redux";
+import {FormattedMessage} from "react-intl";
 
 const DeleteMovimiento = () => {
 
@@ -27,13 +28,13 @@ const DeleteMovimiento = () => {
         <div>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
             <div className="column">
-                <h2>Quiere confirmar la accion de borrar este movimiento?</h2>
+                <h2><FormattedMessage id="project.contabilidad.DeleteMovimiento.text"/></h2>
                 <div className="row" style={{justifyContent: "space-between"}}>
                     <button onClick={() => navigate(-1)}>
-                        Cancelar
+                        <FormattedMessage id="project.global.button.cancel"/>
                     </button>
                     <button onClick={handleConfirm}>
-                        Confirmar
+                        <FormattedMessage id="project.global.button.confirm"/>
                     </button>
                 </div>
             </div>

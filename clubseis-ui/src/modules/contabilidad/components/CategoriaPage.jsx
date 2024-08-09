@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import {Errors, Section} from "../../common";
+import {ActionButton, Errors, Section} from "../../common";
 import CategoriaCreateForm from "./CategoriaCreateForm.jsx";
 import CategoriaUpdateForm from "./CategoriaUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
+import {FormattedMessage} from "react-intl";
 
 const CategoriaPage = () => {
     const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const CategoriaPage = () => {
                     width: "40%",
                     alignSelf: "flex-start"
                 }}>
-                    <h2>Categorias</h2>
+                    <h2><FormattedMessage id="project.global.fields.categories"/></h2>
                     <div style={{width: "100%"}}>
                         {categorias.map((categoria) => (
                             <div key={categoria.id} style={{
@@ -53,16 +54,21 @@ const CategoriaPage = () => {
                             </div>
                         ))}
                         {selected && (
-                            <button onClick={() => setSelected(null)} style={{marginTop: 10}}>
-                                Limpiar Selección
-                            </button>
+                            <ActionButton
+                                type="secondary"
+                                htmlType="button"
+                                onClick={() => setSelected(null)}
+                                style={{marginTop: 10}}
+                            >
+                                <FormattedMessage id="project.global.button.cleanSelect"/>
+                            </ActionButton>
                         )}
                     </div>
                 </div>
                 <div style={{width: "40%", paddingTop: 40, display: "flex", flexDirection: "column", gap: 20}}>
                     {
                         !selected ? (
-                            <Section title="Crear categoria">
+                            <Section title={intl.formatMessage({id: 'project.contabilidad.CategoriaPage.createTitle'})}>
                                 <CategoriaCreateForm
                                     onSuccess={() => setSelected(null)}
                                     onErrors={setBackendErrors}
@@ -70,7 +76,8 @@ const CategoriaPage = () => {
                             </Section>
                         ) : (
                             <>
-                                <Section title="Actualizar categoria">
+                                <Section
+                                    title={intl.formatMessage({id: 'project.contabilidad.CategoriaPage.updateTitle'})}>
                                     <CategoriaUpdateForm
                                         categoria={selected}
                                         onSuccess={() => setSelected(null)}

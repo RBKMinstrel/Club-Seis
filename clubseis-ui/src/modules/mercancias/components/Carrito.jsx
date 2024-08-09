@@ -1,7 +1,7 @@
 import {ActionButton, BackLink, DataGrid, Errors, Modal} from "../../common";
 
 import {useDispatch, useSelector} from "react-redux";
-import {FormattedNumber} from "react-intl";
+import {FormattedMessage, FormattedNumber, useIntl} from "react-intl";
 
 import * as selectors from "../selectors"
 import RemoveItemCarrito from "./RemoveItemCarrito.jsx";
@@ -11,6 +11,7 @@ import * as actions from "../actions.js";
 
 const Carrito = () => {
     const dispatch = useDispatch();
+    const intl = useIntl();
     const carrito = useSelector(selectors.getCarrito);
     const tallaList = useSelector(selectors.getTallas);
 
@@ -29,12 +30,12 @@ const Carrito = () => {
     const getRowId = (row) => "art-" + row.articuloId + "-talla-" + row.tallaId ?? "null";
     const columns = {
         articulo: {
-            header: () => <h4>Articulo</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.article"/></h4>,
             cell: (item) =>
                 <p>{item.articuloName}</p>
         },
         talla: {
-            header: () => <h4>Talla</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.size"/></h4>,
             cell: (item) => {
                 const talla = selectors.getTallaName(tallaList, item.tallaId ?? null)
                 return (
@@ -43,35 +44,35 @@ const Carrito = () => {
             }
         },
         quantity: {
-            header: () => <h4>Cantidad</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.quantity"/></h4>,
             cell: (item) =>
                 <p>{item.quantity}</p>
         },
         disponible: {
-            header: () => <h4>Disponible</h4>,
+            header: () => <h4><FormattedMessage id="project.mercancias.Carrito.available"/></h4>,
             cell: (item) =>
                 <p>
                     {
                         item.itemDisponible
-                            ? "Disponible"
+                            ? intl.formatMessage({id: 'project.mercancias.Carrito.available'})
                             : item.existencia === 0
-                                ? "Sin stock"
-                                : "Disponibles solo " + item.existencia
+                                ? intl.formatMessage({id: 'project.mercancias.Carrito.outStock'})
+                                : intl.formatMessage({id: 'project.mercancias.Carrito.availableX'}, {stock: item.existencia})
                     }
                 </p>
         },
         articuloPrecio: {
-            header: () => <h4>Precio No Socio</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.noMemberPrice"/></h4>,
             cell: (item) =>
                 <FormattedNumber value={item.articuloPrecio} style="currency" currency="EUR"/>
         },
         articuloPrecioSocio: {
-            header: () => <h4>Precio Socio</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.memberPrice"/></h4>,
             cell: (item) =>
                 <FormattedNumber value={item.articuloPrecioSocio} style="currency" currency="EUR"/>
         },
         acciones: {
-            header: () => <h4>Acciones</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.actions"/></h4>,
             cell: (item) => {
                 return (
                     <div style={{display: "flex", gap: 10}}>
@@ -112,7 +113,7 @@ const Carrito = () => {
                 />
                 <Modal
                     isActive={modalClean}
-                    title="¿Vacias articulos del carrito?"
+                    title={intl.formatMessage({id: "project.mercancias.Carrito.cleanCarrito.title"})}
                     onClose={() => setModalClean(false)}
                 >
                     <div style={{
@@ -122,7 +123,7 @@ const Carrito = () => {
                         flexDirection: "column",
                         gap: 20
                     }}>
-                        <h4>Esta acción no se puede deshacer, esta seguro?</h4>
+                        <h4><FormattedMessage id="project.mercancias.Carrito.cleanCarrito.text"/></h4>
                         <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
                             <ActionButton
                                 type="danger"
@@ -130,7 +131,7 @@ const Carrito = () => {
                                 onClick={() =>
                                     setModalClean(false)}
                             >
-                                Cancelar
+                                <FormattedMessage id="project.global.button.cancel"/>
                             </ActionButton>
                             <ActionButton
                                 type="primary"
@@ -141,7 +142,7 @@ const Carrito = () => {
                                         () => setModalClean(false)
                                     ))}
                             >
-                                Confirmar
+                                <FormattedMessage id="project.global.button.confirm"/>
                             </ActionButton>
                         </div>
                     </div>
@@ -162,11 +163,11 @@ const Carrito = () => {
                     disabled={carrito.items.length === 0}
                     onClick={() => setModal(true)}
                 >
-                    Pedir
+                    <FormattedMessage id="project.mercancias.Carrito.PedirButton.button"/>
                 </ActionButton>
                 <Modal
                     isActive={modal}
-                    title="Crear pedido"
+                    title={intl.formatMessage({id: "project.mercancias.Carrito.PedirButton.title"})}
                     onClose={() => setModal(false)}
                 >
                     <div style={{
@@ -177,7 +178,7 @@ const Carrito = () => {
                         gap: 20
                     }}>
                         <div style={{display: "flex", flexDirection: "column"}}>
-                            <label>Texto de la reserva</label>
+                            <label><FormattedMessage id="project.mercancias.Carrito.PedirButton.text"/></label>
                             <input
                                 type="text"
                                 value={reserva}
@@ -192,7 +193,7 @@ const Carrito = () => {
                                 onClick={() =>
                                     setModal(false)}
                             >
-                                Cancelar
+                                <FormattedMessage id="project.global.button.cancel"/>
                             </ActionButton>
                             <ActionButton
                                 type="primary"
@@ -202,12 +203,12 @@ const Carrito = () => {
                                         carrito.id, reserva.trim(),
                                         () => {
                                             setModal(false)
-                                            alert("Pedido creado exitosamente")
+                                            alert(intl.formatMessage({id: "project.mercancias.Carrito.PedirButton.success"}))
                                         },
                                         errors => setBackendErrors(errors)
                                     ))}
                             >
-                                Confirmar
+                                <FormattedMessage id="project.global.button.confirm"/>
                             </ActionButton>
                         </div>
                     </div>
@@ -229,11 +230,11 @@ const Carrito = () => {
                     disabled={carrito.items.length === 0}
                     onClick={() => setModal(true)}
                 >
-                    Comprar
+                    <FormattedMessage id="project.global.button.buy"/>
                 </ActionButton>
                 <Modal
                     isActive={modal}
-                    title="Crear compra"
+                    title={intl.formatMessage({id: "project.mercancias.Carrito.ComprarButton.title"})}
                     onClose={() => setModal(false)}
                 >
                     <div style={{
@@ -243,15 +244,19 @@ const Carrito = () => {
                         flexDirection: "column",
                         gap: 20
                     }}>
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <FormattedMessage id="project.mercancias.Carrito.ComprarButton.text"/>
+                        </div>
                         <div style={{display: "flex", gap: 10, padding: 20}}>
                             <div>
                                 <input type="checkbox" checked={ventaTotal}
                                        onChange={e => setVentaTotal((prev) => !prev)}/>
-                                <label> Venta total</label>
+                                <label> <FormattedMessage
+                                    id="project.mercancias.Carrito.ComprarButton.fullBuy"/></label>
                             </div>
                             <div>
                                 <input type="checkbox" checked={esSocio} onChange={e => setEsSocio((prev) => !prev)}/>
-                                <label> Socio</label>
+                                <label> <FormattedMessage id="project.global.fields.member"/></label>
                             </div>
                         </div>
                         <div style={{display: "flex", justifyContent: "space-between", width: "100%", gap: 30}}>
@@ -261,7 +266,7 @@ const Carrito = () => {
                                 onClick={() =>
                                     setModal(false)}
                             >
-                                Cancelar
+                                <FormattedMessage id="project.global.button.cancel"/>
                             </ActionButton>
                             <ActionButton
                                 type="primary"
@@ -271,12 +276,12 @@ const Carrito = () => {
                                         carrito.id, ventaTotal, esSocio,
                                         () => {
                                             setModal(false)
-                                            alert("Venta creada exitosamente")
+                                            alert(intl.formatMessage({id: "project.mercancias.Carrito.ComprarButton.success"}))
                                         },
                                         errors => setBackendErrors(errors)
                                     ))}
                             >
-                                Confirmar
+                                <FormattedMessage id="project.global.button.confirm"/>
                             </ActionButton>
                         </div>
                     </div>
@@ -293,8 +298,8 @@ const Carrito = () => {
                 <h3>
                     {
                         carrito.allItemDisponible
-                            ? "Todos los articulos estan disponibles"
-                            : "Existen articulos no disponibles"
+                            ? intl.formatMessage({id: "project.mercancias.Carrito.allStock"})
+                            : intl.formatMessage({id: "project.mercancias.Carrito.noStock"})
                     }
                 </h3>
                 <CleanCarrito/>
@@ -313,25 +318,29 @@ const Carrito = () => {
                 }}>
                     <div style={{display: "flex", flexDirection: "column"}}>
                         <div>
-                            <h3>No Socios: {<FormattedNumber value={carrito.totalPrice} style="currency"
+                            <h3><FormattedMessage id="project.mercancias.Carrito.noMembers"/>: {<FormattedNumber
+                                value={carrito.totalPrice} style="currency"
                                                              currency="EUR"/>}</h3>
 
                         </div>
                         <div>
-                            <h3>Socios: {<FormattedNumber value={carrito.totalPriceSocio} style="currency"
+                            <h3><FormattedMessage id="project.mercancias.Carrito.members"/>: {<FormattedNumber
+                                value={carrito.totalPriceSocio} style="currency"
                                                           currency="EUR"/>}</h3>
 
                         </div>
                     </div>
                     <div style={{display: "flex", flexDirection: "column"}}>
                         <div>
-                            <h3>Disponibles No Socios: {<FormattedNumber value={carrito.totalPriceAvaible}
+                            <h3><FormattedMessage id="project.mercancias.Carrito.avaivableNoMembers"/>: {
+                                <FormattedNumber value={carrito.totalPriceAvaible}
                                                                          style="currency"
                                                                          currency="EUR"/>}</h3>
 
                         </div>
                         <div>
-                            <h3>Disponibles Socios: {<FormattedNumber value={carrito.totalPriceSocioAvaible}
+                            <h3><FormattedMessage id="project.mercancias.Carrito.avaivableMembers"/>: {<FormattedNumber
+                                value={carrito.totalPriceSocioAvaible}
                                                                       style="currency"
                                                                       currency="EUR"/>}</h3>
 

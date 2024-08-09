@@ -5,6 +5,7 @@ import Select from "react-select";
 import * as actions from '../actions';
 import * as selectors from "../selectors.js";
 import {parseListToSelect} from "../../utils/selectorUtils.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const Filtros = ({
                      tipo, setTipo,
@@ -15,27 +16,28 @@ const Filtros = ({
                      cuenta, setCuenta
                  }) => {
     const dispatch = useDispatch();
+    const intl = useIntl();
     const razonesSociales = useSelector(selectors.getRazonesSociales);
     const conceptos = useSelector(selectors.getConceptos);
     const categorias = useSelector(selectors.getCategorias);
     const cuentas = useSelector(selectors.getCuentas);
 
     const tipoOptions = [
-        {label: "Todos", value: null},
-        {label: "Gastos", value: true},
-        {label: "Ingresos", value: false}
+        {label: intl.formatMessage({id: 'project.global.fields.all'}), value: null},
+        {label: intl.formatMessage({id: 'project.global.fields.spends'}), value: true},
+        {label: intl.formatMessage({id: 'project.global.fields.incomes'}), value: false}
     ];
     const razonSocialOptions =
         parseListToSelect(razonesSociales || [], (x) => ({
             label: (x.denominacion + "(" + x.cifnif + ")"),
             value: x.id
-        }), true);
+        }), true, intl);
     const conceptoOptions =
-        parseListToSelect(conceptos || [], (x) => ({label: x.name, value: x.id}), true);
+        parseListToSelect(conceptos || [], (x) => ({label: x.name, value: x.id}), true, intl);
     const categoriaOptions =
-        parseListToSelect(categorias || [], (x) => ({label: x.name, value: x.id}), true);
+        parseListToSelect(categorias || [], (x) => ({label: x.name, value: x.id}), true, intl);
     const cuentaOptions =
-        parseListToSelect(cuentas || [], (x) => ({label: x.name, value: x.id}), true);
+        parseListToSelect(cuentas || [], (x) => ({label: x.name, value: x.id}), true, intl);
 
     useEffect(() => {
         dispatch(actions.findAllRazonSocial());
@@ -56,7 +58,7 @@ const Filtros = ({
     return (
         <form className="form-filter-contabilidad" onSubmit={e => handleSubmit(e)}>
             <div className="column">
-                <label>Fecha</label>
+                <label><FormattedMessage id="project.global.fields.date"/></label>
                 <input
                     type="date"
                     value={fecha}
@@ -64,7 +66,7 @@ const Filtros = ({
                 />
             </div>
             <div>
-                <label>Tipo</label>
+                <label><FormattedMessage id="project.global.fields.type"/></label>
                 <Select
                     value={tipoOptions.find(t => t.value === tipo)}
                     onChange={e => setTipo(e.value)}
@@ -72,7 +74,7 @@ const Filtros = ({
                 />
             </div>
             <div>
-                <label>Razon Social</label>
+                <label><FormattedMessage id="project.global.fields.registeredName"/></label>
                 <Select
                     className="selector"
                     isClearable={true}
@@ -83,7 +85,7 @@ const Filtros = ({
                 />
             </div>
             <div>
-                <label>Concepto</label>
+                <label><FormattedMessage id="project.global.fields.concept"/></label>
                 <Select
                     className="selector"
                     isClearable={true}
@@ -94,7 +96,7 @@ const Filtros = ({
                 />
             </div>
             <div>
-                <label>Categoria</label>
+                <label><FormattedMessage id="project.global.fields.category"/></label>
                 <Select
                     className="selector"
                     isClearable={true}
@@ -105,7 +107,7 @@ const Filtros = ({
                 />
             </div>
             <div>
-                <label>Cuenta</label>
+                <label><FormattedMessage id="project.global.fields.account"/></label>
                 <Select
                     className="selector"
                     isClearable={true}

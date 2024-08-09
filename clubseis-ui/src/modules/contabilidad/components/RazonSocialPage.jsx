@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import {Errors, Section} from "../../common";
+import {ActionButton, Errors, Section} from "../../common";
 import RazonSocialCreateForm from "./RazonSocialCreateForm.jsx";
 import RazonSocialUpdateForm from "./RazonSocialUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
+import {FormattedMessage} from "react-intl";
 
 const RazonSocialPage = () => {
     const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const RazonSocialPage = () => {
                     width: "40%",
                     alignSelf: "flex-start"
                 }}>
-                    <h2>Razones Sociales</h2>
+                    <h2><FormattedMessage id="project.global.fields.registeredNames"/></h2>
                     <div style={{width: "100%"}}>
                         {razonesSociales.map((razonSocial) => (
                             <div key={razonSocial.id} style={{
@@ -57,16 +58,22 @@ const RazonSocialPage = () => {
                             </div>
                         ))}
                         {selected && (
-                            <button onClick={() => setSelected(null)} style={{marginTop: 10}}>
-                                Limpiar Selección
-                            </button>
+                            <ActionButton
+                                type="secondary"
+                                htmlType="button"
+                                onClick={() => setSelected(null)}
+                                style={{marginTop: 10}}
+                            >
+                                <FormattedMessage id="project.global.button.cleanSelect"/>
+                            </ActionButton>
                         )}
                     </div>
                 </div>
                 <div style={{width: "40%", paddingTop: 40, display: "flex", flexDirection: "column", gap: 20}}>
                     {
                         !selected ? (
-                            <Section title="Crear razon social">
+                            <Section
+                                title={intl.formatMessage({id: 'project.contabilidad.RazonSocialPage.createTitle'})}>
                                 <RazonSocialCreateForm
                                     onSuccess={() => setSelected(null)}
                                     onErrors={setBackendErrors}
@@ -74,7 +81,8 @@ const RazonSocialPage = () => {
                             </Section>
                         ) : (
                             <>
-                                <Section title="Actualizar razon social">
+                                <Section
+                                    title={intl.formatMessage({id: 'project.contabilidad.RazonSocialPage.updateTitle'})}>
                                     <RazonSocialUpdateForm
                                         razonSocial={selected}
                                         onSuccess={() => setSelected(null)}

@@ -5,11 +5,13 @@ import {ActionButton} from "../../common";
 
 import * as actions from "../actions.js";
 import PropTypes from "prop-types";
+import {FormattedMessage} from "react-intl";
 
 const CategoriaUpdateForm = ({
                                  categoria, onSuccess = () => {
-    }, onErrors = _ => {
-    }
+    },
+                                 onErrors = _ => {
+                                 }
                              }) => {
     const dispatch = useDispatch();
 
@@ -49,7 +51,7 @@ const CategoriaUpdateForm = ({
         >
             <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8}}>
                 <label>
-                    Nombre
+                    <FormattedMessage id="project.global.fields.name"/>
                 </label>
                 <input
                     type="text"
@@ -64,7 +66,7 @@ const CategoriaUpdateForm = ({
                 type="primary"
                 htmlType="submit"
             >
-                Actualizar
+                <FormattedMessage id="project.global.fields.update"/>
             </ActionButton>
         </form>
     );

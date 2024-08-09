@@ -8,6 +8,6 @@ export {default as Logout} from './components/Logout';
 export {default as Base} from './components/Base';
 export {default as BaseIndex} from './components/BaseIndex';
 export {default as UpdateProfile} from './components/UpdateProfile';
-export {default as ChangePassword} from './components/ChangePassword';
+export {default as UserProfile} from './components/UserProfile';
 
 export default {actions, actionTypes, reducer, selectors};

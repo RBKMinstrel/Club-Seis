@@ -2,20 +2,23 @@ import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
-import {Errors} from '../../common';
+import {ActionButton, Errors} from '../../common';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
+import {FormattedMessage} from "react-intl";
 
 const ChangePassword = () => {
 
     const user = useSelector(selectors.getUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [backendErrors, setBackendErrors] = useState(null);
     const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
+
     let form;
     let confirmNewPasswordInput;
 
@@ -64,68 +67,46 @@ const ChangePassword = () => {
         <div>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
             <div>
-                <h5>
-                    Cambiar contraseña
-                </h5>
-                <div>
-                    <form ref={node => form = node}
-                          noValidate onSubmit={e => handleSubmit(e)}>
-                        <div>
-                            <label htmlFor="oldPassword">
-                                Anterior contraseña
-                            </label>
-                            <div>
-                                <input type="password" id="oldPassword"
-                                       value={oldPassword}
-                                       onChange={e => setOldPassword(e.target.value)}
-                                       autoFocus
-                                       required/>
-                                <div>
-                                    Campo obligatorio
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="newPassword">
-                                Nueva contraseña
-                            </label>
-                            <div>
-                                <input type="password" id="newPassword"
-                                       value={newPassword}
-                                       onChange={e => setNewPassword(e.target.value)}
-                                       required/>
-                                <div>
-                                    Campo obligatorio
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="confirmNewPassword">
-                                Repita la contraseña
-                            </label>
-                            <div>
-                                <input ref={node => confirmNewPasswordInput = node}
-                                       type="password" id="confirmNewPassword"
-                                       value={confirmNewPassword}
-                                       onChange={e => handleConfirmNewPasswordChange(e)}
-                                       required/>
-                                <div>
-                                    {passwordsDoNotMatch ?
-                                        <p> Contraseña no coincide </p> :
-                                        <p> Campo requerido </p>}
-
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <button type="submit">
-                                    Guardar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <form ref={node => form = node}
+                      noValidate onSubmit={e => handleSubmit(e)}
+                      style={{display: "flex", flexDirection: "column", alignItems: "center", gap: 10}}
+                >
+                    <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                        <label htmlFor="oldPassword">
+                            <FormattedMessage id="project.user.ChangePassword.previousPassword"/>:
+                        </label>
+                        <input type="password" id="oldPassword"
+                               value={oldPassword}
+                               onChange={e => setOldPassword(e.target.value)}
+                               autoFocus
+                               required/>
+                    </div>
+                    <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                        <label htmlFor="newPassword">
+                            <FormattedMessage id="project.user.ChangePassword.newPassword"/>:
+                        </label>
+                        <input type="password" id="newPassword"
+                               value={newPassword}
+                               onChange={e => setNewPassword(e.target.value)}
+                               required/>
+                    </div>
+                    <div style={{display: "flex", flexDirection: "column", gap: 8}}>
+                        <label htmlFor="confirmNewPassword">
+                            <FormattedMessage id="project.user.ChangePassword.repeatPassword"/>:
+                        </label>
+                        <input ref={node => confirmNewPasswordInput = node}
+                               type="password" id="confirmNewPassword"
+                               value={confirmNewPassword}
+                               onChange={e => handleConfirmNewPasswordChange(e)}
+                               required/>
+                    </div>
+                    <ActionButton
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        <FormattedMessage id="project.global.fields.save"/>
+                    </ActionButton>
+                </form>
             </div>
         </div>
     );

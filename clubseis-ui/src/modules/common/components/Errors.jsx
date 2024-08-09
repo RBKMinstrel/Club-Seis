@@ -25,7 +25,7 @@ const Errors = ({errors, onClose}) => {
 
     return (
 
-        <div role="alert">
+        <div style={{display: "flex", justifyContent: "space-between", width: "100%"}} role="alert">
 
             {globalError ? globalError : ''}
 

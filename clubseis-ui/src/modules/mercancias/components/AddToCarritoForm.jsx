@@ -6,10 +6,10 @@ import * as actions from "../actions.js";
 import * as selectors from '../selectors';
 import {ActionButton, Errors} from "../../common/index.js";
 import Select from "react-select";
+import {FormattedMessage} from "react-intl";
 
 const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
     const dispatch = useDispatch();
-
 
     const carrito = useSelector(selectors.getCarrito);
     const tallas = useSelector(selectors.getTallas);
@@ -17,7 +17,6 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
 
     const [talla, setTalla] = useState(null);
     const [quantity, setQuantity] = useState(1);
-
     const [backendErrors, setBackendErrors] = useState(null);
 
     const handleSubmit = () => {
@@ -39,7 +38,7 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
             <div style={{height: 200, width: 100}}>
                 {typeArticulo &&
                     <div>
-                        <label>Talla:</label>
+                        <label><FormattedMessage id="project.global.fields.size"/>:</label>
                         <Select
                             options={tallasOptions}
                             value={tallasOptions.find(t => t.id === talla)}
@@ -48,7 +47,7 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
                     </div>
                 }
                 <div>
-                    <label>Cantidad:</label>
+                    <label><FormattedMessage id="project.global.fields.quantity"/>:</label>
                     <input
                         type="number"
                         value={quantity}
@@ -63,7 +62,7 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
                         htmlType="submit"
                         onClick={() => handleSubmit()}
                     >
-                        Aceptar
+                        <FormattedMessage id="project.global.fields.accept"/>
                     </ActionButton>
                 </div>
             </div>

@@ -6,6 +6,9 @@ import es.minstrel.app.model.entities.RazonSocial;
 import java.time.LocalDate;
 import java.util.List;
 
+import static es.minstrel.app.rest.dtos.FechaConversor.fromDays;
+import static es.minstrel.app.rest.dtos.FechaConversor.toDays;
+
 public class MovimientoConversor {
 
     private MovimientoConversor() {
@@ -42,16 +45,5 @@ public class MovimientoConversor {
                 " (" +
                 razonSocial.getCifnif() +
                 ")") : "";
-    }
-
-    private final static long toDays(LocalDate date) {
-        return date.toEpochDay();
-    }
-
-    public final static LocalDate fromDays(Long millis) {
-        if (millis != null)
-            return LocalDate.ofEpochDay(millis);
-        else
-            return null;
     }
 }

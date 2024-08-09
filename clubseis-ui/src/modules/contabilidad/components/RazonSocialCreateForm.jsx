@@ -6,11 +6,13 @@ import {ActionButton} from "../../common";
 
 import * as actions from "../actions.js";
 import RazonSocialFormFields from "./RazonSocialFormFields.jsx";
+import {FormattedMessage} from "react-intl";
 
 const RazonSocialCreateForm = ({
                                    onSuccess = () => {
-                                   }, onErrors = _ => {
-    }
+                                   },
+                                   onErrors = _ => {
+                                   }
                                }) => {
     const dispatch = useDispatch();
 
@@ -61,7 +63,7 @@ const RazonSocialCreateForm = ({
                 type="primary"
                 htmlType="submit"
             >
-                Aceptar
+                <FormattedMessage id="project.global.fields.accept"/>
             </ActionButton>
         </form>
     );

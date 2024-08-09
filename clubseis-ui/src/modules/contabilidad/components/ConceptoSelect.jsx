@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
 import Select from "react-select";
+import {FormattedMessage} from "react-intl";
 
 const ConceptoSelect = ({concepto, setConcepto, required = false, isClearable = false, label = false, style = {}}) => {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const ConceptoSelect = ({concepto, setConcepto, required = false, isClearable = 
     return (
         <div style={style}>
             {label &&
-                <label>Concepto</label>
+                <label><FormattedMessage id="project.global.fields.concept"/></label>
             }
             <Select
                 className="full-w"

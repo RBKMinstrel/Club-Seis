@@ -1,10 +1,12 @@
+import {FormattedMessage} from "react-intl";
+
 const RazonSocialFormFields = ({denominacion, setDenominacion, cifnif, setCifnif}) => {
 
     return (
         <>
             <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8}}>
                 <label>
-                    Denominación
+                    <FormattedMessage id="project.contabilidad.RazonSocialFormFields.denomination"/>
                 </label>
                 <input
                     type="text"
@@ -17,7 +19,7 @@ const RazonSocialFormFields = ({denominacion, setDenominacion, cifnif, setCifnif
             </div>
             <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8}}>
                 <label>
-                    Cif/Nif
+                    <FormattedMessage id="project.contabilidad.RazonSocialFormFields.cifnif"/>
                 </label>
                 <input
                     type="text"

@@ -7,6 +7,7 @@ import CuentaSelect from "./CuentaSelect.jsx";
 import CategoriaSelect from "./CategoriaSelect.jsx";
 import RazonSocialSelect from "./RazonSocialSelect.jsx";
 import * as actions from "../actions.js";
+import {FormattedMessage} from "react-intl";
 
 const CreateRecibi = () => {
     const dispatch = useDispatch();
@@ -83,7 +84,7 @@ const CreateRecibi = () => {
             <form ref={node => form = node}
                   className="column"
                   noValidate>
-                <Section title="Datos identificativos">
+                <Section title={intl.formatMessage({id: 'project.global.title.identificationData'})}>
                     <div className="row" style={{justifyContent: "space-around"}}>
                         <ConceptoSelect concepto={concepto} setConcepto={setConcepto} label={true} isClearable={true}
                                         style={{width: "20%"}}/>
@@ -95,7 +96,7 @@ const CreateRecibi = () => {
                                       style={{width: "20%"}}/>
                     </div>
                 </Section>
-                <Section title="Datos recibi">
+                <Section title={intl.formatMessage({id: 'project.contabilidad.CreateRecibi.titleSection'})}>
                     <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", gap: 10}}>
                         <div style={{
                             display: "flex",
@@ -105,7 +106,7 @@ const CreateRecibi = () => {
                             width: "100%",
                             gap: 8
                         }}>
-                            <label>Receptor</label>
+                            <label><FormattedMessage id="project.global.fields.receiver"/>:</label>
                             <textarea rows="2" cols="120" value={receptor} onChange={e => setReceptor(e.target.value)}
                                       required/>
                         </div>
@@ -117,7 +118,7 @@ const CreateRecibi = () => {
                                 alignItems: "start",
                                 gap: 8
                             }}>
-                                <label>Rol del receptor</label>
+                                <label><FormattedMessage id="project.contabilidad.CreateRecibi.receiverRol"/>:</label>
                                 <textarea rows="2" cols="60" value={receptorRol}
                                           onChange={e => setReceptorRol(e.target.value)} required/>
                             </div>
@@ -128,7 +129,7 @@ const CreateRecibi = () => {
                                 alignItems: "start",
                                 gap: 8
                             }}>
-                                <label>Cantidad (en euros):</label>
+                                <label><FormattedMessage id="project.contabilidad.CreateRecibi.eurQuantity"/>:</label>
                                 <input type="number" step="0.01" min="0" value={precio}
                                        onChange={e => setPrecio(Number(e.target.value))}/>
                             </div>
@@ -141,7 +142,7 @@ const CreateRecibi = () => {
                             width: "100%",
                             gap: 8
                         }}>
-                            <label>Emisor</label>
+                            <label><FormattedMessage id="project.global.fields.transmitter"/></label>
                             <textarea rows="2" cols="120" value={emisor} onChange={e => setEmisor(e.target.value)}
                                       required/>
                         </div>
@@ -153,7 +154,7 @@ const CreateRecibi = () => {
                             width: "100%",
                             gap: 8
                         }}>
-                            <label>Concepto</label>
+                            <label><FormattedMessage id="project.global.fields.concept"/></label>
                             <textarea rows="2" cols="120" value={conceptoText}
                                       onChange={e => setConceptoText(e.target.value)} required/>
                         </div>
@@ -165,14 +166,14 @@ const CreateRecibi = () => {
                         htmlType="button"
                         onClick={e => handleMockSubmit(e)}
                     >
-                        Vista Previa
+                        <FormattedMessage id="project.global.button.preview"/>
                     </ActionButton>
                     <ActionButton
                         type="primary"
                         htmlType="button"
                         onClick={e => handleCreateSubmit(e)}
                     >
-                        Crear
+                        <FormattedMessage id="project.global.fields.create"/>
                     </ActionButton>
                 </div>
             </form>

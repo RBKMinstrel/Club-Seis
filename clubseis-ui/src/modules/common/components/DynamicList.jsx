@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './DynamicList.css';
 import FooterList from "./FooterList.jsx";
+import {FormattedMessage} from "react-intl";
 
 const DynamicList = ({data, total, renderItem, page, setPage, size, setSize, height, header, footer}) => {
     return (
@@ -10,7 +11,7 @@ const DynamicList = ({data, total, renderItem, page, setPage, size, setSize, hei
             <div className="dynamic-list-content" style={{height: `${height}px`}}>
                 {
                     data === null || data.length === 0 ? (
-                        <p>No resultados</p>
+                        <FormattedMessage id="project.common.DynamicList.noResult"/>
                     ) : (
                         data.map((item, index) => (
                             <div key={index} className="dynamic-list-item">

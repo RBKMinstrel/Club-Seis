@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
 import Select from "react-select";
+import {FormattedMessage} from "react-intl";
 
 const CuentaSelect = ({cuenta, setCuenta, required = false, isClearable = false, label = false, style = {}}) => {
     const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const CuentaSelect = ({cuenta, setCuenta, required = false, isClearable = false,
     return (
         <div style={style}>
             {label &&
-                <label>Cuenta</label>
+                <label><FormattedMessage id="project.global.fields.account"/></label>
             }
             <Select
                 className="full-w"

@@ -6,6 +6,7 @@ import {ActionButton} from "../../common/index.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
+import {FormattedMessage} from "react-intl";
 
 const Configuration = () => {
     const dispatch = useDispatch();
@@ -61,14 +62,14 @@ const Configuration = () => {
     return (
         <>
             <div style={{borderBottom: "1px solid black", paddingBottom: "1rem"}}>
-                <h2>Datos club</h2>
+                <h2><FormattedMessage id="project.configuracion.Configuration.title"/></h2>
             </div>
             <>
                 <form ref={node => form = node}
                       noValidate onSubmit={e => handleSubmit(e)}>
                     <div style={{margin: "15px 0"}}>
                         <div style={{margin: "0 0 6px"}}>
-                            <label>Nombre del club:</label>
+                            <label><FormattedMessage id="project.configuracion.Configuration.nameClub"/>:</label>
                         </div>
                         <div>
                             <input
@@ -78,14 +79,13 @@ const Configuration = () => {
                                 style={{width: 600, maxWidth: "100%", padding: "5px 12px", borderRadius: 6}}
                             />
                             <div style={{fontSize: 12, margin: "0.25rem 0 2px"}}>
-                                Este nombre se usara como cabeza de las paginas, y tambien se usara para el encabezado
-                                de los documentos generados.
+                                <FormattedMessage id="project.configuracion.Configuration.nameClubDescription"/>
                             </div>
                         </div>
                     </div>
                     <div style={{margin: "15px 0"}}>
                         <div style={{margin: "0 0 6px"}}>
-                            <label>Direccion:</label>
+                            <label><FormattedMessage id="project.configuracion.Configuration.direction"/>:</label>
                         </div>
                         <div>
                             <input
@@ -95,14 +95,13 @@ const Configuration = () => {
                                 style={{width: 600, maxWidth: "100%", padding: "5px 12px", borderRadius: 6}}
                             />
                             <div style={{fontSize: 12, margin: "0.25rem 0 2px"}}>
-                                Este direccion aparecera en la informacion de contacto, y tambien se usara para el
-                                encabezado de los documentos generados.
+                                <FormattedMessage id="project.configuracion.Configuration.directionDescription"/>
                             </div>
                         </div>
                     </div>
                     <div style={{margin: "15px 0"}}>
                         <div style={{margin: "0 0 6px"}}>
-                            <label>Telefono:</label>
+                            <label><FormattedMessage id="project.configuracion.Configuration.phonenumber"/>:</label>
                         </div>
                         <div>
                             <input
@@ -112,14 +111,13 @@ const Configuration = () => {
                                 style={{width: 600, maxWidth: "100%", padding: "5px 12px", borderRadius: 6}}
                             />
                             <div style={{fontSize: 12, margin: "0.25rem 0 2px"}}>
-                                Este telefono aparecera en la informacion de contacto, y tambien se usara para el
-                                encabezado de los documentos generados.
+                                <FormattedMessage id="project.configuracion.Configuration.phonenumberDescription"/>
                             </div>
                         </div>
                     </div>
                     <div style={{margin: "15px 0"}}>
                         <div style={{margin: "0 0 6px"}}>
-                            <label>NIF:</label>
+                            <label><FormattedMessage id="project.configuracion.Configuration.nif"/>:</label>
                         </div>
                         <div>
                             <input
@@ -129,13 +127,13 @@ const Configuration = () => {
                                 style={{width: 600, maxWidth: "100%", padding: "5px 12px", borderRadius: 6}}
                             />
                             <div style={{fontSize: 12, margin: "0.25rem 0 2px"}}>
-                                Este NIF se usara para el encabezado de los documentos de facturas generados.
+                                <FormattedMessage id="project.configuracion.Configuration.nifDescription"/>
                             </div>
                         </div>
                     </div>
                     <div style={{margin: "15px 0"}}>
                         <div style={{margin: "0 0 6px"}}>
-                            <label>Otros datos fiscales:</label>
+                            <label><FormattedMessage id="project.configuracion.Configuration.otherData"/>:</label>
                         </div>
                         <div>
                             <input
@@ -144,8 +142,7 @@ const Configuration = () => {
                                 style={{width: 600, maxWidth: "100%", padding: "5px 12px", borderRadius: 6}}
                             />
                             <div style={{fontSize: 12, margin: "0.25rem 0 2px"}}>
-                                Opcional. Este informacion se añadira tras el NIF en el encabezado de los documentos de
-                                facturas generados.
+                                <FormattedMessage id="project.configuracion.Configuration.otherDataDescription"/>
                             </div>
                         </div>
                     </div>
@@ -153,7 +150,7 @@ const Configuration = () => {
                         type="primary"
                         htmlType="submit"
                     >
-                        Guardar
+                        <FormattedMessage id="project.global.fields.save"/>
                     </ActionButton>
                 </form>
             </>

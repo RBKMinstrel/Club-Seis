@@ -2,9 +2,12 @@ import {Modal} from "../../common/index.js";
 import {useState} from "react";
 import {useDispatch} from "react-redux";
 import * as actions from "../actions.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const UploadAsientos = () => {
     const dispatch = useDispatch();
+    const intl = useIntl();
+
     const [isModalActive, setIsModalActive] = useState(false);
     const [file, setFile] = useState(null);
 
@@ -18,7 +21,7 @@ const UploadAsientos = () => {
 
     const handleFileUpload = async () => {
         if (!file) {
-            alert('No se ha seleccionado ningun archivo');
+            alert(intl.formatMessage({id: 'project.contabilidad.UploadAsientos.noFile'}));
             return;
         }
 
@@ -27,11 +30,11 @@ const UploadAsientos = () => {
 
         const onSuccess = (quantity) => {
             setFile(null);
-            alert("Se subio exitosamente " + quantity + " asientos.")
+            alert(intl.formatMessage({id: 'project.contabilidad.UploadAsientos.noFile'}, {quantity: quantity}));
         }
 
         const onError = (error) => {
-            alert("Error: " + error);
+            alert(intl.formatMessage({id: 'project.contabilidad.UploadAsientos.error'}, {error: error}));
         }
 
         dispatch(actions.uploadExcel(formData, onSuccess, onError));
@@ -50,20 +53,17 @@ const UploadAsientos = () => {
                 onClose={toggleModal}
             >
                 <div style={{display: "flex", flexDirection: "column", gap: 5, padding: 20}}>
-                    <p>Para la importación de asientos contables se deben de cumplir ciertas
-                        condiciones:</p>
+                    <p><FormattedMessage id="project.contabilidad.UploadAsientos.intro"/></p>
                     <ol style={{paddingLeft: 20}}>
-                        <li>Solo se aceptan formatos .xlsx y .xls.</li>
-                        <li>Las hojas deben de ser "Gastos" y/o "Ingresos".</li>
-                        <li>Al comienzo de cada hoja la primera fila debe de incluir las cabezeras.</li>
-                        <li>
-                            <p>Las cabezeras aceptadas son: "Fecha", "Razón Social", "NIF/CIF", "Concepto",</p>
-                            <p>"Categoría", "Cuenta", "Base 0", "Base 4", "Base 10" y "Base 21".</p>
-                        </li>
+                        <li><FormattedMessage id="project.contabilidad.UploadAsientos.part1"/></li>
+                        <li><FormattedMessage id="project.contabilidad.UploadAsientos.part2"/></li>
+                        <li><FormattedMessage id="project.contabilidad.UploadAsientos.part3"/></li>
+                        <li><FormattedMessage id="project.contabilidad.UploadAsientos.part4"/></li>
                     </ol>
                     <div className="row" style={{paddingTop: 30}}>
                         <input type="file" accept=".xlsx, .xls" onChange={handleFileChange}/>
-                        <button onClick={handleFileUpload}>Subir</button>
+                        <button onClick={handleFileUpload}><FormattedMessage
+                            id="project.contabilidad.UploadAsientos.upload"/></button>
                     </div>
                 </div>
             </Modal>

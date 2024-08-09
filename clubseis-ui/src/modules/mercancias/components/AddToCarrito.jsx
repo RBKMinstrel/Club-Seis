@@ -3,8 +3,11 @@ import PropTypes from "prop-types";
 
 import {Modal} from "../../common";
 import AddToCarritoForm from "./AddToCarritoForm.jsx";
+import {useIntl} from "react-intl";
 
 const AddToCarrito = ({idArticulo, typeArticulo}) => {
+    const intl = useIntl();
+
     const [modal, setModal] = useState(false);
 
     return (
@@ -16,7 +19,7 @@ const AddToCarrito = ({idArticulo, typeArticulo}) => {
             />
             <Modal
                 isActive={modal}
-                title="Añadir a carrito"
+                title={intl.formatMessage({id: 'project.mercancias.AddToCarrito.title'})}
                 onClose={() => setModal(false)}
             >
                 <AddToCarritoForm

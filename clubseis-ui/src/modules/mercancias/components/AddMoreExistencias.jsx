@@ -4,9 +4,11 @@ import {useDispatch, useSelector} from "react-redux";
 
 import * as selectors from "../selectors.js";
 import * as actions from "../actions.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const AddMoreExistencias = ({articulo}) => {
     const dispatch = useDispatch();
+    const intl = useIntl();
 
     const tallas = useSelector(selectors.getTallas);
     const stockList = !tallas
@@ -46,7 +48,7 @@ const AddMoreExistencias = ({articulo}) => {
             <Modal
                 isActive={modal}
                 onClose={() => setModal(false)}
-                title="Reponer articulo"
+                title={intl.formatMessage({id: 'project.mercancias.AddMoreExistencias.title'})}
             >
                 <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
                 <div style={{width: 600, height: 200, display: "flex", flexWrap: "wrap", gap: 20}}>
@@ -54,7 +56,7 @@ const AddMoreExistencias = ({articulo}) => {
                         articulo.esRopa
                             ? (stock.map((talla, indice) =>
                                 <div className="column begin">
-                                    <label>Talla {talla.name}:</label>
+                                    <label><FormattedMessage id="project.global.fields.size"/> {talla.name}:</label>
                                     <input type="number" step="0" min="0" value={talla.stock}
                                            onChange={e => setStock(
                                                stock.map((t, i) => indice === i ? {...t, stock: Number(e.target.value)} : t)
@@ -63,9 +65,10 @@ const AddMoreExistencias = ({articulo}) => {
                             ))
                             : (
                                 <div className="column begin">
-                                    <label>Cantidad:</label>
+                                    <label><FormattedMessage id="project.global.fields.quantity"/>:</label>
                                     <input type="number" step="0" min="0" value={stock[0].stock}
-                                           onChange={e => setStock([{id: null, name: null, stock: Number(e.target.value)}]
+                                           onChange={e => setStock(
+                                               [{id: null, name: null, stock: Number(e.target.value)}]
                                            )}/>
                                 </div>
                             )
@@ -78,7 +81,7 @@ const AddMoreExistencias = ({articulo}) => {
                         type={"primary"}
                         htmlType={"button"}
                     >
-                        Guardar
+                        <FormattedMessage id="project.global.fields.save"/>
                     </ActionButton>
                 </div>
             </Modal>

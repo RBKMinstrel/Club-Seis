@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import * as selectors from "../selectors";
 import * as actions from "../actions";
-import {FormattedDate, FormattedNumber} from "react-intl";
+import {FormattedDate, FormattedMessage, FormattedNumber, useIntl} from "react-intl";
 import {useParams} from "react-router-dom";
 import {BackLink, Section} from "../../common";
 
@@ -17,6 +17,7 @@ const razonText = (r) => {
 }
 
 const MovimientoDetails = () => {
+    const intl = useIntl();
 
     const movimiento = useSelector(selectors.getMovimiento);
     const razonSocialOptions = useSelector(selectors.getRazonesSociales);
@@ -58,89 +59,93 @@ const MovimientoDetails = () => {
     return (
         <div className="column">
             <BackLink style={{alignSelf: "start"}}/>
-            <Section title="Datos identificativos">
+            <Section title={intl.formatMessage({id: 'project.global.title.identificationData'})}>
                 <div className="row" style={{justifyContent: "space-around"}}>
                     <div className="column">
                         <div className="row">
-                            <h3>Tipo:</h3>
-                            <h5>{movimiento.esGasto ? "Gasto" : "Ingreso"}</h5>
+                            <h3><FormattedMessage id="project.global.fields.type"/>:</h3>
+                            <h5>
+                                {movimiento.esGasto
+                                    ? intl.formatMessage({id: 'project.global.fields.spend'})
+                                    : intl.formatMessage({id: 'project.global.fields.income'})}
+                            </h5>
                         </div>
                         <div className="row">
-                            <h3>Fecha:</h3>
+                            <h3><FormattedMessage id="project.global.fields.date"/>:</h3>
                             <FormattedDate value={new Date(movimiento.fecha * (1000 * 60 * 60 * 24))}/>
                         </div>
                     </div>
                     <div className="column">
                         <div className="row">
-                            <h3>Razon Social:</h3>
+                            <h3><FormattedMessage id="project.global.fields.registeredName"/>:</h3>
                             <h5>{razonText(selectors.getRazonSocial(razonSocialOptions, movimiento.razonSocial))}</h5>
                         </div>
                         <div className="row">
-                            <h3>Concepto:</h3>
+                            <h3><FormattedMessage id="project.global.fields.concept"/>:</h3>
                             <h5>{selectors.getConcepto(conceptoOptions, movimiento.concepto)}</h5>
                         </div>
                     </div>
                     <div className="column">
                         <div className="row">
-                            <h3>Categoria:</h3>
+                            <h3><FormattedMessage id="project.global.fields.category"/>:</h3>
                             <h5>{selectors.getCategoria(categoriaOptions, movimiento.categoria)}</h5>
                         </div>
                         <div className="row">
-                            <h3>Cuenta:</h3>
+                            <h3><FormattedMessage id="project.global.fields.account"/>:</h3>
                             <h5>{selectors.getCuenta(cuentaOptions, movimiento.cuenta)}</h5>
                         </div>
                     </div>
                 </div>
             </Section>
-            <Section title="Cuantia">
+            <Section title={intl.formatMessage({id: "project.global.fields.amount"})}>
                 <div className="row begin" style={{justifyContent: "space-evenly"}}>
                     <div className="column" style={{alignItems: "start"}}>
                         <div className="column begin">
-                            <h3>Base 0:</h3>
+                            <h3><FormattedMessage id="project.global.fields.base"/> 0:</h3>
                             <FormattedNumber value={base0} style="currency" currency="EUR"/>
                         </div>
                     </div>
                     <div className="column" style={{alignItems: "start"}}>
                         <div className="column begin">
-                            <h3>Base 4:</h3>
+                            <h3><FormattedMessage id="project.global.fields.base"/> 4:</h3>
                             <FormattedNumber value={base4} style="currency" currency="EUR"/>
                         </div>
                         <div className="column begin">
-                            <h3>Iva 4:</h3>
+                            <h3><FormattedMessage id="project.global.fields.vat"/> 4:</h3>
                             <FormattedNumber value={iva4} style="currency" currency="EUR"/>
                         </div>
                     </div>
                     <div className="column" style={{alignItems: "start"}}>
                         <div className="column begin">
-                            <h3>Base 10:</h3>
+                            <h3><FormattedMessage id="project.global.fields.base"/> 10:</h3>
                             <FormattedNumber value={base10} style="currency" currency="EUR"/>
                         </div>
                         <div className="column begin">
-                            <h3>Iva 10:</h3>
+                            <h3><FormattedMessage id="project.global.fields.vat"/> 10:</h3>
                             <FormattedNumber value={iva10} style="currency" currency="EUR"/>
                         </div>
                     </div>
                     <div className="column" style={{alignItems: "start"}}>
                         <div className="column begin">
-                            <h3>Base 21:</h3>
+                            <h3><FormattedMessage id="project.global.fields.base"/> 21:</h3>
                             <FormattedNumber value={base21} style="currency" currency="EUR"/>
                         </div>
                         <div className="column begin">
-                            <h3>Iva 21:</h3>
+                            <h3><FormattedMessage id="project.global.fields.vat"/> 21:</h3>
                             <FormattedNumber value={iva21} style="currency" currency="EUR"/>
                         </div>
                     </div>
                     <div className="column" style={{alignItems: "start"}}>
                         <div className="column begin">
-                            <h3>Total Base:</h3>
+                            <h3><FormattedMessage id="project.global.fields.totalBase"/>:</h3>
                             <FormattedNumber value={baseTotal} style="currency" currency="EUR"/>
                         </div>
                         <div className="column begin">
-                            <h3>Total Iva:</h3>
+                            <h3><FormattedMessage id="project.global.fields.totalVAT"/>:</h3>
                             <FormattedNumber value={ivaTotal} style="currency" currency="EUR"/>
                         </div>
                         <div className="column begin">
-                            <h3>Total:</h3>
+                            <h3><FormattedMessage id="project.global.fields.total"/>:</h3>
                             <FormattedNumber value={total} style="currency" currency="EUR"/>
                         </div>
                     </div>

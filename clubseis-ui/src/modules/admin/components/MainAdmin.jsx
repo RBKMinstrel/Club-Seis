@@ -5,6 +5,7 @@ import * as selectors from '../selectors';
 import {DataGrid, Pagination} from '../../common';
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {FormattedMessage} from "react-intl";
 
 const MainAdmin = () => {
 
@@ -45,19 +46,19 @@ const MainAdmin = () => {
     const getRowId = (row) => "user-id-" + row.id;
     const columns = {
         usuario: {
-            header: () => <h4>Usuario</h4>,
+            header: () => <h4><FormattedMessage id="project.admin.MainAdmin.user"/></h4>,
             cell: (user) => <p>{user.userName}</p>,
         },
         nombre: {
-            header: () => <h4>Nombre</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.firstName"/></h4>,
             cell: (user) => <p>{user.firstName}</p>,
         },
         apellidos: {
-            header: () => <h4>Apellidos</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.lastName"/></h4>,
             cell: (user) => <p>{user.lastName}</p>,
         },
         roles: {
-            header: () => <h4>Roles</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.roles"/></h4>,
             cell: (user) => {
                 const roles = useSelector(selectors.getRoles);
                 return (
@@ -66,7 +67,7 @@ const MainAdmin = () => {
             },
         },
         acciones: {
-            header: () => <h4>Acciones</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.actions"/></h4>,
             cell: (user) => {
                 const roles = useSelector(selectors.getRoles);
                 const dispatch = useDispatch();
@@ -87,7 +88,7 @@ const MainAdmin = () => {
                 const isAdmin = user.rolesIds.map(
                     id => selectors.getRolName(roles, id)
                 ).includes('ADMIN');
-                return isAdmin ? (
+                return !isAdmin ? (
                     <div className="row" style={{justifyContent: "flex-start", gap: 10}}>
                         <span
                             onClick={() => updateClick(user.id)}
@@ -108,9 +109,9 @@ const MainAdmin = () => {
     };
 
     return (
-        <div className="main-admin">
+        <div style={{display: "flex", flexDirection: "column", gap: 10}}>
             <div style={{display: "flex", justifyContent: "space-between", alignContent: "center", width: "100%"}}>
-                <h2>Usuarios</h2>
+                <h2><FormattedMessage id="project.admin.MainAdmin.users"/></h2>
                 <Link to={'/gestion/admin/create-user'}>
                     <span
                         className="fa-solid fa-circle-plus link-out"

@@ -5,11 +5,13 @@ import {ActionButton} from "../../common";
 
 import * as actions from "../actions.js";
 import PropTypes from "prop-types";
+import {FormattedMessage} from "react-intl";
 
 const CategoriaCreateForm = ({
                                  onSuccess = () => {
-                                 }, onErrors = _ => {
-    }
+                                 },
+                                 onErrors = _ => {
+                                 }
                              }) => {
     const dispatch = useDispatch();
 
@@ -49,7 +51,7 @@ const CategoriaCreateForm = ({
         >
             <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8}}>
                 <label>
-                    Nombre
+                    <FormattedMessage id="project.global.fields.name"/>
                 </label>
                 <input
                     type="text"
@@ -64,7 +66,7 @@ const CategoriaCreateForm = ({
                 type="primary"
                 htmlType="submit"
             >
-                Aceptar
+                <FormattedMessage id="project.global.fields.accept"/>
             </ActionButton>
         </form>
     );

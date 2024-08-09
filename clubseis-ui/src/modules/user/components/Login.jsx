@@ -4,10 +4,13 @@ import {useNavigate} from 'react-router-dom';
 
 import {Errors, Section} from '../../common';
 import * as actions from '../actions';
+import {FormattedMessage, useIntl} from "react-intl";
 
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
+
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [backendErrors, setBackendErrors] = useState(null);
@@ -40,7 +43,7 @@ const Login = () => {
         <div style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100vh"}}>
             <div style={{width: 250}}>
                 <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-                <Section title="Titulo login">
+                <Section title={intl.formatMessage({id: 'project.user.Login.title'})}>
                     <form ref={node => form = node}
                           noValidate
                           onSubmit={e => handleSubmit(e)}
@@ -48,7 +51,7 @@ const Login = () => {
                     >
                         <div>
                             <label htmlFor="userName">
-                                Nombre de usuario
+                                <FormattedMessage id="project.global.fields.userName"/>
                             </label>
                             <div>
                                 <input type="text" id="userName"
@@ -56,28 +59,22 @@ const Login = () => {
                                        onChange={e => setUserName(e.target.value)}
                                        autoFocus
                                        required/>
-                                <div>
-                                    Atributo requerido
-                                </div>
                             </div>
                         </div>
                         <div>
                             <label htmlFor="password">
-                                Contraseña
+                                <FormattedMessage id="project.global.fields.password"/>
                             </label>
                             <div>
                                 <input type="password" id="password"
                                        value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        required/>
-                                <div>
-                                    Atributo requerido
-                                </div>
                             </div>
                         </div>
                         <div style={{display: "flex", justifyContent: "center"}}>
                                 <button type="submit">
-                                    Entrar
+                                    <FormattedMessage id="project.global.fields.accept"/>
                                 </button>
                             </div>
                     </form>

@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
-import * as actions from "../actions.js";
 import {useDispatch, useSelector} from "react-redux";
-import * as selectors from "../selectors.js";
-import {FormattedNumber} from "react-intl";
+import {FormattedMessage, FormattedNumber, useIntl} from "react-intl";
 
-const dateChange = (date) => {
-    const selectedDate = new Date(date);
-    return Math.floor(selectedDate.getTime() / (1000 * 60 * 60 * 24));
-};
+import {fromStringDateToNumber} from "../../utils/dataUtils.js";
+
+import * as actions from "../actions.js";
+import * as selectors from "../selectors.js";
 
 const Resumen = () => {
 
     const dispatch = useDispatch();
+    const intl = useIntl();
     const resumen = useSelector(selectors.getResumen);
+
     const [options, setOptions] = useState([]);
     const [selected, setSelected] = useState();
 
@@ -30,26 +30,26 @@ const Resumen = () => {
 
                 yearOptions.push({
                     value: {
-                        fechaInicio: dateChange(new Date(year, 7, 2)),
-                        fechaFin: dateChange(new Date(year + 1, 0, 32))
+                        fechaInicio: fromStringDateToNumber(new Date(year, 7, 2)),
+                        fechaFin: fromStringDateToNumber(new Date(year + 1, 0, 32))
                     },
-                    label: `1º Temporada ${year}/${year + 1}`
+                    label: intl.formatMessage({id: 'project.contabilidad.Resumen.firstSeason'}) + ` ${year}/${year + 1}`
                 });
 
                 yearOptions.push({
                     value: {
-                        fechaInicio: dateChange(new Date(year + 1, 1, 2)),
-                        fechaFin: dateChange(new Date(year + 1, 6, 32))
+                        fechaInicio: fromStringDateToNumber(new Date(year + 1, 1, 2)),
+                        fechaFin: fromStringDateToNumber(new Date(year + 1, 6, 32))
                     },
-                    label: `2º Temporada ${year}/${year + 1}`
+                    label: intl.formatMessage({id: 'project.contabilidad.Resumen.secondSeason'}) + ` ${year}/${year + 1}`
                 });
 
                 yearOptions.push({
                     value: {
-                        fechaInicio: dateChange(new Date(year, 7, 2)),
-                        fechaFin: dateChange(new Date(year + 1, 6, 32))
+                        fechaInicio: fromStringDateToNumber(new Date(year, 7, 2)),
+                        fechaFin: fromStringDateToNumber(new Date(year + 1, 6, 32))
                     },
-                    label: `Año ${year}/${year + 1}`
+                    label: intl.formatMessage({id: 'project.contabilidad.Resumen.year'}) + ` ${year}/${year + 1}`
                 });
             }
 
@@ -57,6 +57,10 @@ const Resumen = () => {
         };
 
         generateOptions();
+    }, []);
+
+    useEffect(() => {
+        return () => dispatch(actions.clearResumen());
     }, []);
 
     const handleChange = event => {
@@ -81,9 +85,9 @@ const Resumen = () => {
 
                         <thead>
                         <tr>
-                            <th scope="col">Concepto</th>
-                            <th scope="col">Gasto</th>
-                            <th scope="col">Ingreso</th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.concept"/></th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.spend"/></th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.income"/></th>
                         </tr>
                         </thead>
 
@@ -91,7 +95,7 @@ const Resumen = () => {
                         {resumen.conceptoSummaryList.map(concepto =>
                             <tr>
                                 <td>
-                                    {concepto.name ? concepto.name : "Sin asignar"}
+                                    {concepto.name ? concepto.name : intl.formatMessage({id: "project.global.title.unassigned"})}
                                 </td>
                                 <td>
                                     <FormattedNumber value={concepto.gasto} style="currency" currency="EUR"/>
@@ -107,9 +111,9 @@ const Resumen = () => {
 
                         <thead>
                         <tr>
-                            <th scope="col">Categoria</th>
-                            <th scope="col">Gasto</th>
-                            <th scope="col">Ingreso</th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.category"/></th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.spend"/></th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.income"/></th>
                         </tr>
                         </thead>
 
@@ -117,7 +121,7 @@ const Resumen = () => {
                         {resumen.categoriaSummaryList.map(categoria =>
                             <tr>
                                 <td>
-                                    {categoria.name ? categoria.name : "Sin asignar"}
+                                    {categoria.name ? categoria.name : intl.formatMessage({id: "project.global.title.unassigned"})}
                                 </td>
                                 <td>
                                     <FormattedNumber value={categoria.gasto} style="currency" currency="EUR"/>
@@ -133,9 +137,9 @@ const Resumen = () => {
 
                         <thead>
                         <tr>
-                            <th scope="col">Cuenta</th>
-                            <th scope="col">Gasto</th>
-                            <th scope="col">Ingreso</th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.account"/></th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.spend"/></th>
+                            <th scope="col"><FormattedMessage id="project.global.fields.income"/></th>
                         </tr>
                         </thead>
 
@@ -143,7 +147,7 @@ const Resumen = () => {
                         {resumen.cuentaSummaryList.map(cuenta =>
                             <tr>
                                 <td>
-                                    {cuenta.name ? cuenta.name : "Sin asignar"}
+                                    {cuenta.name ? cuenta.name : intl.formatMessage({id: "project.global.title.unassigned"})}
                                 </td>
                                 <td>
                                     <FormattedNumber value={cuenta.gasto} style="currency" currency="EUR"/>
@@ -158,7 +162,7 @@ const Resumen = () => {
                 </div>
             ) : (
                 <div>
-                    Sin contenido
+                    <FormattedMessage id="project.global.title.noContent"/>
                 </div>
             )}
         </div>

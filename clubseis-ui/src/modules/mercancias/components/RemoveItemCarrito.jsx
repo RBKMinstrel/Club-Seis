@@ -1,8 +1,10 @@
 import {ActionButton, Modal} from "../../common";
 
 import * as actions from "../actions.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const RemoveItemCarrito = ({dispatch, carritoId, articuloId, tallaId, modalActive, setModalActive}) => {
+    const intl = useIntl();
 
     const active = {
         articuloId: articuloId,
@@ -25,7 +27,7 @@ const RemoveItemCarrito = ({dispatch, carritoId, articuloId, tallaId, modalActiv
             />
             <Modal
                 isActive={isActive}
-                title="¿Borrar articulo del carrito?"
+                title={intl.formatMessage({id: 'project.mercancias.RemoveItemCarrito.title'})}
                 onClose={() => setModalActive(null)}
             >
                 <div style={{
@@ -35,7 +37,7 @@ const RemoveItemCarrito = ({dispatch, carritoId, articuloId, tallaId, modalActiv
                     flexDirection: "column",
                     gap: 20
                 }}>
-                    <h4>Esta acción no se puede deshacer, esta seguro?</h4>
+                    <h4><FormattedMessage id="project.mercancias.RemoveItemCarrito.text"/></h4>
                     <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
                         <ActionButton
                             type="danger"
@@ -43,7 +45,7 @@ const RemoveItemCarrito = ({dispatch, carritoId, articuloId, tallaId, modalActiv
                             onClick={() =>
                                 setModalActive(null)}
                         >
-                            Cancelar
+                            <FormattedMessage id="project.global.button.cancel"/>
                         </ActionButton>
                         <ActionButton
                             type="primary"
@@ -54,7 +56,7 @@ const RemoveItemCarrito = ({dispatch, carritoId, articuloId, tallaId, modalActiv
                                     () => setModalActive(null)
                                 ))}
                         >
-                            Confirmar
+                            <FormattedMessage id="project.global.button.confirm"/>
                         </ActionButton>
                     </div>
                 </div>

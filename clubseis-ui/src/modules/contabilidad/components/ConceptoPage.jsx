@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import {Errors, Section} from "../../common";
+import {ActionButton, Errors, Section} from "../../common";
 import ConceptoCreateForm from "./ConceptoCreateForm.jsx";
 import ConceptoUpdateForm from "./ConceptoUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
+import {FormattedMessage} from "react-intl";
 
 const ConceptoPage = () => {
     const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const ConceptoPage = () => {
                     width: "40%",
                     alignSelf: "flex-start"
                 }}>
-                    <h2>Conceptos</h2>
+                    <h2><FormattedMessage id="project.global.fields.concepts"/></h2>
                     <div style={{width: "100%"}}>
                         {conceptos.map((concepto) => (
                             <div key={concepto.id} style={{
@@ -53,16 +54,21 @@ const ConceptoPage = () => {
                             </div>
                         ))}
                         {selected && (
-                            <button onClick={() => setSelected(null)} style={{marginTop: 10}}>
-                                Limpiar Selección
-                            </button>
+                            <ActionButton
+                                type="secondary"
+                                htmlType="button"
+                                onClick={() => setSelected(null)}
+                                style={{marginTop: 10}}
+                            >
+                                <FormattedMessage id="project.global.button.cleanSelect"/>
+                            </ActionButton>
                         )}
                     </div>
                 </div>
                 <div style={{width: "40%", paddingTop: 40, display: "flex", flexDirection: "column", gap: 20}}>
                     {
                         !selected ? (
-                            <Section title="Crear concepto">
+                            <Section title={intl.formatMessage({id: 'project.contabilidad.ConceptoPage.createTitle'})}>
                                 <ConceptoCreateForm
                                     onSuccess={() => setSelected(null)}
                                     onErrors={setBackendErrors}
@@ -70,7 +76,8 @@ const ConceptoPage = () => {
                             </Section>
                         ) : (
                             <>
-                                <Section title="Actualizar concepto">
+                                <Section
+                                    title={intl.formatMessage({id: 'project.contabilidad.ConceptoPage.updateTitle'})}>
                                     <ConceptoUpdateForm
                                         concepto={selected}
                                         onSuccess={() => setSelected(null)}

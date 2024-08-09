@@ -6,6 +6,7 @@ import {fromStringDateToNumber} from "../../utils/dataUtils.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
+import {FormattedMessage} from "react-intl";
 
 const Demanda = () => {
     const dispatch = useDispatch();
@@ -40,12 +41,12 @@ const Demanda = () => {
     const getNestedRows = (row) => row.stockList;
     const columns = {
         articulo: {
-            header: () => <h4>Articulo</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.article"/></h4>,
             cell: (item) =>
                 <p>{item.name}</p>
         },
         talla: {
-            header: () => <h4>Talla</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.size"/></h4>,
             cell: (item) => {
                 const isItem = 'stockList' in item;
                 const talla = isItem
@@ -57,7 +58,7 @@ const Demanda = () => {
             }
         },
         quantity: {
-            header: () => <h4>Cantidad</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.quantity"/></h4>,
             cell: (item) =>
                 <p>{item.stock}</p>
         },
@@ -71,7 +72,7 @@ const Demanda = () => {
                   onSubmit={e => handleSubmit(e)}
             >
                 <div style={{display: "flex", flexDirection: "column"}}>
-                    <label>Fecha de inicio:</label>
+                    <label><FormattedMessage id="project.mercancias.Demanda.initData"/>:</label>
                     <input
                         type="date"
                         id="beginDate"
@@ -81,7 +82,7 @@ const Demanda = () => {
                     />
                 </div>
                 <div style={{display: "flex", flexDirection: "column"}}>
-                    <label>Fecha de fin:</label>
+                    <label><FormattedMessage id="project.mercancias.Demanda.endData"/>:</label>
                     <input
                         type="date"
                         id="endDate"
@@ -94,7 +95,7 @@ const Demanda = () => {
                     type="primary"
                     htmlType="submit"
                 >
-                    Buscar
+                    <FormattedMessage id="project.mercancias.Demanda.button"/>
                 </ActionButton>
             </form>
             <br/>

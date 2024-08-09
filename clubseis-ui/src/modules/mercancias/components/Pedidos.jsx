@@ -7,6 +7,7 @@ import * as selectors from "../selectors.js";
 import {useEffect, useState} from "react";
 import CrearCompraByPedido from "./CrearCompraByPedido.jsx";
 import DeletePedido from "./DeletePedido.jsx";
+import {FormattedMessage} from "react-intl";
 
 const Pedidos = () => {
     const dispatch = useDispatch();
@@ -50,22 +51,22 @@ const Pedidos = () => {
     const getNestedRows = (row) => row.subItems;
     const columns = {
         reserva: {
-            header: () => <h4>Reserva</h4>,
+            header: () => <h4><FormattedMessage id="project.mercancias.Pedidos.booking"/></h4>,
             cell: (item) =>
                 <p>{item.reserva}</p>,
         },
         articulo: {
-            header: () => <h4>Articulo</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.article"/></h4>,
             cell: (item) =>
                 <p>{item.articulo}</p>,
         },
         talla: {
-            header: () => <h4>Talla</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.size"/></h4>,
             cell: (item) =>
                 <p>{selectors.getTallaName(tallaList, item.tallaId)}</p>,
         },
         cantidad: {
-            header: () => <h4>Cantidad</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.quantity"/></h4>,
             cell: (item) =>
                 <p>{item.cantidad}</p>,
         },

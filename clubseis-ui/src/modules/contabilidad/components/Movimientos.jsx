@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
-import {FormattedDate, FormattedNumber} from "react-intl";
+import {FormattedDate, FormattedMessage, FormattedNumber} from "react-intl";
 
 import {DataGrid, Pagination} from "../../common";
 import Filtros from "./Filtros";
@@ -58,12 +58,12 @@ const Movimientos = () => {
     const getRowId = (row) => "mov-id-" + row.id;
     const columns = {
         fecha: {
-            header: () => <h4>Fecha</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.date"/></h4>,
             cell: (movimiento) =>
                 <FormattedDate value={new Date(movimiento.fecha * (1000 * 60 * 60 * 24))}/>,
         },
         tipo: {
-            header: () => <h4>Tipo</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.type"/></h4>,
             cell: (movimiento) => {
                 return movimiento.gasto
                     ? (<p>Gasto</p>)
@@ -71,27 +71,27 @@ const Movimientos = () => {
             },
         },
         razonSocial: {
-            header: () => <h4>Razón Social</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.registeredName"/></h4>,
             cell: (movimiento) => <p>{movimiento.razonSocial}</p>,
         },
         concepto: {
-            header: () => <h4>Concepto</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.concept"/></h4>,
             cell: (movimiento) => <p>{movimiento.concepto}</p>,
         },
         categoria: {
-            header: () => <h4>Categoria</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.category"/></h4>,
             cell: (movimiento) => <p>{movimiento.categoria}</p>,
         },
         cuenta: {
-            header: () => <h4>Cuenta</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.account"/></h4>,
             cell: (movimiento) => <p>{movimiento.cuenta}</p>,
         },
         total: {
-            header: () => <h4>Total</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.total"/></h4>,
             cell: (movimiento) => <FormattedNumber value={movimiento.total} style="currency" currency="EUR"/>,
         },
         acciones: {
-            header: () => <h4>Acciones</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.actions"/></h4>,
             cell: (movimiento) =>
                 <div className="row" style={{justifyContent: "space-around"}}>
                     <Link to={`/gestion/contabilidad/asientos/${movimiento.id}`}>
@@ -146,7 +146,7 @@ const Movimientos = () => {
         <div className="column" style={{alignItems: "center"}}>
             <div style={{display: "flex", justifyContent: "space-between", width: "100%", padding: 10}}>
                 <div>
-                    <h2>Asientos</h2>
+                    <h2><FormattedMessage id="project.contabilidad.Movimientos.title"/></h2>
                 </div>
                 <div style={{display: "flex", alignItems: "center", gap: 10}}>
                     <Link to="/gestion/contabilidad/asientos/crear">

@@ -1,4 +1,5 @@
 import './DataGrid.css';
+import {FormattedMessage} from "react-intl";
 
 const DataGrid = ({
                       dataList, getRowId, columns,
@@ -57,7 +58,8 @@ const DataGrid = ({
                 {loading ? (
                     <tr key={"data-loading"}>
                         <td colSpan={keys.length + (setSelectedRows ? 1 : 0)}
-                            className="data-grid-loading">Cargando...
+                            className="data-grid-loading">
+                            <FormattedMessage id="project.common.DataGrid.loading"/>
                         </td>
                     </tr>
                 ) : dataList.length > 0 ? (
@@ -102,8 +104,8 @@ const DataGrid = ({
                     })
                 ) : (
                     <tr key={"no-results"}>
-                        <td colSpan={keys.length + (setSelectedRows ? 1 : 0)} className="data-grid-no-results">No hay
-                            datos disponibles
+                        <td colSpan={keys.length + (setSelectedRows ? 1 : 0)} className="data-grid-no-results">
+                            <FormattedMessage id="project.common.DataGrid.noResult"/>
                         </td>
                     </tr>
                 )}

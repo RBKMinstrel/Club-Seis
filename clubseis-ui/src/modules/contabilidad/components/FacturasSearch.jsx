@@ -6,11 +6,12 @@ import {ActionButton, DataGrid, Pagination} from "../../common/index.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";
-import {FormattedDate} from "react-intl";
+import {FormattedDate, FormattedMessage, useIntl} from "react-intl";
 
 const FacturasSearch = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
     const facturasSearch = useSelector(selectors.getFacturasSearch);
 
     const [forceUpdate, setForceUpdate] = useState(false);
@@ -47,24 +48,24 @@ const FacturasSearch = () => {
     const getRowId = (row) => "fact-" + row.id;
     const columns = {
         fecha: {
-            header: () => <h4>Fecha</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.date"/></h4>,
             cell: (item) =>
                 <p><FormattedDate value={new Date(item.fecha * (1000 * 60 * 60 * 24))}/></p>
         },
         codigo: {
-            header: () => <h4>Codigo</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.code"/></h4>,
             cell: (item) =>
                 <p>{item.codigo}</p>
         },
         tipo: {
-            header: () => <h4>Tipo</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.type"/></h4>,
             cell: (item) => {
                 const getTipoName = (tipo) => {
                     switch (tipo) {
                         case 1:
-                            return 'Factura';
+                            return intl.formatMessage({id: 'project.global.fields.bill'});
                         case 2:
-                            return 'Recibi';
+                            return intl.formatMessage({id: 'project.global.fields.receipt'});
                         default:
                             return '';
                     }
@@ -73,22 +74,22 @@ const FacturasSearch = () => {
             }
         },
         anotaciones: {
-            header: () => <h4>Anotaciones</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.annotations"/></h4>,
             cell: (item) =>
                 <p>{item.anotacion}</p>
         },
         emisor: {
-            header: () => <h4>Emisor</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.transmitter"/></h4>,
             cell: (item) =>
                 <p>{item.emisor}</p>
         },
         receptor: {
-            header: () => <h4>Receptor</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.receiver"/></h4>,
             cell: (item) =>
                 <p>{item.receptor}</p>
         },
         acciones: {
-            header: () => <h4>Acciones</h4>,
+            header: () => <h4><FormattedMessage id="project.global.fields.actions"/></h4>,
             cell: (item) => {
                 return (
                     <div style={{display: "flex", justifyContent: "center"}}>
@@ -118,14 +119,14 @@ const FacturasSearch = () => {
                         htmlType="button"
                         onClick={() => navigate("/gestion/contabilidad/facturas/crearFactura")}
                     >
-                        Crear Factura
+                        <FormattedMessage id="project.contabilidad.FacturaSearch.createBill"/>
                     </ActionButton>
                     <ActionButton
                         type="secondary"
                         htmlType="button"
                         onClick={() => navigate("/gestion/contabilidad/facturas/crearRecibi")}
                     >
-                        Crear Recibi
+                        <FormattedMessage id="project.contabilidad.FacturaSearch.createReceipt"/>
                     </ActionButton>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Route, Routes} from "react-router-dom";
 
-import user, {Base, BaseIndex, ChangePassword, Login, Logout, UpdateProfile} from "../../user";
+import user, {Base, BaseIndex, Login, Logout, UpdateProfile, UserProfile} from "../../user";
 import {DeleteUser, MainAdmin, UpdateUser, UserForm} from "../../admin";
 import {
     CategoriaPage,
@@ -56,8 +56,6 @@ const App = () => {
             {loggedIn &&
                 <Route path="/gestion/" element={<Base/>}>
                     <Route index element={<BaseIndex/>}/>
-                    <Route path="update-profile" element={<UpdateProfile/>}/>
-                    <Route path="change-password" element={<ChangePassword/>}/>
                     <Route path="logout" element={<Logout/>}/>
                     {roles.includes('ADMIN') &&
                         <Route path="admin/">
@@ -105,6 +103,10 @@ const App = () => {
                         <Route path="pedidos" element={<Pedidos/>}/>
                     </Route>
                     <Route path="configuracion" element={<Configuration/>}/>
+                    <Route path="mi-perfil">
+                        <Route index element={<UserProfile/>}/>
+                        <Route path="update-profile" element={<UpdateProfile/>}/>
+                    </Route>
                 </Route>
             }
         </Routes>

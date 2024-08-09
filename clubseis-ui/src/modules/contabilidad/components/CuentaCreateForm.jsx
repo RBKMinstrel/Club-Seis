@@ -5,11 +5,13 @@ import {useDispatch} from "react-redux";
 import {ActionButton} from "../../common";
 
 import * as actions from "../actions.js";
+import {FormattedMessage} from "react-intl";
 
 const CuentaCreateForm = ({
                               onSuccess = () => {
-                              }, onErrors = _ => {
-    }
+                              },
+                              onErrors = _ => {
+                              }
                           }) => {
     const dispatch = useDispatch();
 
@@ -48,9 +50,7 @@ const CuentaCreateForm = ({
             style={{display: "flex", flexDirection: "column", gap: 20}}
         >
             <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8}}>
-                <label>
-                    Nombre
-                </label>
+                <label><FormattedMessage id="project.global.fields.name"/></label>
                 <input
                     type="text"
                     id="nameFieldCreate"
@@ -64,7 +64,7 @@ const CuentaCreateForm = ({
                 type="primary"
                 htmlType="submit"
             >
-                Aceptar
+                <FormattedMessage id="project.global.fields.accept"/>
             </ActionButton>
         </form>
     );

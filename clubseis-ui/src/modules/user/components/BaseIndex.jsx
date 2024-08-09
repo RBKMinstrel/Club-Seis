@@ -1,9 +1,9 @@
+import {FormattedMessage} from "react-intl";
+
 const BaseIndex = () => {
     return (
         <div>
-            <p>
-                Bienvenido al sistema de gestion club seis.
-            </p>
+            <p><FormattedMessage id="project.user.BaseIndex.title"/></p>
         </div>
     );
 

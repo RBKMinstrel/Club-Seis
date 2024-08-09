@@ -1,15 +1,17 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import {Errors, Section} from "../../common";
+import {ActionButton, Errors, Section} from "../../common";
 import CuentaCreateForm from "./CuentaCreateForm.jsx";
 import CuentaUpdateForm from "./CuentaUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
+import {FormattedMessage, useIntl} from "react-intl";
 
 const CuentaPage = () => {
     const dispatch = useDispatch();
+    const intl = useIntl();
     const cuentas = useSelector(selectors.getCuentas) || [];
 
     const [selected, setSelected] = useState(null);
@@ -38,7 +40,7 @@ const CuentaPage = () => {
                     width: "40%",
                     alignSelf: "flex-start"
                 }}>
-                    <h2>Cuentas</h2>
+                    <h2><FormattedMessage id="project.global.fields.accounts"/></h2>
                     <div style={{width: "100%"}}>
                         {cuentas.map((cuenta) => (
                             <div key={cuenta.id} style={{
@@ -53,16 +55,21 @@ const CuentaPage = () => {
                             </div>
                         ))}
                         {selected && (
-                            <button onClick={() => setSelected(null)} style={{marginTop: 10}}>
-                                Limpiar Selección
-                            </button>
+                            <ActionButton
+                                type="secondary"
+                                htmlType="button"
+                                onClick={() => setSelected(null)}
+                                style={{marginTop: 10}}
+                            >
+                                <FormattedMessage id="project.global.button.cleanSelect"/>
+                            </ActionButton>
                         )}
                     </div>
                 </div>
                 <div style={{width: "40%", paddingTop: 40, display: "flex", flexDirection: "column", gap: 20}}>
                     {
                         !selected ? (
-                            <Section title="Crear cuenta">
+                            <Section title={intl.formatMessage({id: 'project.contabilidad.CuentaPage.createTitle'})}>
                                 <CuentaCreateForm
                                     onSuccess={() => setSelected(null)}
                                     onErrors={setBackendErrors}
@@ -70,7 +77,8 @@ const CuentaPage = () => {
                             </Section>
                         ) : (
                             <>
-                                <Section title="Actualizar cuenta">
+                                <Section
+                                    title={intl.formatMessage({id: 'project.contabilidad.CuentaPage.updateTitle'})}>
                                     <CuentaUpdateForm
                                         cuenta={selected}
                                         onSuccess={() => setSelected(null)}

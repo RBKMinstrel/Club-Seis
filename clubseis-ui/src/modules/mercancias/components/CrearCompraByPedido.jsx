@@ -3,10 +3,12 @@ import {useState} from "react";
 import {ActionButton, Modal} from "../../common";
 
 import * as actions from "../actions.js";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const CrearCompraByPedido = ({dispatch, selectedRows, setBackendErrors, setForceUpdate}) => {
-    const [modal, setModal] = useState(false);
+    const intl = useIntl();
 
+    const [modal, setModal] = useState(false);
     const [esSocio, setEsSocio] = useState(false);
 
     return (
@@ -17,18 +19,18 @@ const CrearCompraByPedido = ({dispatch, selectedRows, setBackendErrors, setForce
                 onClick={() => setModal(true)}
                 disabled={selectedRows.length !== 1}
             >
-                Comprar
+                <FormattedMessage id="project.global.button.buy"/>
             </ActionButton>
             <Modal
                 isActive={modal}
                 onClose={() => setModal(false)}
-                title="Crear compra a partir de pedido"
+                title={intl.formatMessage({id: "project.mercancias.CrearCompraByPedido.title"})}
             >
                 <>
                     <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                         <>
                             <input type="checkbox" checked={esSocio} onChange={e => setEsSocio((prev) => !prev)}/>
-                            <label> Socio</label>
+                            <label> <FormattedMessage id="project.global.fields.member"/></label>
                         </>
                     </div>
                     <div style={{display: "flex", justifyContent: "space-between"}}>
@@ -37,7 +39,7 @@ const CrearCompraByPedido = ({dispatch, selectedRows, setBackendErrors, setForce
                             htmlType="button"
                             onClick={() => setModal(false)}
                         >
-                            Cancelar
+                            <FormattedMessage id="project.global.button.cancel"/>
                         </ActionButton>
                         <ActionButton
                             type="primary"
@@ -47,7 +49,7 @@ const CrearCompraByPedido = ({dispatch, selectedRows, setBackendErrors, setForce
                                     Number(selectedRows[0].split("-")[1]), esSocio,
                                     () => {
                                         setModal(false);
-                                        alert("Compra realizada con exito")
+                                        alert(intl.formatMessage({id: "project.mercancias.CrearCompraByPedido.success"}))
                                         setForceUpdate((prev) => !prev)
                                     },
                                     errors => {
@@ -56,7 +58,7 @@ const CrearCompraByPedido = ({dispatch, selectedRows, setBackendErrors, setForce
                                     }
                                 ))}
                         >
-                            Comprar
+                            <FormattedMessage id="project.global.button.buy"/>
                         </ActionButton>
                     </div>
                 </>

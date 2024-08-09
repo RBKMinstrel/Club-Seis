@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static es.minstrel.app.rest.dtos.FacturaConversors.*;
+import static es.minstrel.app.rest.dtos.FechaConversor.fromDays;
 import static es.minstrel.app.rest.dtos.MovimientoConversor.*;
 
 @RestController
