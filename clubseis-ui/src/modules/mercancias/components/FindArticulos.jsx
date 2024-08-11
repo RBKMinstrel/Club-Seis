@@ -29,6 +29,10 @@ const FindArticulos = () => {
     const [size, setSize] = useState(6);
 
     useEffect(() => {
+        dispatch(actions.getCarrito());
+    }, []);
+
+    useEffect(() => {
         setPage(0);
         setForceUpdate((prev) => !prev);
     }, [name, tipo, genero, size]);

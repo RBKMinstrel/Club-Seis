@@ -7,10 +7,11 @@ import RazonSocialUpdateForm from "./RazonSocialUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const RazonSocialPage = () => {
     const dispatch = useDispatch();
+    const intl = useIntl();
     const razonesSociales = useSelector(selectors.getRazonesSociales) || [];
 
     const [selected, setSelected] = useState(null);

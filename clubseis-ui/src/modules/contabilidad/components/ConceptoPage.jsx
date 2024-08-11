@@ -7,10 +7,11 @@ import ConceptoUpdateForm from "./ConceptoUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const ConceptoPage = () => {
     const dispatch = useDispatch();
+    const intl = useIntl();
     const conceptos = useSelector(selectors.getConceptos) || [];
 
     const [selected, setSelected] = useState(null);

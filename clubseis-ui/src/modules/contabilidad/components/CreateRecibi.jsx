@@ -7,11 +7,12 @@ import CuentaSelect from "./CuentaSelect.jsx";
 import CategoriaSelect from "./CategoriaSelect.jsx";
 import RazonSocialSelect from "./RazonSocialSelect.jsx";
 import * as actions from "../actions.js";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const CreateRecibi = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const intl = useIntl();
 
     const [concepto, setConcepto] = useState(null);
     const [razonSocial, setRazonSocial] = useState(null);

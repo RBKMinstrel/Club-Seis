@@ -34,7 +34,10 @@ const Base = () => {
                     name: intl.formatMessage({id: "project.global.fields.categories"}),
                     url: "/gestion/contabilidad/categorias"
                 },
-                {name: intl.formatMessage({id: "project.global.fields.acounts"}), url: "/gestion/contabilidad/cuentas"},
+                {
+                    name: intl.formatMessage({id: "project.global.fields.accounts"}),
+                    url: "/gestion/contabilidad/cuentas"
+                },
                 {name: intl.formatMessage({id: "project.user.Base.summary"}), url: "/gestion/contabilidad/resumen"},
                 {name: intl.formatMessage({id: "project.user.Base.bills"}), url: "/gestion/contabilidad/facturas"},
             ]
@@ -55,7 +58,7 @@ const Base = () => {
             subItems: []
         },
         {
-            name: intl.formatMessage({id: "project.user.Base.profile"}),
+            name: intl.formatMessage({id: "project.user.Base.config"}),
             url: "/gestion/configuracion",
             subItems: []
         },

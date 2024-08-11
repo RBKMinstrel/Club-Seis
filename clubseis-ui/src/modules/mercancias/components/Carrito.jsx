@@ -21,6 +21,10 @@ const Carrito = () => {
         ({artId: i.articuloId, talId: i.tallaId ?? null, cant: i.quantity})));
 
     useEffect(() => {
+        dispatch(actions.getCarrito());
+    }, []);
+
+    useEffect(() => {
         setItemsData(carrito
             ? carrito.items.map(i =>
                 ({artId: i.articuloId, talId: i.tallaId ?? null, cant: i.quantity}))

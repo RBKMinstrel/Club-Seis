@@ -7,10 +7,11 @@ import CategoriaUpdateForm from "./CategoriaUpdateForm.jsx";
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 
 const CategoriaPage = () => {
     const dispatch = useDispatch();
+    const intl = useIntl();
     const categorias = useSelector(selectors.getCategorias) || [];
 
     const [selected, setSelected] = useState(null);
