@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-import {ActionButton, BackLink, Errors, Section} from "../../common/index.js";
+import {ActionButton, Errors, Section} from "../../common/index.js";
 import Select from "react-select";
 
 import * as selectors from "../selectors";

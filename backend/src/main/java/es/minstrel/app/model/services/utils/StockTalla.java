@@ -1,7 +1,5 @@
 package es.minstrel.app.model.services.utils;
 
-import java.util.List;
-
 public class StockTalla {
 
     private Long idTalla;

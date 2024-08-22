@@ -1,7 +1,5 @@
 package es.minstrel.app.rest.dtos;
 
-import es.minstrel.app.model.entities.Articulo;
-
 import java.math.BigDecimal;
 import java.util.List;
 

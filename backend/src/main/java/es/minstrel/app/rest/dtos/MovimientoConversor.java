@@ -3,7 +3,6 @@ package es.minstrel.app.rest.dtos;
 import es.minstrel.app.model.entities.Movimiento;
 import es.minstrel.app.model.entities.RazonSocial;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static es.minstrel.app.rest.dtos.FechaConversor.fromDays;
