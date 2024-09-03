@@ -191,7 +191,7 @@ public class ContabilidadServiceImpl implements ContabilidadService {
         if (concepto.getName().equals(name))
             return;
 
-        if (categoriaDao.existsByName(name))
+        if (conceptoDao.existsByName(name))
             throw new DuplicateInstanceException("project.entities.categoria", name);
 
         concepto.setName(name);

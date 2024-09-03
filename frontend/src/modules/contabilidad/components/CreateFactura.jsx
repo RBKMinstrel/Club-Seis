@@ -9,7 +9,7 @@ import ConceptoSelect from "./ConceptoSelect.jsx";
 import CuentaSelect from "./CuentaSelect.jsx";
 import CategoriaSelect from "./CategoriaSelect.jsx";
 import RazonSocialSelect from "./RazonSocialSelect.jsx";
-import {fromStringDateToNumber, todayStringDate} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber, todayStringDate} from "../../utils/dateUtils.js";
 
 import * as actions from "../actions.js";
 
@@ -17,7 +17,7 @@ const CreateFactura = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const intl = useIntl();
-    const ivaName = intl.formatMessage({id: "'project.global.fields.vat'"});
+    const ivaName = intl.formatMessage({id: "project.global.fields.vat"});
 
     const ivaOptions = [
         {label: ivaName + "4%", value: 1},

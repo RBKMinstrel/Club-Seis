@@ -51,7 +51,7 @@ const AddMoreExistencias = ({articulo}) => {
                 title={intl.formatMessage({id: 'project.mercancias.AddMoreExistencias.title'})}
             >
                 <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-                <div style={{width: 600, height: 200, display: "flex", flexWrap: "wrap", gap: 20}}>
+                <div style={{width: 400, height: 120, display: "flex", flexWrap: "wrap", gap: 20}}>
                     {
                         articulo.esRopa
                             ? (stock.map((talla, indice) =>
@@ -64,12 +64,19 @@ const AddMoreExistencias = ({articulo}) => {
                                 </div>
                             ))
                             : (
-                                <div className="column begin">
-                                    <label><FormattedMessage id="project.global.fields.quantity"/>:</label>
-                                    <input type="number" step="0" min="0" value={stock[0].stock}
-                                           onChange={e => setStock(
-                                               [{id: null, name: null, stock: Number(e.target.value)}]
-                                           )}/>
+                                <div style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "100%"
+                                }}>
+                                    <div className="column begin">
+                                        <label><FormattedMessage id="project.global.fields.quantity"/>:</label>
+                                        <input type="number" step="0" min="0" value={stock[0].stock}
+                                               onChange={e => setStock(
+                                                   [{id: null, name: null, stock: Number(e.target.value)}]
+                                               )}/>
+                                    </div>
                                 </div>
                             )
                     }

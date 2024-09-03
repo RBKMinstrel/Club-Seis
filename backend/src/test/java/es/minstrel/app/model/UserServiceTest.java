@@ -44,13 +44,17 @@ public class UserServiceTest {
     /*Funcion loguearse*/
 
     @Test
-    public void testLogin() throws IncorrectLoginException {
+    public void testLogin()
+            throws IncorrectLoginException {
 
+        //1. Iniciar resursos
         User user = createUser("user");
         String clearPassword = "password";
 
+        //2. Llamar al metodo a probar
         User loggedInUser = userService.login(user.getUserName(), clearPassword);
 
+        //3. Comprobar el resultado
         assertEquals(user, loggedInUser);
 
     }

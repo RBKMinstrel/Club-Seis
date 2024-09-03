@@ -1,16 +1,21 @@
 import {useDispatch, useSelector} from 'react-redux';
 
-import * as actions from '../actions';
-import * as selectors from '../selectors';
 import {DataGrid, Pagination} from '../../common';
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {FormattedMessage} from "react-intl";
 
+import * as actions from '../actions';
+import * as selectors from '../selectors';
+import * as userSelectors from '../../user/selectors';
+
 const MainAdmin = () => {
 
-    const users = useSelector(selectors.getUserSearch);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const users = useSelector(selectors.getUserSearch);
+    const roles = useSelector(selectors.getRoles);
+    const myUser = useSelector(userSelectors.getUserName);
 
     const [forceUpdate, setForceUpdate] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -60,7 +65,6 @@ const MainAdmin = () => {
         roles: {
             header: () => <h4><FormattedMessage id="project.global.fields.roles"/></h4>,
             cell: (user) => {
-                const roles = useSelector(selectors.getRoles);
                 return (
                     <p>{user.rolesIds.map(id => selectors.getRolName(roles, id)).join(", ")}</p>
                 );
@@ -69,10 +73,6 @@ const MainAdmin = () => {
         acciones: {
             header: () => <h4><FormattedMessage id="project.global.fields.actions"/></h4>,
             cell: (user) => {
-                const roles = useSelector(selectors.getRoles);
-                const dispatch = useDispatch();
-                const navigate = useNavigate();
-
                 const updateClick = (id) => {
                     dispatch(actions.findUserById(id,
                         () => navigate(`/gestion/admin/update`))
@@ -85,9 +85,7 @@ const MainAdmin = () => {
                     );
                 }
 
-                const isAdmin = user.rolesIds.map(
-                    id => selectors.getRolName(roles, id)
-                ).includes('ADMIN');
+                const isAdmin = user.userName === myUser;
                 return !isAdmin ? (
                     <div className="row" style={{justifyContent: "flex-start", gap: 10}}>
                         <span

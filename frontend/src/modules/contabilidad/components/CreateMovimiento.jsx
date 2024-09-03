@@ -2,7 +2,7 @@ import {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-import {fromStringDateToNumber, todayStringDate} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber, todayStringDate} from "../../utils/dateUtils.js";
 import {ActionButton, BackLink, Errors, Section} from "../../common";
 import Select from "react-select";
 
@@ -281,7 +281,7 @@ const CreateMovimiento = () => {
                     </div>
                 </Section>
                 {factura && (
-                    <Section title={intl.formatMessage({id: "'project.contabilidad.CreateMovimiento.uploadBill'"})}>
+                    <Section title={intl.formatMessage({id: "project.contabilidad.CreateMovimiento.uploadBill"})}>
                         <div style={{display: "flex", justifyContent: "space-around", gap: 20}}>
                             <div style={{display: "flex", flexDirection: "column", gap: 10}}>
                                 <div className="column begin">
@@ -301,7 +301,7 @@ const CreateMovimiento = () => {
                                     />
                                 </div>
                                 <div className="column begin">
-                                    <label><FormattedMessage id="'project.global.fields.selectFile'"/>:</label>
+                                    <label><FormattedMessage id="project.global.fields.selectFile"/>:</label>
                                     <input
                                         type="file"
                                         required

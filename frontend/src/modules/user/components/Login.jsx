@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
-import {Errors, Section} from '../../common';
+import {ActionButton, Errors, Section} from '../../common';
 import * as actions from '../actions';
 import {FormattedMessage, useIntl} from "react-intl";
 
@@ -73,9 +73,9 @@ const Login = () => {
                             </div>
                         </div>
                         <div style={{display: "flex", justifyContent: "center"}}>
-                                <button type="submit">
+                            <ActionButton type="primary" htmlType="submit">
                                     <FormattedMessage id="project.global.fields.accept"/>
-                                </button>
+                            </ActionButton>
                             </div>
                     </form>
                 </Section>

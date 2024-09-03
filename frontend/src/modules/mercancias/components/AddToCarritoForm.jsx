@@ -35,9 +35,16 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
     return (
         <>
             <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
-            <div style={{height: 200, width: 100}}>
+            <div style={{
+                height: 200,
+                width: 300,
+                display: "flex",
+                flexDirection: "column",
+                gap: 20,
+                alignItems: "center"
+            }}>
                 {typeArticulo &&
-                    <div>
+                    <div style={{width: 200}}>
                         <label><FormattedMessage id="project.global.fields.size"/>:</label>
                         <Select
                             options={tallasOptions}
@@ -46,7 +53,7 @@ const AddToCarritoForm = ({idArticulo, typeArticulo, onSuccess}) => {
                         />
                     </div>
                 }
-                <div>
+                <div style={{display: "flex", flexDirection: "column", width: 200}}>
                     <label><FormattedMessage id="project.global.fields.quantity"/>:</label>
                     <input
                         type="number"

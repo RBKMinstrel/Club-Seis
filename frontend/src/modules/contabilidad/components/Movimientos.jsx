@@ -7,7 +7,7 @@ import {DataGrid, Pagination} from "../../common";
 import Filtros from "./Filtros";
 import UploadAsientos from "./UploadAsientos.jsx";
 
-import {fromStringDateToNumber} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber} from "../../utils/dateUtils.js";
 
 import * as actions from "../actions.js";
 import * as selectors from '../selectors';

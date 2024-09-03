@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {ActionButton, DataGrid} from "../../common";
 import {useEffect, useState} from "react";
-import {fromStringDateToNumber} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber} from "../../utils/dateUtils.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";

@@ -7,7 +7,7 @@ import Select from "react-select";
 
 import * as selectors from "../selectors";
 import * as actions from "../actions";
-import {fromNumberToStringDate, fromStringDateToNumber} from "../../utils/dataUtils.js";
+import {fromNumberToStringDate, fromStringDateToNumber} from "../../utils/dateUtils.js";
 import {FormattedMessage, useIntl} from "react-intl";
 
 function redondear(numero) {

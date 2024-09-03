@@ -31,7 +31,7 @@ public class CommonServiceImpl implements CommonService {
             throws UnsupportedFileTypeException, IOException {
 
         if (imageBytes == null || imageBytes.length == 0 || fileType == null || fileType.isEmpty())
-            return fileType;
+            return null;
 
         String extension = getExtensionFromMimeType(fileType);
         String newFileName = UUID.randomUUID() + extension;

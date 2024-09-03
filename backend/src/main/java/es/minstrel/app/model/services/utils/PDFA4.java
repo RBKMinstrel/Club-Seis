@@ -152,7 +152,7 @@ public class PDFA4 {
 
             }
 
-            float lineWidth = fontSize * font.getStringWidth(line) / 1000;
+            float lineWidth = getWidthOfString(line, fontSize, font);
             float displacement = (getAvaibleWidth() - lineWidth) / 2f;
 
             actualHeight -= writeLine(line, fontSize, font, color, actualHeight, displacement + offSet, maxWidth);

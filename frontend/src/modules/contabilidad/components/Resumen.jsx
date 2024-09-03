@@ -3,7 +3,7 @@ import Select from 'react-select';
 import {useDispatch, useSelector} from "react-redux";
 import {FormattedMessage, FormattedNumber, useIntl} from "react-intl";
 
-import {fromStringDateToNumber} from "../../utils/dataUtils.js";
+import {fromStringDateToNumber} from "../../utils/dateUtils.js";
 
 import * as actions from "../actions.js";
 import * as selectors from "../selectors.js";

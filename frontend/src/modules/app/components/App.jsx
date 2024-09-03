@@ -57,7 +57,7 @@ const App = () => {
                 <Route path="/gestion/" element={<Base/>}>
                     <Route index element={<BaseIndex/>}/>
                     <Route path="logout" element={<Logout/>}/>
-                    {roles.includes('ADMIN') &&
+                    {roles.includes('Usuarios') &&
                         <Route path="admin/">
                             <Route index element={<MainAdmin/>}/>
                             <Route path="create-user" element={<UserForm/>}/>
@@ -65,7 +65,7 @@ const App = () => {
                             <Route path="delete" element={<DeleteUser/>}/>
                         </Route>
                     }
-                    {roles.includes('TESORERO') &&
+                    {roles.includes('Financias') &&
                         <Route path="contabilidad/" element={<ContabilidadBase/>}>
                             <Route index element={<Movimientos/>}/>
                             <Route path="asientos/">

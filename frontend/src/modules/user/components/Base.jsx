@@ -81,7 +81,7 @@ const Base = () => {
                 <div className="headerContent">
                     <div className="logoClub">
                         <img src={Logo} alt="Logo Seis do nadal"/>
-                        <h1>Seis do Nadal</h1>
+                        <h1> Club Seis do Nadal-Coia</h1>
                     </div>
                     <div className="userInfo">
                         <h2>{userName}</h2>
